@@ -931,6 +931,7 @@ void sendHBT (void)
         // gpio_set_level(LedHBT, 1);
         // vTaskDelay(200/portTICK_PERIOD_MS);
         // gpio_set_level(LedHBT, 0);
+        xTaskCreate(http_get_task, "http_get_task", 8192, NULL, 5, NULL);
         vTaskDelay(HBTDelay/portTICK_PERIOD_MS);
     }
 }
