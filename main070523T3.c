@@ -190,7 +190,7 @@ int sock = -1;
 #define DEFAULT_SERVER_PORT    6666
 #define DEFAULT_FOTA_URL  "http://vending-iot.com/esp/firmware.bin"
 #define FWVersion "*Kwikpay-05MAY24#"
-#define HBTDelay    300000
+#define HBTDelay    30000
 #define LEDR    13
 #define LEDG    12
 

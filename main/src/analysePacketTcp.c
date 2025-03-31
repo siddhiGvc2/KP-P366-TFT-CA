@@ -108,7 +108,7 @@ void tcpip_client_task(){
                     int err = send(sock, payload, strlen(payload), 0);
                     ESP_LOGI(TAG, "*Successfully connected#"); 
                     serverStatus=1;
-                     sprintf(payload, "*QR:%s#",QrString); 
+                    sprintf(payload, "*QR:%s#",QrString); 
                     uart_write_string_ln(payload);
 
                     if (gpio_get_level(JUMPER) == 0)
