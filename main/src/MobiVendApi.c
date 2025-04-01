@@ -83,9 +83,8 @@ void http_get_task(void) {
     esp_http_client_config_t config = {
         .url = url, // Replace with your API URL
         .event_handler = _http_handler,
-        .disable_auto_redirect = false,  // Allow redirects
-        .max_redirection_count = 5,
-        .transport_type = HTTP_TRANSPORT_OVER_TCP, // Force HTTP, disable TLS
+        .skip_cert_common_name_check = true,  // Ignore certificate CN check
+        .cert_pem = NULL,  // Disable SSL verification
     };
     esp_http_client_handle_t client = esp_http_client_init(&config);
 
