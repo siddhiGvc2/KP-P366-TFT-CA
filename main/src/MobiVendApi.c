@@ -31,10 +31,15 @@
 #include "calls.h"
 
 #define MAX_HTTP_OUTPUT_BUFFER 1024
+#define MAX_HTTP_RESPONSE_LEN 512  // Adjust size if needed
 static char output_buffer[MAX_HTTP_OUTPUT_BUFFER]={0}; // Buffer to store response
 static int output_len = 0; // Length of response
 
 static const char *TAG = "MOBIVEND";
+
+
+
+
 static esp_err_t _http_handler(esp_http_client_event_t *evt) {
     char payload[1600];
     switch (evt->event_id) {
@@ -75,7 +80,7 @@ static esp_err_t _http_handler(esp_http_client_event_t *evt) {
             
                 sprintf(payload, "Price: %s, RefId: %s", price, refId);
                 uart_write_string_ln(payload);
-                sprintf(payload, "*SELL,%s,%s,0x20#", price, refId);
+                sprintf(payload, "*SELL,%s,%s#", price, refId);
                 uart_write_string_ln(payload);
 
             } else {
@@ -124,4 +129,40 @@ void http_get_task(void) {
     // Clean up
     esp_http_client_cleanup(client);
     vTaskDelete(NULL);
+}
+
+void send_api_request(const char *price, const char *refId) {
+    char url[256];  // Buffer to store the final URL
+    sprintf(url, "http://snaxsmart.mobivend.in/cashlessvend/65121?spring=02x20&price=%s&request=%s", price, refId);
+    esp_http_client_config_t config = {
+        .url = url, // Replace with your API URL
+        .method = HTTP_METHOD_GET,
+    };
+    esp_http_client_handle_t client = esp_http_client_init(&config);
+
+    // Perform the request
+    esp_err_t err = esp_http_client_perform(client);
+    if (err == ESP_OK) {
+        int status_code = esp_http_client_get_status_code(client);
+        int content_length = esp_http_client_get_content_length(client);
+        
+        ESP_LOGI(TAG, "HTTP GET Status = %d, Content-Length = %d", status_code, content_length);
+        // if (content_length > 0) {
+        //     char response_buffer[256] = {0};  // Make sure it's large enough
+        //     int read_len = esp_http_client_read(client, response_buffer, sizeof(response_buffer) - 1);
+        //     if (read_len > 0) {
+        //         response_buffer[read_len] = '\0';  // Null-terminate response
+        //         ESP_LOGI(TAG, "API Response: %s", response_buffer);
+        //     } else {
+        //         ESP_LOGE(TAG, "Failed to read API response or response is empty");
+        //     }
+        // }
+        
+    } else {
+        ESP_LOGE("HTTP", "HTTP GET request failed: %s", esp_err_to_name(err));
+    }
+    
+
+    // Clean up
+    esp_http_client_cleanup(client);
 }

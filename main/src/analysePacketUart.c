@@ -455,11 +455,22 @@ void process_uart_packet(const char *pkt){
         sprintf(payload,"LED State is %d",led_state);
         uart_write_string_ln(payload);
     }
-    else if(strncmp(pkt, "*SELL,",6) == 0){
-        sprintf(payload,"LED State is %d",led_state);
-        uart_write_string_ln(payload);
+    else if (strncmp(pkt, "*SELL,", 6) == 0) {
+        ESP_LOGI("UART", "Received SELL command!");
+
+        // Extract Price, RefId, and extra value (e.g., 0x20)
+        char price[10], refId[20], extra[10];
+        if (sscanf(pkt, "*SELL,%9[^,],%19[^,#]#", price, refId) == 2) {
+            // ESP_LOGI("UART", "Price: %s, RefId: %s, Extra: %s", price, refId, extra);
+            sprintf(payload,"*SELL-OK,Price: %s, RefId: %s#", price, refId);
+            uart_write_string_ln(payload);
+            // Process the SELL command as needed...
+
+            send_api_request(price, refId);
+        } else {
+            ESP_LOGW("UART", "Invalid SELL command format!");
+        }
     }
-    
     
     else{
         uart_write_string_ln(pkt);
