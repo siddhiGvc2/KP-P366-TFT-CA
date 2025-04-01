@@ -50,18 +50,26 @@ static esp_err_t _http_handler(esp_http_client_event_t *evt) {
             ESP_LOGI("HTTP", "Received header: %s: %s", evt->header_key, evt->header_value);
             break;
         case HTTP_EVENT_ON_DATA:
-            ESP_LOGI("HTTP", "HTTP_EVENT_ON_DATA, len=%d", evt->data_len);
-            if (!esp_http_client_is_chunked_response(evt->client)) {
-                if (output_len + evt->data_len < MAX_HTTP_OUTPUT_BUFFER) {
-                    memcpy(output_buffer + output_len, evt->data, evt->data_len);
-                    output_len += evt->data_len;
-                }
+            if (esp_http_client_is_chunked_response(evt->client)) {
+                ESP_LOGI(TAG, "Chunked data received, len=%d", evt->data_len);
             }
+            ESP_LOGI(TAG, "Received Data: %.*s", evt->data_len, (char*)evt->data);
+            char payload[100];
+            sprintf(payload,"Received Data: %.*s", evt->data_len, (char*)evt->data);
+            uart_write_string_ln(payload);
             break;
+            // ESP_LOGI("HTTP", "HTTP_EVENT_ON_DATA, len=%d", evt->data_len);
+            // if (!esp_http_client_is_chunked_response(evt->client)) {
+            //     if (output_len + evt->data_len < MAX_HTTP_OUTPUT_BUFFER) {
+            //         memcpy(output_buffer + output_len, evt->data, evt->data_len);
+            //         output_len += evt->data_len;
+            //     }
+            // }
+            // break;
         case HTTP_EVENT_ON_FINISH:
-            ESP_LOGI("HTTP", "HTTP_EVENT_ON_FINISH");
-            ESP_LOGI("HTTP", "Response: %.*s", output_len, output_buffer);
-            output_len = 0;
+            // ESP_LOGI("HTTP", "HTTP_EVENT_ON_FINISH");
+            // ESP_LOGI("HTTP", "Response: %.*s", output_len, output_buffer);
+            // output_len = 0;
             break;
         case HTTP_EVENT_DISCONNECTED:
             ESP_LOGI("HTTP", "HTTP_EVENT_DISCONNECTED");
@@ -79,12 +87,10 @@ static esp_err_t _http_handler(esp_http_client_event_t *evt) {
 
 void http_get_task(void) {
     char url[256];  // Buffer to store the final URL
-    sprintf(url, "http://mobivend.in/heartbeat/1234");
+    sprintf(url, "http://snaxsmart.mobivend.in/heartbeat/65122");
     esp_http_client_config_t config = {
         .url = url, // Replace with your API URL
-        .event_handler = _http_handler,
-        .skip_cert_common_name_check = true,  // Ignore certificate CN check
-        .cert_pem = NULL,  // Disable SSL verification
+        .event_handler = _http_handler
     };
     esp_http_client_handle_t client = esp_http_client_init(&config);
 
