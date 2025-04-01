@@ -168,3 +168,10 @@ extern uint8_t led2_gpio_state;
 extern int32_t MQTT_CONNEECTED;
 extern int AckPulseReceived;
 extern int ServerHBTTimeOut;
+
+
+//mobivend
+
+
+extern char price[100];
+extern char refId[100];

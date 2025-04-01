@@ -455,6 +455,10 @@ void process_uart_packet(const char *pkt){
         sprintf(payload,"LED State is %d",led_state);
         uart_write_string_ln(payload);
     }
+    else if(strncmp(pkt, "*SELL,",6) == 0){
+        sprintf(payload,"LED State is %d",led_state);
+        uart_write_string_ln(payload);
+    }
     
     
     else{

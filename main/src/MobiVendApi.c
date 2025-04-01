@@ -30,12 +30,13 @@
 #include "externVars.h"
 #include "calls.h"
 
-#define MAX_HTTP_OUTPUT_BUFFER 512
-static char output_buffer[MAX_HTTP_OUTPUT_BUFFER]; // Buffer to store response
+#define MAX_HTTP_OUTPUT_BUFFER 1024
+static char output_buffer[MAX_HTTP_OUTPUT_BUFFER]={0}; // Buffer to store response
 static int output_len = 0; // Length of response
 
 static const char *TAG = "MOBIVEND";
 static esp_err_t _http_handler(esp_http_client_event_t *evt) {
+    char payload[1600];
     switch (evt->event_id) {
         case HTTP_EVENT_ERROR:
             ESP_LOGI("HTTP", "HTTP_EVENT_ERROR");
@@ -49,27 +50,40 @@ static esp_err_t _http_handler(esp_http_client_event_t *evt) {
         case HTTP_EVENT_ON_HEADER:
             ESP_LOGI("HTTP", "Received header: %s: %s", evt->header_key, evt->header_value);
             break;
-        case HTTP_EVENT_ON_DATA:
+            case HTTP_EVENT_ON_DATA:
             if (esp_http_client_is_chunked_response(evt->client)) {
                 ESP_LOGI(TAG, "Chunked data received, len=%d", evt->data_len);
             }
-            ESP_LOGI(TAG, "Received Data: %.*s", evt->data_len, (char*)evt->data);
-            char payload[100];
-            sprintf(payload,"Received Data: %.*s", evt->data_len, (char*)evt->data);
-            uart_write_string_ln(payload);
+        
+            // Ensure we don't exceed buffer size
+            if (output_len + evt->data_len < MAX_HTTP_OUTPUT_BUFFER) {
+                memcpy(output_buffer + output_len, evt->data, evt->data_len);
+                output_len += evt->data_len;
+            }
+        
+            ESP_LOGI(TAG, "Received Data (Chunk): %.*s", evt->data_len, (char*)evt->data);
             break;
-            // ESP_LOGI("HTTP", "HTTP_EVENT_ON_DATA, len=%d", evt->data_len);
-            // if (!esp_http_client_is_chunked_response(evt->client)) {
-            //     if (output_len + evt->data_len < MAX_HTTP_OUTPUT_BUFFER) {
-            //         memcpy(output_buffer + output_len, evt->data, evt->data_len);
-            //         output_len += evt->data_len;
-            //     }
-            // }
-            // break;
+        
         case HTTP_EVENT_ON_FINISH:
-            // ESP_LOGI("HTTP", "HTTP_EVENT_ON_FINISH");
-            // ESP_LOGI("HTTP", "Response: %.*s", output_len, output_buffer);
-            // output_len = 0;
+            output_buffer[output_len] = '\0';  // Null-terminate the buffer
+            ESP_LOGI(TAG, "Final Response: %s", output_buffer);
+            sprintf(payload, "Final Response: %s", output_buffer);
+            uart_write_string_ln(payload);
+            if (sscanf(output_buffer, "MVBEGIN_START_%9[^_]_%19[^_]_MVCLOSE", price, refId) == 2) {
+                ESP_LOGI(TAG, "Extracted Price: %s", price);
+                ESP_LOGI(TAG, "Extracted RefId: %s", refId);
+            
+                sprintf(payload, "Price: %s, RefId: %s", price, refId);
+                uart_write_string_ln(payload);
+                sprintf(payload, "*SELL,%s,%s,0x20#", price, refId);
+                uart_write_string_ln(payload);
+
+            } else {
+                ESP_LOGE(TAG, "Parsing failed: Unexpected response format.");
+            }
+            // Reset buffer for the next request
+            memset(output_buffer, 0, MAX_HTTP_OUTPUT_BUFFER);
+            output_len = 0;
             break;
         case HTTP_EVENT_DISCONNECTED:
             ESP_LOGI("HTTP", "HTTP_EVENT_DISCONNECTED");

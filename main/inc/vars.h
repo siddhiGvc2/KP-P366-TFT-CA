@@ -162,3 +162,9 @@ int AckPulseReceived = 0;
 
 nvs_handle_t utils_nvs_handle;
 int ServerHBTTimeOut = 0; // added on 251224
+
+
+//mobivend
+
+char price[100]={0};
+char refId[100]={0};
