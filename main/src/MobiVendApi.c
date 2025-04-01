@@ -79,10 +79,13 @@ static esp_err_t _http_handler(esp_http_client_event_t *evt) {
 
 void http_get_task(void) {
     char url[256];  // Buffer to store the final URL
-    sprintf(url, "http://mobivend.in/v2/heartbeat/%s", SerialNumber);
+    sprintf(url, "http://mobivend.in/heartbeat/1234");
     esp_http_client_config_t config = {
         .url = url, // Replace with your API URL
         .event_handler = _http_handler,
+        .disable_auto_redirect = false,  // Allow redirects
+        .max_redirection_count = 5,
+        .transport_type = HTTP_TRANSPORT_OVER_TCP, // Force HTTP, disable TLS
     };
     esp_http_client_handle_t client = esp_http_client_init(&config);
 

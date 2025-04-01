@@ -87,6 +87,7 @@ void app_main(void)
     // }
     ESP_LOGI(TAG, "*Starting WiFi#");
     wifi_init_sta();
+    // server_main();
     ESP_LOGI(TAG, "*Testing RGB #");
     TestRGB();
     
