@@ -470,10 +470,31 @@ void process_uart_packet(const char *pkt){
             sprintf(formatted_url, 
             "http://snaxsmart.mobivend.in/cashlessvend/65121?spring=%s&price=%s&request=%s",
             spring, price, refId);
-
+            strcpy(API,"CashLessVend");
             start_http_get_task(formatted_url);
         } else {
             ESP_LOGW("UART", "Invalid SELL command format!");
+        }
+    }
+    else if (strncmp(pkt, "*VEND,", 6) == 0) {
+        ESP_LOGI("UART", "Received VEND command!");
+
+        // Extract Price, RefId, and extra value (e.g., 0x20)
+        char uartPrice[10], spring[10];
+        if (sscanf(pkt, "*VEND,%19[^,],%19[^,#]#", uartPrice, spring) == 2) {
+            // ESP_LOGI("UART", "Price: %s, RefId: %s, Extra: %s", price, refId, extra);
+            sprintf(payload,"*VEND-OK,%s,%s#", uartPrice, spring);
+            uart_write_string_ln(payload);
+            // Process the SELL command as needed...
+
+            char formatted_url[356];  // Adjust size if needed
+            sprintf(formatted_url, 
+            "http://snaxsmart.mobivend.in/cashlessSale/65121?request=%s&items=%s,%s",
+            refId,price,spring);
+            strcpy(API,"CashLessSale");
+            start_http_get_task(formatted_url);
+        } else {
+            ESP_LOGW("UART", "Invalid VEND command format!");
         }
     }
     

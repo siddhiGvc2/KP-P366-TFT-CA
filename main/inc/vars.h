@@ -165,6 +165,6 @@ int ServerHBTTimeOut = 0; // added on 251224
 
 
 //mobivend
-
+char API[100]={0};
 char price[100]={0};
 char refId[100]={0};

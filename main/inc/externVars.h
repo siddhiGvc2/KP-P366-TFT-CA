@@ -171,6 +171,6 @@ extern int ServerHBTTimeOut;
 
 
 //mobivend
-
+extern char API[200];
 extern char price[100];
 extern char refId[100];
