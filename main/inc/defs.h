@@ -152,7 +152,7 @@ typedef enum TCPIP_SOCKET_STATE{
 
 #define PASS_THRU   "Y"
 
-#define FWVersion "*Mobivend_310325_VER_1.1 Naico Ltd#"
+#define FWVersion "*Mobivend_310325_VER_1.2 Naico Ltd#"
 
 #define HBTDelay    20000
 #define LEDR    13
