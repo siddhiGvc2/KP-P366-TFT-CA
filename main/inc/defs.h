@@ -1,6 +1,6 @@
-#define URL_HEARTBEAT    "http://snaxsmart.mobivend.in/heartbeat/%s"
-#define URL_CASHLESSVEND "http://snaxsmart.mobivend.in/cashlessvend/%s?spring=%s&price=%s&request=%s"
-#define URL_CASHLESSSALE "http://snaxsmart.mobivend.in/CashlessSale/%s?request=%s&items=%s,%s"
+#define URL_HEARTBEAT    "http://snaxsmart.mobivend.in/heartbeat/%s" // SerialNumber
+#define URL_CASHLESSVEND "http://snaxsmart.mobivend.in/cashlessvend/%s?spring=%s&price=%s&request=%s" // SerialNumber,spring,price,refId
+#define URL_CASHLESSSALE "http://snaxsmart.mobivend.in/CashlessSale/%s?request=%s&items=%s,%s" // SerialNumber,refId,items,spring
 //#define GVCOptionRequired 0
 //90 second before restart in loop count is 3
 #define WIFIRETRYAFTERCONNECTIONLIMIT 75 // As proposed by NB 20 How many minutes 30 minutes
