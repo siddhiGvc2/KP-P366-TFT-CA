@@ -77,6 +77,6 @@ extern void mqtt_app_start(void);
 
 
 //mobivendApi
-extern void http_get_task(void);
+extern void start_http_get_task(const char *);
 extern void server_main(void);
 extern void send_api_request(const char *, const char *);

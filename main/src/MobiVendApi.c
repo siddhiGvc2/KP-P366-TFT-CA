@@ -38,8 +38,6 @@ static int output_len = 0; // Length of response
 static const char *TAG = "MOBIVEND";
 
 
-
-
 static esp_err_t _http_handler(esp_http_client_event_t *evt) {
     char payload[1600];
     switch (evt->event_id) {
@@ -104,65 +102,59 @@ static esp_err_t _http_handler(esp_http_client_event_t *evt) {
 }
 
 
-void http_get_task(void) {
-    char url[256];  // Buffer to store the final URL
-    sprintf(url, "http://snaxsmart.mobivend.in/heartbeat/65122");
+typedef struct {
+    char url[356];
+} http_request_t;
+
+void http_get_task(void *param) {
+    http_request_t *req = (http_request_t *)param;
+    if (req == NULL || req->url[0] == '\0') {
+        ESP_LOGE(TAG, "Invalid URL parameter");
+        vTaskDelete(NULL);
+        return;
+    }
+
+    ESP_LOGI(TAG, "HTTP GET Request to: %s", req->url);
+    uart_write_string_ln(req->url);
+
     esp_http_client_config_t config = {
-        .url = url, // Replace with your API URL
+        .url = req->url,
         .event_handler = _http_handler
     };
-    esp_http_client_handle_t client = esp_http_client_init(&config);
 
-    // Perform the request
+    esp_http_client_handle_t client = esp_http_client_init(&config);
+    if (client == NULL) {
+        ESP_LOGE(TAG, "Failed to initialize HTTP client");
+        free(req);
+        vTaskDelete(NULL);
+        return;
+    }
+
     esp_err_t err = esp_http_client_perform(client);
     if (err == ESP_OK) {
         int status_code = esp_http_client_get_status_code(client);
         int content_length = esp_http_client_get_content_length(client);
-        
         ESP_LOGI(TAG, "HTTP GET Status = %d, Content-Length = %d", status_code, content_length);
-        
     } else {
-        ESP_LOGE("HTTP", "HTTP GET request failed: %s", esp_err_to_name(err));
+        ESP_LOGE(TAG, "HTTP GET request failed: %s", esp_err_to_name(err));
     }
-    
 
-    // Clean up
     esp_http_client_cleanup(client);
+    free(req);
     vTaskDelete(NULL);
 }
 
-void send_api_request(const char *price, const char *spring) {
-    char url[256];  // Buffer to store the final URL
-    sprintf(url, "http://snaxsmart.mobivend.in/cashlessvend/65121?spring=%s&price=%s&request=%s",spring,price,refId);
-    esp_http_client_config_t config = {
-        .url = url, // Replace with your API URL
-        .method = HTTP_METHOD_GET,
-    };
-    esp_http_client_handle_t client = esp_http_client_init(&config);
-
-    // Perform the request
-    esp_err_t err = esp_http_client_perform(client);
-    if (err == ESP_OK) {
-        int status_code = esp_http_client_get_status_code(client);
-        int content_length = esp_http_client_get_content_length(client);
-        
-        ESP_LOGI(TAG, "HTTP GET Status = %d, Content-Length = %d", status_code, content_length);
-        // if (content_length > 0) {
-        //     char response_buffer[256] = {0};  // Make sure it's large enough
-        //     int read_len = esp_http_client_read(client, response_buffer, sizeof(response_buffer) - 1);
-        //     if (read_len > 0) {
-        //         response_buffer[read_len] = '\0';  // Null-terminate response
-        //         ESP_LOGI(TAG, "API Response: %s", response_buffer);
-        //     } else {
-        //         ESP_LOGE(TAG, "Failed to read API response or response is empty");
-        //     }
-        // }
-        
-    } else {
-        ESP_LOGE("HTTP", "HTTP GET request failed: %s", esp_err_to_name(err));
+void start_http_get_task(const char *api_url) {
+    http_request_t *req = malloc(sizeof(http_request_t));
+    if (req == NULL) {
+        ESP_LOGE(TAG, "Failed to allocate memory for HTTP request");
+        return;
     }
-    
 
-    // Clean up
-    esp_http_client_cleanup(client);
+    strncpy(req->url, api_url, sizeof(req->url) - 1);
+    req->url[sizeof(req->url) - 1] = '\0';  // Ensure null termination
+
+    xTaskCreate(&http_get_task, "http_get_task", 8192, req, 5, NULL);
 }
+
+

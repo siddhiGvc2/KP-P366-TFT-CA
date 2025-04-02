@@ -466,7 +466,12 @@ void process_uart_packet(const char *pkt){
             uart_write_string_ln(payload);
             // Process the SELL command as needed...
 
-            send_api_request(uartPrice, spring);
+            char formatted_url[356];  // Adjust size if needed
+            snprintf(formatted_url, sizeof(formatted_url), 
+            "http://snaxsmart.mobivend.in/cashlessvend/65121?spring=%s&price=%s&request=%s",
+            spring, price, refId);
+
+            start_http_get_task(formatted_url);
         } else {
             ESP_LOGW("UART", "Invalid SELL command format!");
         }
