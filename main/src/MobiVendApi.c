@@ -69,19 +69,18 @@ static esp_err_t _http_handler(esp_http_client_event_t *evt) {
         
         case HTTP_EVENT_ON_FINISH:
             output_buffer[output_len] = '\0';  // Null-terminate the buffer
-           
+            sprintf(payload, "Response for : %s, %s", API, output_buffer);
+            uart_write_string_ln(payload);
             
             if(strstr(API,"CashLessSale")!=NULL)
             {
                 ESP_LOGI(TAG, "CashLessSale Response: %s", output_buffer);
-                sprintf(payload, "CashLessSale Response: %s", output_buffer);
-                uart_write_string_ln(payload);
+              
             }
             if(strstr(API,"CashLessVend")!=NULL)
             {
                 ESP_LOGI(TAG, "CashLessVend Response: %s", output_buffer);
-                sprintf(payload, "CashLessVend Response: %s", output_buffer);
-                uart_write_string_ln(payload);
+              
                 if (sscanf(output_buffer, "MVBEGIN_OK_MVCLOSE") == 0)
                 {
                     sprintf(payload, "*VEND,%s,%s#", price, "02x20");
@@ -90,8 +89,7 @@ static esp_err_t _http_handler(esp_http_client_event_t *evt) {
             }
             if (sscanf(output_buffer, "MVBEGIN_START_%9[^_]_%19[^_]_MVCLOSE", price, refId) == 2 && strstr(API,"Heartbeat")!=NULL) {
                 ESP_LOGI(TAG, "Hearbeat Response: %s", output_buffer);
-                sprintf(payload, "Heartbeat Response: %s", output_buffer);
-                uart_write_string_ln(payload);
+              
                 ESP_LOGI(TAG, "Extracted Price: %s", price);
                 ESP_LOGI(TAG, "Extracted RefId: %s", refId);
             
