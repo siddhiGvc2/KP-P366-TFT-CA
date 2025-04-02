@@ -154,7 +154,7 @@ typedef enum TCPIP_SOCKET_STATE{
 
 #define FWVersion "*Mobivend_310325_VER_1.0 Naico Ltd#"
 
-#define HBTDelay    30000
+#define HBTDelay    20000
 #define LEDR    13
 #define LEDG    12
 

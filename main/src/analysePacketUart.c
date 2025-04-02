@@ -467,7 +467,7 @@ void process_uart_packet(const char *pkt){
             // Process the SELL command as needed...
 
             char formatted_url[356];  // Adjust size if needed
-            snprintf(formatted_url, sizeof(formatted_url), 
+            sprintf(formatted_url, 
             "http://snaxsmart.mobivend.in/cashlessvend/65121?spring=%s&price=%s&request=%s",
             spring, price, refId);
 
