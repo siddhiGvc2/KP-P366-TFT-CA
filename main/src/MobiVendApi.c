@@ -71,13 +71,13 @@ static esp_err_t _http_handler(esp_http_client_event_t *evt) {
             output_buffer[output_len] = '\0';  // Null-terminate the buffer
            
             
-            if(strstr(API,"CashLessSale")==NULL)
+            if(strstr(API,"CashLessSale")!=NULL)
             {
                 ESP_LOGI(TAG, "CashLessSale Response: %s", output_buffer);
                 sprintf(payload, "CashLessSale Response: %s", output_buffer);
                 uart_write_string_ln(payload);
             }
-            if(strstr(API,"CashLessVend")==NULL)
+            if(strstr(API,"CashLessVend")!=NULL)
             {
                 ESP_LOGI(TAG, "CashLessVend Response: %s", output_buffer);
                 sprintf(payload, "CashLessVend Response: %s", output_buffer);
@@ -88,7 +88,7 @@ static esp_err_t _http_handler(esp_http_client_event_t *evt) {
                     uart_write_string_ln(payload);
                 }
             }
-            if (sscanf(output_buffer, "MVBEGIN_START_%9[^_]_%19[^_]_MVCLOSE", price, refId) == 2 && strstr(API,"Heartbeat")==NULL) {
+            if (sscanf(output_buffer, "MVBEGIN_START_%9[^_]_%19[^_]_MVCLOSE", price, refId) == 2 && strstr(API,"Heartbeat")!=NULL) {
                 ESP_LOGI(TAG, "Hearbeat Response: %s", output_buffer);
                 sprintf(payload, "Heartbeat Response: %s", output_buffer);
                 uart_write_string_ln(payload);
