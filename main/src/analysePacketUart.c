@@ -466,10 +466,10 @@ void process_uart_packet(const char *pkt){
             uart_write_string_ln(payload);
             // Process the SELL command as needed...
 
-            char formatted_url[356];  // Adjust size if needed
+            char formatted_url[376];  // Adjust size if needed
             sprintf(formatted_url, 
-            "http://snaxsmart.mobivend.in/cashlessvend/65121?spring=%s&price=%s&request=%s",
-            spring, price, refId);
+            "http://snaxsmart.mobivend.in/cashlessvend/%s?spring=%s&price=%s&request=%s",
+             SerialNumber,spring, price, refId);
             strcpy(API,"CashLessVend");
             start_http_get_task(formatted_url);
         } else {
@@ -487,10 +487,10 @@ void process_uart_packet(const char *pkt){
             uart_write_string_ln(payload);
             // Process the SELL command as needed...
 
-            char formatted_url[356];  // Adjust size if needed
+            char formatted_url[376];  // Adjust size if needed
             sprintf(formatted_url, 
-            "http://snaxsmart.mobivend.in/cashlessSale/65121?request=%s&items=%s,%s",
-            refId,price,spring);
+            "http://snaxsmart.mobivend.in/cashlessSale/%s?request=%s&items=%s,%s",
+            SerialNumber,refId,price,spring);
             strcpy(API,"CashLessSale");
             start_http_get_task(formatted_url);
         } else {
