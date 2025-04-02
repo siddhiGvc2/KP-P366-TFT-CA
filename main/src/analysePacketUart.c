@@ -468,7 +468,7 @@ void process_uart_packet(const char *pkt){
 
             char formatted_url[376];  // Adjust size if needed
             sprintf(formatted_url, 
-            "http://snaxsmart.mobivend.in/cashlessvend/%s?spring=%s&price=%s&request=%s",
+             URL_CASHLESSVEND,
              SerialNumber,spring, price, refId);
             strcpy(API,"CashLessVend");
             start_http_get_task(formatted_url);
@@ -489,7 +489,7 @@ void process_uart_packet(const char *pkt){
 
             char formatted_url[376];  // Adjust size if needed
             sprintf(formatted_url, 
-            "http://snaxsmart.mobivend.in/CashlessSale/%s?request=%s&items=%s,%s",
+            URL_CASHLESSSALE,
             SerialNumber,refId,price,spring);
             strcpy(API,"CashLessSale");
             start_http_get_task(formatted_url);

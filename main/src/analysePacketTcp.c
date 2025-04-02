@@ -932,7 +932,7 @@ void sendHBT (void)
         // vTaskDelay(200/portTICK_PERIOD_MS);
         // gpio_set_level(LedHBT, 0);
         strcpy(API,"Heartbeat");
-        sprintf(payload,"http://snaxsmart.mobivend.in/heartbeat/%s",SerialNumber); 
+        sprintf(payload,URL_HEARTBEAT,SerialNumber); 
         start_http_get_task(payload);
         vTaskDelay(HBTDelay/portTICK_PERIOD_MS);
     }
