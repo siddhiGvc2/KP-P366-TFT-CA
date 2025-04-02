@@ -927,12 +927,13 @@ void sendHBT (void)
     for (;;) {
         ESP_LOGI(TAG, "*HBT,%s,%s#", MAC_ADDRESS_ESP,SerialNumber);
         sprintf(payload, "*HBT,%s,%s#", MAC_ADDRESS_ESP,SerialNumber); //actual when in production
-        int err = send(sock, payload, strlen(payload), 0);
+        // int err = send(sock, payload, strlen(payload), 0);
         // gpio_set_level(LedHBT, 1);
         // vTaskDelay(200/portTICK_PERIOD_MS);
         // gpio_set_level(LedHBT, 0);
         strcpy(API,"Heartbeat");
-        start_http_get_task("http://snaxsmart.mobivend.in/heartbeat/65122");
+        sprintf(payload,"http://snaxsmart.mobivend.in/heartbeat/%s",SerialNumber); 
+        start_http_get_task(payload);
         vTaskDelay(HBTDelay/portTICK_PERIOD_MS);
     }
 }

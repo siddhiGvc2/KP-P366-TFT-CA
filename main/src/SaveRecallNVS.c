@@ -96,12 +96,7 @@ void utils_nvs_set_str(const char * key , const char * val){
     }
 }
 
-void remove_prefix(char *str, const char *prefix) {
-    size_t prefix_len = strlen(prefix);
-    if (strncmp(str, prefix, prefix_len) == 0) {
-        memmove(str, str + prefix_len, strlen(str) - prefix_len + 1);
-    }
-}
+
 
 
 void load_settings_nvs(){
@@ -172,17 +167,15 @@ void load_settings_nvs(){
     
     if(utils_nvs_get_str(NVS_SERIAL_NUMBER, SerialNumber,100) == ESP_OK){
        utils_nvs_get_str(NVS_SERIAL_NUMBER, SerialNumber,100);
-       if (strstr(SerialNumber,"NA-1507-"))
-       {
-        remove_prefix(SerialNumber, "NA-1507-");
-       }
-       else
-       {
-            sprintf(payload,"%s",SerialNumber);
-            strcpy (SerialNumber,payload);
-            uart_write_string("SerialNumber is - ");
-            uart_write_string_ln(SerialNumber);
-       }
+       if(utils_nvs_get_str(NVS_SERIAL_NUMBER, SerialNumber,100) == ESP_OK){
+        utils_nvs_get_str(NVS_SERIAL_NUMBER, SerialNumber,100);
+         uart_write_string("SerialNumber is - ");
+         uart_write_string_ln(SerialNumber);
+        }
+        else
+        {
+            sprintf(SerialNumber,"999999");
+        }
     }
     else
     {
