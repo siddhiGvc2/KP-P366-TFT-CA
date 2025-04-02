@@ -459,14 +459,14 @@ void process_uart_packet(const char *pkt){
         ESP_LOGI("UART", "Received SELL command!");
 
         // Extract Price, RefId, and extra value (e.g., 0x20)
-        char price[10], refId[20], extra[10];
-        if (sscanf(pkt, "*SELL,%9[^,],%19[^,#]#", price, refId) == 2) {
+        char uartPrice[10], spring[10];
+        if (sscanf(pkt, "*SELL,%19[^,],%19[^,#]#", uartPrice, spring) == 2) {
             // ESP_LOGI("UART", "Price: %s, RefId: %s, Extra: %s", price, refId, extra);
-            sprintf(payload,"*SELL-OK,%s,%s#", price, refId);
+            sprintf(payload,"*SELL-OK,%s,%s#", uartPrice, spring);
             uart_write_string_ln(payload);
             // Process the SELL command as needed...
 
-            send_api_request(price, refId);
+            send_api_request(uartPrice, spring);
         } else {
             ESP_LOGW("UART", "Invalid SELL command format!");
         }

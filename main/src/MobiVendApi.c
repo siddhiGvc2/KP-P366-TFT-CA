@@ -131,9 +131,9 @@ void http_get_task(void) {
     vTaskDelete(NULL);
 }
 
-void send_api_request(const char *price, const char *refId) {
+void send_api_request(const char *price, const char *spring) {
     char url[256];  // Buffer to store the final URL
-    sprintf(url, "http://snaxsmart.mobivend.in/cashlessvend/65121?spring=02x20&price=%s&request=%s", price, refId);
+    sprintf(url, "http://snaxsmart.mobivend.in/cashlessvend/65121?spring=%s&price=%s&request=%s",spring,price,refId);
     esp_http_client_config_t config = {
         .url = url, // Replace with your API URL
         .method = HTTP_METHOD_GET,
