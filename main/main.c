@@ -65,7 +65,7 @@ void app_main(void)
     console_uart_init();
     uart_write_string(FWVersion);
     read_mac_address();
-    xTaskCreate(tcpip_client_task, "tcpip_client_task", 8192, NULL, 7, NULL);
+    // xTaskCreate(tcpip_client_task, "tcpip_client_task", 8192, NULL, 7, NULL);
     load_settings_nvs();
     ESP_LOGI(TAG, "*Starting ICH#");
     ICH_init();

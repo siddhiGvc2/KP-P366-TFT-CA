@@ -462,7 +462,7 @@ void process_uart_packet(const char *pkt){
         char price[10], refId[20], extra[10];
         if (sscanf(pkt, "*SELL,%9[^,],%19[^,#]#", price, refId) == 2) {
             // ESP_LOGI("UART", "Price: %s, RefId: %s, Extra: %s", price, refId, extra);
-            sprintf(payload,"*SELL-OK,Price: %s, RefId: %s#", price, refId);
+            sprintf(payload,"*SELL-OK,%s,%s#", price, refId);
             uart_write_string_ln(payload);
             // Process the SELL command as needed...
 
