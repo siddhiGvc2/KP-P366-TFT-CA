@@ -72,7 +72,7 @@ void app_main(void)
     ESP_LOGI(TAG, "*Starting S2P#");
     s2p_init();
     Out4094(0x00);; // set all outputs inactive
-
+    TFT_main();
     // for (int i = 0 ; i < 3 ; i++)
     // {
     //     led_set_level(LEDR, 1);
