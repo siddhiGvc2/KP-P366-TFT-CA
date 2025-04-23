@@ -75,6 +75,7 @@ void app_main(void)
     s2p_init();
     Out4094(0x00);; // set all outputs inactive
     TFT_main();
+    DisplayBootingUp();
     showLogo();
     // for (int i = 0 ; i < 3 ; i++)
     // {

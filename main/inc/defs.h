@@ -9,6 +9,14 @@
 #define MAXSIPNUMBER 3
 
 
+
+#define ModeQR   1
+#define ModeNoWifi 2
+#define ModeBootingUp 3
+#define ModeServerBad 4
+#define ModeFOTA 4
+
+
 typedef enum LED_STATES{
     STANDBY_LED,
     SEARCH_FOR_WIFI,

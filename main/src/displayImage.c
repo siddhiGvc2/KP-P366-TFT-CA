@@ -39,13 +39,9 @@
 #include "calls.h"
 #include "gvcLogo.c"
 #include "NoConnectivity.c"
+#include "BootingUp.c"
 
 
-void DisplayNoWiFi(void)
-{
-    LV_IMG_DECLARE(NoConnectivity);
-    display_images(&NoConnectivity);
-}
 
 
 void display_images(const lv_img_dsc_t *ig) {
@@ -69,6 +65,30 @@ void showLogo(void)
     lv_img_set_src(img6, &gvcLogo);
     lv_obj_align(img6, LV_ALIGN_TOP_MID, 0, 240);
 
+}
+
+
+void DisplayBootingUp(void)
+{
+    if (DisplayMode != ModeBootingUp)
+    {
+        // LV_IMG_DECLARE();
+        LV_IMG_DECLARE(BootingUp);
+        display_images(&BootingUp);
+        DisplayMode = ModeBootingUp;
+    }
+    
+}
+
+void DisplayNoWiFi(void)
+{
+    if (DisplayMode != ModeNoWifi)
+    {
+        LV_IMG_DECLARE(NoConnectivity);
+        LV_IMG_DECLARE(OIP);
+        display_images(&NoConnectivity);
+        DisplayMode = ModeNoWifi;
+    }
 }
 
 
