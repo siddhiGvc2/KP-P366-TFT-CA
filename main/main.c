@@ -94,7 +94,7 @@ void app_main(void)
     ESP_LOGI(TAG, "*Testing RGB #");
     TestRGB();
     
-    xTaskCreate(sendHBT, "sendHBT", 2048, NULL, 6, NULL);
+    xTaskCreate(sendHBT, "sendHBT", 4096, NULL, 6, NULL);
     xTaskCreate(BlinkLED, "BlinkLED", 2048, NULL, 6, NULL);
    
     xTaskCreate(TestCoin, "TestCoin", 2048, NULL, 6, NULL);

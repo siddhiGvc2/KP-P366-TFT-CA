@@ -89,18 +89,26 @@ void tcpip_client_task(){
                 if (err != 0) {
                     ESP_LOGE(TAG, "*Socket unable to connect: errno %d#", errno);
                     ESP_LOGE(TAG, "*Shutting down socket and restarting...#");
+                    if(IsSocketConnected)
+                    {
+                        IsSocketConnected=0;
+                    }
                     serverStatus=0;
                     sprintf(payload, "*NOSERVER#");
                     shutdown(sock, 0);
                     close(sock);
                     sock = -1;
                 }else{
-               
+                   
                     ServerRetryCount = 0;
                     set_led_state(EVERYTHING_OK_LED); 
-                    // if (gpio_get_level(JUMPER) == 0)
+                    if(IsSocketConnected==0)
+                    {
+                        IsSocketConnected=1;
+                    }
+                    if (gpio_get_level(JUMPER) == 0)
                         sprintf(payload, "*MAC,%s,%s#", MAC_ADDRESS_ESP,SerialNumber);  // for GVC use ,
-                    // else
+                    else
                         sprintf(payload, "*MAC:%s:%s#", MAC_ADDRESS_ESP,SerialNumber);  // for KP use :
                     uart_write_string_ln(payload);
 
@@ -108,12 +116,13 @@ void tcpip_client_task(){
                     int err = send(sock, payload, strlen(payload), 0);
                     ESP_LOGI(TAG, "*Successfully connected#"); 
                     serverStatus=1;
+
                     sprintf(payload, "*QR:%s#",QrString); 
                     uart_write_string_ln(payload);
 
-                    // if (gpio_get_level(JUMPER) == 0)
+                    if (gpio_get_level(JUMPER) == 0)
                         ESP_LOGI(TAG, "*MAC,%s,%s#", MAC_ADDRESS_ESP,SerialNumber) ;
-                    // else
+                    else
                         ESP_LOGI(TAG, "*MAC,%s,%s#", MAC_ADDRESS_ESP,SerialNumber) ;
 
                     sprintf(payload, "*WiFi,%d#", WiFiNumber); //actual when in production
@@ -151,6 +160,10 @@ void tcpip_client_task(){
                             if (len < 0) {
                                 ESP_LOGE(TAG, "*recv failed: errno %d#", errno);
                                 ESP_LOGE(TAG, "*Shutting down socket and restarting...#");
+                                if(IsSocketConnected)
+                                {
+                                    IsSocketConnected=0;
+                                }
                                 shutdown(sock, 0);
                                 close(sock);
                                 sock  = -1;
@@ -925,9 +938,13 @@ void sendHBT (void)
 {
     char payload[400];
     for (;;) {
+        if(IsSocketConnected)
+        {
         ESP_LOGI(TAG, "*HBT,%s,%s#", MAC_ADDRESS_ESP,SerialNumber);
         sprintf(payload, "*HBT,%s,%s#", MAC_ADDRESS_ESP,SerialNumber); //actual when in production
-        // int err = send(sock, payload, strlen(payload), 0);
+
+         int err = send(sock, payload, strlen(payload), 0);
+        }
         // gpio_set_level(LedHBT, 1);
         // vTaskDelay(200/portTICK_PERIOD_MS);
         // gpio_set_level(LedHBT, 0);
@@ -935,6 +952,7 @@ void sendHBT (void)
         sprintf(payload,URL_HEARTBEAT,SerialNumber); 
         start_http_get_task(payload);
         vTaskDelay(HBTDelay/portTICK_PERIOD_MS);
+        
     }
 }
 

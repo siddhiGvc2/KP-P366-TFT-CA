@@ -169,6 +169,8 @@ extern int32_t MQTT_CONNEECTED;
 extern int AckPulseReceived;
 extern int ServerHBTTimeOut;
 
+extern int IsSocketConnected;
+
 
 //mobivend
 extern char API[200];

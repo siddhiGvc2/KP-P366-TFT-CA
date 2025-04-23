@@ -163,6 +163,7 @@ int AckPulseReceived = 0;
 nvs_handle_t utils_nvs_handle;
 int ServerHBTTimeOut = 0; // added on 251224
 
+int IsSocketConnected=0;
 
 //mobivend
 char API[100]={0};
