@@ -89,7 +89,7 @@ static esp_err_t _http_handler(esp_http_client_event_t *evt) {
             }
             if (sscanf(output_buffer, "MVBEGIN_START_%9[^_]_%19[^_]_MVCLOSE", price, refId) == 2 && strstr(API,"Heartbeat")!=NULL) {
                 ESP_LOGI(TAG, "Hearbeat Response: %s", output_buffer);
-              
+                DisplayCashReceived();
                 ESP_LOGI(TAG, "Extracted Price: %s", price);
                 ESP_LOGI(TAG, "Extracted RefId: %s", refId);
             

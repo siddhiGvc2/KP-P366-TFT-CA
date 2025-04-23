@@ -41,6 +41,7 @@
 #include "NoConnectivity.c"
 #include "BootingUp.c"
 #include "QRcode.c"
+#include "CashReceived.c"
 
 #define QR_CODE_SIZE  198
 
@@ -86,9 +87,18 @@ void DisplayNoWiFi(void)
     if (DisplayMode != ModeNoWifi)
     {
         LV_IMG_DECLARE(NoConnectivity);
-        LV_IMG_DECLARE(OIP);
         display_images(&NoConnectivity);
         DisplayMode = ModeNoWifi;
+    }
+}
+
+void DisplayCashReceived(void)
+{
+    if (DisplayMode != ModeCashReceived)
+    {
+        LV_IMG_DECLARE(CashReceived);
+        display_images(&CashReceived);
+        DisplayMode = ModeCashReceived;
     }
 }
 

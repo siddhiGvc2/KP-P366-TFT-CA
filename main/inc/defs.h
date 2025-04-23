@@ -14,7 +14,8 @@
 #define ModeNoWifi 2
 #define ModeBootingUp 3
 #define ModeServerBad 4
-#define ModeFOTA 4
+#define ModeFOTA 5
+#define ModeCashReceived 6
 
 
 typedef enum LED_STATES{
