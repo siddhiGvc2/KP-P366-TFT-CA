@@ -40,8 +40,9 @@
 #include "gvcLogo.c"
 #include "NoConnectivity.c"
 #include "BootingUp.c"
+#include "QRcode.c"
 
-
+#define QR_CODE_SIZE  198
 
 
 void display_images(const lv_img_dsc_t *ig) {
@@ -88,6 +89,48 @@ void DisplayNoWiFi(void)
         LV_IMG_DECLARE(OIP);
         display_images(&NoConnectivity);
         DisplayMode = ModeNoWifi;
+    }
+}
+
+
+void dispayQR(void){
+    if (DisplayMode != ModeQR)
+    {
+     DisplayMode = ModeQR;   
+     uart_write_string_ln("displayQR Initiated");
+     LV_IMG_DECLARE(QRcode);
+
+    //  display_images(&image);
+    img = lv_img_create(lv_scr_act());
+    lv_img_set_src(img, &QRcode);
+    lv_obj_align(img, LV_ALIGN_TOP_MID, 0, 0);
+   
+
+    // Refresh the display to show the first image
+  
+    // //delay
+
+    
+    // // Display "Hello World" text
+    // lv_obj_t *label = lv_label_create(scr);
+    // lv_label_set_text(label, QrString);
+    // lv_obj_align(label, LV_ALIGN_CENTER, 0, 0); // Center the text
+
+    // // Create a QR code object
+    lv_obj_t *qr = lv_qrcode_create(img, QR_CODE_SIZE, lv_color_hex3(0x000), lv_color_hex3(0xFFF));
+
+    // // Set the QR code data
+   //const char *data = "https://www.google.com";
+    lv_qrcode_update(qr, QrString, strlen(QrString));
+
+    // // Center the QR code on the screen
+    lv_obj_align(qr, LV_ALIGN_CENTER, 0, 10);
+    
+    // ***********Haresh
+    // while(1) {
+    //     lv_timer_handler();
+    //     vTaskDelay(pdMS_TO_TICKS(50));
+    // }
     }
 }
 
