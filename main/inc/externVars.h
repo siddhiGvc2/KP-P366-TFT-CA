@@ -180,5 +180,11 @@ extern char refId[100];
 
 extern unsigned char DisplayMode; 
 
+extern int Price;
+extern int ItemsVended;
+extern int CashCollected;
+extern int CashLessVending;
+extern int OnTime;
+
 #include "lvgl.h"
 extern lv_obj_t * img; // Declare globally or in a higher scope

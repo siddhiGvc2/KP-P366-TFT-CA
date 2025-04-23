@@ -173,5 +173,11 @@ char refId[100]={0};
 
 unsigned char DisplayMode; 
 
+int Price=10;
+int ItemsVended=20;
+int CashCollected=200;
+int CashLessVending=6;
+int OnTime=5;
+
 #include "lvgl.h"
 lv_obj_t * img = NULL; // Declare globally or in a higher scope

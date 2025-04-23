@@ -93,3 +93,4 @@ extern void DisplayBootingUp(void);
 extern void DisplayNoWiFi(void);
 extern void dispayQR(void);
 extern void DisplayCashReceived(void);
+extern void displayVariables(void);
