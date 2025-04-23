@@ -98,9 +98,9 @@ void tcpip_client_task(){
                
                     ServerRetryCount = 0;
                     set_led_state(EVERYTHING_OK_LED); 
-                    if (gpio_get_level(JUMPER) == 0)
+                    // if (gpio_get_level(JUMPER) == 0)
                         sprintf(payload, "*MAC,%s,%s#", MAC_ADDRESS_ESP,SerialNumber);  // for GVC use ,
-                    else
+                    // else
                         sprintf(payload, "*MAC:%s:%s#", MAC_ADDRESS_ESP,SerialNumber);  // for KP use :
                     uart_write_string_ln(payload);
 
@@ -111,9 +111,9 @@ void tcpip_client_task(){
                     sprintf(payload, "*QR:%s#",QrString); 
                     uart_write_string_ln(payload);
 
-                    if (gpio_get_level(JUMPER) == 0)
+                    // if (gpio_get_level(JUMPER) == 0)
                         ESP_LOGI(TAG, "*MAC,%s,%s#", MAC_ADDRESS_ESP,SerialNumber) ;
-                    else
+                    // else
                         ESP_LOGI(TAG, "*MAC,%s,%s#", MAC_ADDRESS_ESP,SerialNumber) ;
 
                     sprintf(payload, "*WiFi,%d#", WiFiNumber); //actual when in production
