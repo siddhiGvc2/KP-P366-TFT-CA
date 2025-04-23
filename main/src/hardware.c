@@ -247,7 +247,7 @@ void gpio_read_n_act(void)
 
         if (gpio_get_level(JUMPER) == 0)
         {
-            // displayVariables();
+           
             if (LastJumper2Status == 1)    
             {
                 Jumper2Debounce = 4;        

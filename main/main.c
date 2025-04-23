@@ -77,6 +77,7 @@ void app_main(void)
     TFT_main();
     DisplayBootingUp();
     showLogo();
+    
     // for (int i = 0 ; i < 3 ; i++)
     // {
     //     led_set_level(LEDR, 1);

@@ -449,6 +449,10 @@ void example_lvgl_demo_ui(lv_disp_t *disp)
      if (example_lvgl_lock(-1)) {
         //  example_lvgl_demo_ui(disp);
          // Release the mutex
+         if (gpio_get_level(ErasePin) == 0)
+         {
+            displayVariables();
+         }
          example_lvgl_unlock();
      }
  }
