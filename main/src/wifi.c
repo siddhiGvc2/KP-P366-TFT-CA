@@ -136,6 +136,7 @@ void event_handler(void* arg, esp_event_base_t event_base,
     
     else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_DISCONNECTED) {
         connected_to_wifi_and_internet = false;
+        DisplayNoWiFi();
         if (WiFiNumber == 1)
             set_led_state(SEARCH_FOR_WIFI1);
         if (WiFiNumber == 2)
