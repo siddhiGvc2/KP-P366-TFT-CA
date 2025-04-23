@@ -447,7 +447,7 @@ void example_lvgl_demo_ui(lv_disp_t *disp)
      ESP_LOGI(TAG, "Display LVGL Meter Widget");
      // Lock the mutex due to the LVGL APIs are not thread-safe
      if (example_lvgl_lock(-1)) {
-         example_lvgl_demo_ui(disp);
+        //  example_lvgl_demo_ui(disp);
          // Release the mutex
          example_lvgl_unlock();
      }

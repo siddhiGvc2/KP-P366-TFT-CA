@@ -174,3 +174,7 @@ extern int ServerHBTTimeOut;
 extern char API[200];
 extern char price[100];
 extern char refId[100];
+
+
+#include "lvgl.h"
+extern lv_obj_t * img; // Declare globally or in a higher scope

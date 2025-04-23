@@ -32,6 +32,7 @@
 
 
 
+
 static const char *TAG = "WIFI";
 static int s_retry_num = 0;
 static int FirstWiFiConnection = 0;
@@ -423,6 +424,7 @@ void wifi_init_sta(void)
     }
     else // restart
     {
+       
         ESP_LOGI(TAG,"*All tries over");
         uart_write_string_ln("*All tries over#");
         RestartDevice();

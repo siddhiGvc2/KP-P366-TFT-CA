@@ -84,3 +84,7 @@ extern void send_api_request(const char *, const char *);
 
 //TFT
 extern void TFT_main(void);
+
+#include "lvgl.h"
+extern void display_images(const lv_img_dsc_t *);
+extern void showLogo(void);

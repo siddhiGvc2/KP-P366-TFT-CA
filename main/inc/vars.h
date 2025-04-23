@@ -168,3 +168,7 @@ int ServerHBTTimeOut = 0; // added on 251224
 char API[100]={0};
 char price[100]={0};
 char refId[100]={0};
+
+
+#include "lvgl.h"
+lv_obj_t * img = NULL; // Declare globally or in a higher scope

@@ -30,6 +30,8 @@
 #include "calls.h"
 #include "vars.h"
 
+
+
 // void resolve_hostname(const char *);
 // uint32_t millis(void);
 
@@ -65,7 +67,7 @@ void app_main(void)
     console_uart_init();
     uart_write_string(FWVersion);
     read_mac_address();
-    // xTaskCreate(tcpip_client_task, "tcpip_client_task", 8192, NULL, 7, NULL);
+    xTaskCreate(tcpip_client_task, "tcpip_client_task", 8192, NULL, 7, NULL);
     load_settings_nvs();
     ESP_LOGI(TAG, "*Starting ICH#");
     ICH_init();
@@ -73,6 +75,7 @@ void app_main(void)
     s2p_init();
     Out4094(0x00);; // set all outputs inactive
     TFT_main();
+    showLogo();
     // for (int i = 0 ; i < 3 ; i++)
     // {
     //     led_set_level(LEDR, 1);
