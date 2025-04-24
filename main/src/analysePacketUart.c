@@ -219,7 +219,7 @@ void process_uart_packet(const char *pkt){
     }
      else if(strncmp(pkt, "*QR:",4) == 0){
             char tempBuf[100];
-            sscanf(pkt, "*QR:%[^:#]#",tempBuf);
+            sscanf(pkt, "*QR:%[^#]#",tempBuf);
             strcpy(QrString,tempBuf);
             sprintf(buffer, "*QR-OK,%s#",QrString);
             utils_nvs_set_str(NVS_QR_STRING,QrString);
@@ -496,6 +496,10 @@ void process_uart_packet(const char *pkt){
         } else {
             ESP_LOGW("UART", "Invalid VEND command format!");
         }
+    }
+    else if(strncmp(pkt,"*REQUEST:",9)==0)
+    {
+       mqtt_publish_msg(pkt);
     }
     
     else{

@@ -73,6 +73,7 @@ extern uint32_t millis(void);
 // void
 extern void InitMqtt (void);
 extern void mqtt_app_start(void);
+extern void mqtt_publish_msg(const char *);
 // extern void publish_message(const char *, esp_mqtt_client_handle_t *)
 
 
@@ -94,3 +95,4 @@ extern void DisplayNoWiFi(void);
 extern void dispayQR(void);
 extern void DisplayCashReceived(void);
 extern void displayVariables(void);
+

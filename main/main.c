@@ -46,7 +46,7 @@ void app_main(void)
     //esp_log_level_set("*", ESP_LOG_NONE);
     // set totals to 0
     char payload[100];
-    MQTTRequired = 0;
+    MQTTRequired = 1;
     for (int i = 0 ; i < 7 ; i++)
     {
         Totals[i] = 0;
@@ -100,8 +100,7 @@ void app_main(void)
     xTaskCreate(BlinkLED, "BlinkLED", 2048, NULL, 6, NULL);
    
     xTaskCreate(TestCoin, "TestCoin", 2048, NULL, 6, NULL);
-    if (MQTTRequired)
-        InitMqtt();
+  
 
     for (;;) 
     {

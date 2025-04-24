@@ -281,7 +281,7 @@ void tcpip_client_task(){
                                  }
                                   else if(strncmp(rx_buffer, "*QR:",4) == 0){
                                         char tempBuf[100];
-                                        sscanf(rx_buffer, "*QR:%[^:#]#",tempBuf);
+                                        sscanf(rx_buffer, "*QR:%[^#]#",tempBuf);
                                         strcpy(QrString,tempBuf);
                                         sprintf(payload, "*QR-OK,%s#",QrString);
                                         utils_nvs_set_str(NVS_QR_STRING,QrString);

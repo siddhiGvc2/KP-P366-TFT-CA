@@ -56,15 +56,45 @@ int32_t MQTT_CONNEECTED = 1;
  
 
 
-void publish_message(const char *message, esp_mqtt_client_handle_t client) {
+ void publish_message(const char *message, esp_mqtt_client_handle_t client) {
     // Publish the provided message to the MQTT topic
-    esp_mqtt_client_publish(client, "GVC/KP/ALL", message, strlen(message), 0, 0);
+    char topic[200];
+    char modified_message[256];
+    
+    sprintf(topic,"GVC/KP/ALL");
+    
+    // Check if message starts with * and ends with #
+    if (message[0] == '*' && message[strlen(message)-1] == '#') {
+        // Extract the command between * and #
+        char command[100];
+        strncpy(command, message + 1, strlen(message) - 2);
+        command[strlen(message) - 2] = '\0';
+        
+        // Create new message with serial number
+        sprintf(modified_message, "*%s,%s#", SerialNumber, command);
+        message = modified_message;
+    }
+    
+    int msg_id = esp_mqtt_client_publish(client,topic, message, strlen(message), 0, 0);
 
     // Indicate that a transaction is pending
     tx_event_pending = 1;
 
     // Log the published message for debugging
-    ESP_LOGI(TAG, "Published SIP message: %s", message);
+   
+    if (msg_id == -1) {
+        ESP_LOGE(TAG, "Publish failed! MQTT client not ready or disconnected.");
+        uart_write_string_ln("Publish failed! MQTT client not ready or disconnected.");
+      
+    } else {
+        
+        ESP_LOGI(TAG, "Published SIP message: %s", message);
+    }
+}
+
+void mqtt_publish_msg(const char *message)
+{
+   publish_message(message,client);
 }
 
 void Publisher_Task(void *params)
@@ -573,6 +603,7 @@ void mqtt_app_start(void)
     client = esp_mqtt_client_init(&mqttConfig);
     esp_mqtt_client_register_event(client, ESP_EVENT_ANY_ID, mqtt_event_handler, client);
     esp_mqtt_client_start(client);
+    InitMqtt();
 }
 
 
