@@ -564,6 +564,15 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
                     publish_message("*PW2-OK#", client);
                     tx_event_pending = 1;
                 }  
+                else if(strncmp(data, "*QR:",4) == 0){
+                    char tempBuf[100];
+                    sscanf(data, "*QR:%[^#]#",tempBuf);
+                    strcpy(QrString,tempBuf);
+                    sprintf(payload, "*QR-OK,%s#",QrString);
+                    utils_nvs_set_str(NVS_QR_STRING,QrString);
+                    publish_message(payload,client);
+                  
+                }
                 else {
                     ESP_LOGI(TAG, "Unknown message received.");
                 }
