@@ -61,7 +61,7 @@ int32_t MQTT_CONNEECTED = 1;
     char topic[200];
     char modified_message[256];
     
-    sprintf(topic,"GVC/KP/ALL");
+    sprintf(topic,"GVC/MV/ALL");
     
     // Check if message starts with * and ends with #
     if (message[0] == '*' && message[strlen(message)-1] == '#') {
@@ -170,7 +170,7 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
             data[event->data_len] = '\0';
 
             char expected_topic[150];
-            sprintf(expected_topic, "GVC/KP/%s", SerialNumber);
+            sprintf(expected_topic, "GVC/MV/%s", SerialNumber);
 
             if (strcmp(topic, expected_topic) == 0) {
                 if (strcmp(data, "*HBT#") == 0) {
