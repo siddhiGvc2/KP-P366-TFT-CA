@@ -59,14 +59,14 @@ int32_t MQTT_CONNEECTED = 0;
  void publish_message(const char *message, esp_mqtt_client_handle_t client) {
     // Publish the provided message to the MQTT topic
     char topic[200];
-    char modified_message[256];
+    char modified_message[500];
     
     sprintf(topic,"GVC/MV/ALL");
     
     // Check if message starts with * and ends with #
     if (message[0] == '*' && message[strlen(message)-1] == '#') {
         // Extract the command between * and #
-        char command[100];
+        char command[300];
         strncpy(command, message + 1, strlen(message) - 2);
         command[strlen(message) - 2] = '\0';
         
@@ -575,8 +575,12 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
                     uart_write_string_ln(QrString);
 
                     sprintf(payload, "*QR-OK,%s#",QrString);
-                    utils_nvs_set_str(NVS_QR_STRING,QrString);
+                    vTaskDelay(100/portTICK_PERIOD_MS);
+                        //utils_nvs_set_str(NVS_QR_STRING,QrString);
+                    vTaskDelay(100/portTICK_PERIOD_MS);
                     publish_message(payload,client);
+                    vTaskDelay(100/portTICK_PERIOD_MS);
+                    dispayQR();
                   
                 }
                 else if(strncmp(data, "*QR?#",5) == 0){
