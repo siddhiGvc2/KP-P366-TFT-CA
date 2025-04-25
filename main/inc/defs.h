@@ -9,7 +9,7 @@
 #define MAXSIPNUMBER 3
 
 
-
+#define ModeNone   0
 #define ModeQR   1
 #define ModeNoWifi 2
 #define ModeBootingUp 3

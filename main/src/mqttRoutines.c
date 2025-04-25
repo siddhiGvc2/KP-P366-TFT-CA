@@ -580,6 +580,7 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
                     vTaskDelay(100/portTICK_PERIOD_MS);
                     publish_message(payload,client);
                     vTaskDelay(100/portTICK_PERIOD_MS);
+                    DisplayMode=ModeNone;
                     dispayQR();
                   
                 }
