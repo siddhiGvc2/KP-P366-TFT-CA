@@ -565,7 +565,7 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
                     tx_event_pending = 1;
                 }  
                 else if(strncmp(data, "*QR:",4) == 0){
-                    char tempBuf[100];
+                    char tempBuf[500];
                     sscanf(data, "*QR:%[^#]#",tempBuf);
                     strcpy(QrString,tempBuf);
                     sprintf(payload, "*QR-OK,%s#",QrString);
