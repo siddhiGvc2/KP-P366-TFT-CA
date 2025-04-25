@@ -45,7 +45,7 @@ void process_uart_packet(const char *);
 void process_uart_packet(const char *pkt){
     rx_event_pending = 1;
     char buf[200];
-    char buffer[900]; 
+    char buffer[1400]; 
     char payload[240]; 
     // sprintf(buffer,"*MAC:%s:%s#", MAC_ADDRESS_ESP,SerialNumber);
     // uart_write_string_ln(buffer);
@@ -218,7 +218,7 @@ void process_uart_packet(const char *pkt){
       
     }
      else if(strncmp(pkt, "*QR:",4) == 0){
-            char tempBuf[100];
+            char tempBuf[500];
             sscanf(pkt, "*QR:%[^#]#",tempBuf);
             strcpy(QrString,tempBuf);
             sprintf(buffer, "*QR-OK,%s#",QrString);

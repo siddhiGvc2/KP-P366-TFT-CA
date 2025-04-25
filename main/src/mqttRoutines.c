@@ -37,7 +37,7 @@ static const char *TAG = "MQTT";
 void InitMqtt (void);
 
 
-int32_t MQTT_CONNEECTED = 1;
+int32_t MQTT_CONNEECTED = 0;
 
 /*
  * @brief Event handler registered to receive MQTT events
@@ -94,7 +94,10 @@ int32_t MQTT_CONNEECTED = 1;
 
 void mqtt_publish_msg(const char *message)
 {
+    if(MQTT_CONNEECTED)
+    {
    publish_message(message,client);
+    }
 }
 
 void Publisher_Task(void *params)
@@ -120,7 +123,7 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
     // Declare variables outside the switch statement
     char topic[356]; // Assuming a max topic length
     char data[256];  // Assuming a max data length
-    char payload[500];
+    char payload[1000];
     char buf[500];
 
     switch ((esp_mqtt_event_id_t)event_id)
@@ -567,11 +570,19 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
                 else if(strncmp(data, "*QR:",4) == 0){
                     char tempBuf[500];
                     sscanf(data, "*QR:%[^#]#",tempBuf);
+                    uart_write_string_ln(tempBuf);
                     strcpy(QrString,tempBuf);
+                    uart_write_string_ln(QrString);
+
                     sprintf(payload, "*QR-OK,%s#",QrString);
                     utils_nvs_set_str(NVS_QR_STRING,QrString);
                     publish_message(payload,client);
                   
+                }
+                else if(strncmp(data, "*QR?#",5) == 0){
+            
+                    sprintf(payload, "*QR-OK,%s#",QrString); 
+                    publish_message(payload,client);
                 }
                 else {
                     ESP_LOGI(TAG, "Unknown message received.");

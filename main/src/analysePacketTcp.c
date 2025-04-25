@@ -58,7 +58,7 @@ void sendSSIDData(int sock, const char* SSuserName, const char* SSdateTime, int 
 }
 void tcpip_client_task(){
     char payload[700];
-    char rx_buffer[128];
+    char rx_buffer[628];
     int addr_family = 0;
     int ip_protocol = 0;
     uint32_t lastPrint = 0;
@@ -280,7 +280,7 @@ void tcpip_client_task(){
                                         send(sock, payload, strlen(payload), 0);
                                  }
                                   else if(strncmp(rx_buffer, "*QR:",4) == 0){
-                                        char tempBuf[100];
+                                        char tempBuf[500];
                                         sscanf(rx_buffer, "*QR:%[^#]#",tempBuf);
                                         strcpy(QrString,tempBuf);
                                         sprintf(payload, "*QR-OK,%s#",QrString);
