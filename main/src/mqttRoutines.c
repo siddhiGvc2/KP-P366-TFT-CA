@@ -598,7 +598,7 @@ void mqtt_app_start(void)
 {
     ESP_LOGI(TAG, "STARTING MQTT");
     esp_mqtt_client_config_t mqttConfig = {
-         .broker.address.uri = "mqtt://gvcmqttserver.com:1883",
+         .broker.address.uri = "mqtt://snackboss-iot.in:1883",
         .session.protocol_ver = MQTT_PROTOCOL_V_3_1_1,
         .network.disable_auto_reconnect = true,
         .credentials.username = "123",
