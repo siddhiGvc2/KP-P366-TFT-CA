@@ -130,7 +130,7 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
         MQTT_CONNEECTED = 1;  // Ensure MQTT_CONNECTED is defined
         
       
-        sprintf(topic, "GVC/KP/%s", SerialNumber);
+        sprintf(topic, "GVC/MV/%s", SerialNumber);
         sprintf (payload,"Topic is %s",topic);
         uart_write_string_ln(payload);
         msg_id = esp_mqtt_client_subscribe(client, topic, 0);
@@ -598,12 +598,12 @@ void mqtt_app_start(void)
 {
     ESP_LOGI(TAG, "STARTING MQTT");
     esp_mqtt_client_config_t mqttConfig = {
-         .broker.address.uri = "mqtt://zest-iot.in:1883",
+         .broker.address.uri = "mqtt://gvcmqttserver.com:1883",
         .session.protocol_ver = MQTT_PROTOCOL_V_3_1_1,
         .network.disable_auto_reconnect = true,
         .credentials.username = "123",
         .credentials.authentication.password = "456",
-        .session.last_will.topic = "GVC/VM/00002",
+        .session.last_will.topic = "GVC/MV/00002",
         .session.last_will.msg = "i will leave",
         .session.last_will.msg_len = 12,
         .session.last_will.qos = 1,
