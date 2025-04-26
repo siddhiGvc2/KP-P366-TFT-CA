@@ -593,6 +593,7 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
                 {
                     uart_write_string_ln(data);
                     publish_message("CASHRECEIVED-OK",client);
+                    DisplayCashReceived();
                 }
                 else {
                     ESP_LOGI(TAG, "Unknown message received.");

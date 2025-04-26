@@ -42,6 +42,7 @@
 #include "BootingUp.c"
 #include "QRcode.c"
 #include "CashReceived.c"
+#include "SelectItem.c"
 
 #define QR_CODE_SIZE  198
 
@@ -99,6 +100,16 @@ void DisplayCashReceived(void)
         LV_IMG_DECLARE(CashReceived);
         display_images(&CashReceived);
         DisplayMode = ModeCashReceived;
+    }
+}
+
+void DisplaySelectItem(void)
+{
+    if (DisplayMode != ModeSelectItem)
+    {
+        LV_IMG_DECLARE(SelectItem);
+        display_images(&SelectItem);
+        DisplayMode = ModeSelectItem;
     }
 }
 
