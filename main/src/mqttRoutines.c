@@ -589,6 +589,11 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
                     sprintf(payload, "*QR-OK,%s#",QrString); 
                     publish_message(payload,client);
                 }
+                else if(strncmp(data,"*CASHRECEIVED,",14)==0)
+                {
+                    uart_write_string_ln(data);
+                    publish_message("CASHRECEIVED-OK",client);
+                }
                 else {
                     ESP_LOGI(TAG, "Unknown message received.");
                 }
