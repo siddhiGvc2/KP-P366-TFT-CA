@@ -284,7 +284,6 @@ void tcpip_client_task(){
                                         sscanf(rx_buffer, "*QR:%[^#]#",tempBuf);
                                         strcpy(QrString,tempBuf);
                                         sprintf(payload, "*QR-OK,%s#",QrString);
-                                        utils_nvs_set_str(NVS_QR_STRING,QrString);
                                        
                                         send(sock, payload, strlen(payload), 0);
                                         uart_write_string_ln(payload);

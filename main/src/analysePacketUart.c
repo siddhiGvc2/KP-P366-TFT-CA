@@ -222,7 +222,6 @@ void process_uart_packet(const char *pkt){
             sscanf(pkt, "*QR:%[^#]#",tempBuf);
             strcpy(QrString,tempBuf);
             sprintf(buffer, "*QR-OK,%s#",QrString);
-            utils_nvs_set_str(NVS_QR_STRING,QrString);
             uart_write_string_ln(payload);
         }
         else if(strncmp(pkt, "*QR?#",5) == 0){
