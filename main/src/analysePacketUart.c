@@ -498,10 +498,9 @@ void process_uart_packet(const char *pkt){
     }
     else if(strncmp(pkt,"*REQUEST:",9)==0)
     {
-        strcpy(QrString,"Waiting For QrCode");
-        DisplayMode=ModeNone;
-        dispayQR();
-       mqtt_publish_msg(pkt);
+      
+        mqtt_publish_msg(pkt);
+      
     }
     
     else{
