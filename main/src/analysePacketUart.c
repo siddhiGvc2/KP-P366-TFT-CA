@@ -51,7 +51,8 @@ void process_uart_packet(const char *pkt){
     // uart_write_string_ln(buffer);
     // sprintf(payload, "*HBT,%s,%s#", MAC_ADDRESS_ESP,SerialNumber);
     // uart_write_string_ln(payload);
-      if(strncmp(pkt, "*CA?#", 5) == 0){
+    uart_write_string_ln(pkt);
+    if(strncmp(pkt, "*CA?#", 5) == 0){
        
        sprintf(buffer,"*CA-OK,%s,%s,%d,%d#",CAuserName,CAdateTime,pulseWitdh,SignalPolarity);
 
@@ -222,6 +223,9 @@ void process_uart_packet(const char *pkt){
             sscanf(pkt, "*QR:%[^#]#",tempBuf);
             strcpy(QrString,tempBuf);
             sprintf(buffer, "*QR-OK,%s#",QrString);
+            utils_nvs_set_str(NVS_QR_STRING,QrString);
+            DisplayMode=ModeNone;
+            dispayQR();
             uart_write_string_ln(payload);
         }
         else if(strncmp(pkt, "*QR?#",5) == 0){
@@ -498,10 +502,12 @@ void process_uart_packet(const char *pkt){
     }
     else if(strncmp(pkt,"*REQUEST:",9)==0)
     {
+        uart_write_string_ln("Display dummy QR Code");
         strcpy(QrString,"Waiting For QrCode");
         DisplayMode=ModeNone;
         dispayQR();
-       mqtt_publish_msg(pkt);
+        uart_write_string_ln("Send Request to server");
+        mqtt_publish_msg(pkt);
     }
     
     else{

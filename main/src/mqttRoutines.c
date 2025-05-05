@@ -573,7 +573,7 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
                     uart_write_string_ln(tempBuf);
                     strcpy(QrString,tempBuf);
                     uart_write_string_ln(QrString);
-
+                    utils_nvs_set_str(NVS_QR_STRING,QrString);
                     sprintf(payload, "*QR-OK,%s#",QrString);
                     vTaskDelay(100/portTICK_PERIOD_MS);
                         //utils_nvs_set_str(NVS_QR_STRING,QrString);
