@@ -40,6 +40,15 @@
 
 static const char *TAG = "main";
 
+
+static void display_inc_task(void *para) {
+        
+    while(1) {
+        lv_timer_handler();
+        vTaskDelay(pdMS_TO_TICKS(10));
+    }
+}
+
 void app_main(void)
 {
     //Initialize NVS
@@ -91,6 +100,8 @@ void app_main(void)
     //     led_set_level(LEDG, 0);
     //     vTaskDelay(500/portTICK_PERIOD_MS);   
     // }
+    xTaskCreate(display_inc_task, "display task", 1024 * 4, NULL, 20, NULL);
+    
     ESP_LOGI(TAG, "*Starting WiFi#");
     wifi_init_sta();
     // server_main();

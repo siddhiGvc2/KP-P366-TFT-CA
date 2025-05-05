@@ -95,4 +95,4 @@ extern void DisplayNoWiFi(void);
 extern void dispayQR(void);
 extern void DisplayCashReceived(void);
 extern void displayVariables(void);
-
+extern void DisplaySelectItem(void);
