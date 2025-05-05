@@ -9,4 +9,7 @@
 -- send z after some delay
 -- send *CONFIGOK# after some delay
 -- send *OKNET# when wifi and mqtt connected
+- when UART sends *TRXN,POSID,TID,SID,PAYTM,Price,SprialNumber# - this means this item has been vend, send API to mobivend server.
+-- send Serial Number via *PID,xxxx# to UART
+-- serial number is without NA-1507-
 

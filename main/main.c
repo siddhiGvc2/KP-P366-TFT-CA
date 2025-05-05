@@ -54,7 +54,7 @@ void app_main(void)
     //Initialize NVS
     //esp_log_level_set("*", ESP_LOG_NONE);
     // set totals to 0
-    char payload[100];
+    char payload[200];
     MQTTRequired = 1;
     for (int i = 0 ; i < 7 ; i++)
     {
@@ -85,8 +85,11 @@ void app_main(void)
     Out4094(0x00);; // set all outputs inactive
     TFT_main();
     DisplayBootingUp();
-
+    
     showLogo();
+
+    sprintf(payload,"*PID,%s#",SerialNumber);
+    uart_write_string_ln(payload);
     uart_write_string_ln("*ARD+ESP#");
     
     // for (int i = 0 ; i < 3 ; i++)
