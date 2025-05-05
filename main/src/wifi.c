@@ -305,6 +305,8 @@ void smartconfig_example_task(void * parm)
 
 void wifi_init_sta(void)
 {
+    vTaskDelay(2000/portTICK_PERIOD_MS);
+    uart_write_string_ln("*WIFICONFIGOK#");
     char buffer[100];
     s_wifi_event_group = xEventGroupCreate();
 
@@ -407,10 +409,12 @@ void wifi_init_sta(void)
   
     if(connected_to_wifi){
        
-        
+        vTaskDelay(2000/portTICK_PERIOD_MS);
+        uart_write_string_ln("*CONFIGOK#");
         connected_to_wifi_and_internet = true;
         DisplayMode=ModeNone;
         dispayQR();
+       
         
         // esp_http_client_config_t config = {
         //     .url = "http://www.google.com",  

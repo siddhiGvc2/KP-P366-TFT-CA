@@ -132,8 +132,8 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
     case MQTT_EVENT_CONNECTED:
         ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
         MQTT_CONNEECTED = 1;  // Ensure MQTT_CONNECTED is defined
-        
-      
+        vTaskDelay(2000/portTICK_PERIOD_MS);
+        uart_write_string_ln("*OKNET#");
         sprintf(topic, "GVC/MV/%s", SerialNumber);
         sprintf (payload,"Topic is %s",topic);
         uart_write_string_ln(payload);
@@ -595,6 +595,11 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
                     uart_write_string_ln(data);
                     publish_message("CASHRECEIVED-OK",client);
                     DisplayCashReceived();
+                }
+                else if(strncmp(data,"*VEND,",6)==0)
+                {
+                    uart_write_string_ln(data);
+
                 }
                 else {
                     ESP_LOGI(TAG, "Unknown message received.");

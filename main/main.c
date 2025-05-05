@@ -87,6 +87,7 @@ void app_main(void)
     DisplayBootingUp();
 
     showLogo();
+    uart_write_string_ln("*ARD+ESP#");
     
     // for (int i = 0 ; i < 3 ; i++)
     // {
