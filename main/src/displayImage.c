@@ -117,6 +117,11 @@ void DisplaySelectItem(void)
 void dispayQR(void){
     if (DisplayMode != ModeQR)
     {
+        if(img)
+        {
+        lv_obj_del(img); // Delete the flame icon if it exists
+        img = NULL;
+        }
      DisplayMode = ModeQR;   
      uart_write_string_ln("displayQR Initiated");
      LV_IMG_DECLARE(QRcode);

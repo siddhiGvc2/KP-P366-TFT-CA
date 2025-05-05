@@ -107,8 +107,9 @@ void Publisher_Task(void *params)
     if(MQTT_CONNEECTED)
     {
         publish_message("*HBT#", client);
-        vTaskDelay(15000 / portTICK_PERIOD_MS);
+       
     }
+    vTaskDelay(15000 / portTICK_PERIOD_MS);
   }
 }
 
