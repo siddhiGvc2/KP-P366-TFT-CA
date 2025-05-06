@@ -500,6 +500,48 @@ void process_uart_packet(const char *pkt){
             ESP_LOGW("UART", "Invalid VEND command format!");
         }
     }
+    else if (strncmp(pkt, "*TRXN,", 6) == 0) {
+        ESP_LOGI("UART", "Received TRXN command!");
+    
+        // Declare buffers for all 7 fields
+        char val1[20], val2[20], refId[32], val4[20], rawPrice[20], itemCode[10];
+    
+        // Parse 7 fields
+        int matched = sscanf(pkt, "*TRXN,%[^,],%[^,],%[^,],%[^,],%[^,],%[^,#]#", 
+                             val1, val2, refId, val4, rawPrice, itemCode);
+    
+        if (matched == 6) {
+            // Convert price from paise to rupees
+            int priceInt = atoi(rawPrice);
+            int p=priceInt/100;
+    
+            // Format spring (e.g., A01 → AX01)
+            char spring[10];
+            if (strlen(itemCode) >= 3) {
+                snprintf(spring, sizeof(spring), "%cX%c%c", itemCode[0], itemCode[1], itemCode[2]);
+            } else {
+                ESP_LOGW("UART", "Invalid itemCode length");
+                return;
+            }
+            sprintf(price, 50, "%d", p);
+
+            // Send acknowledgment over UART
+            char payload[204];
+            snprintf(payload, sizeof(payload), "*VEND-OK,%s,%s#", price, spring);
+            uart_write_string_ln(payload);
+    
+            char formatted_url[476];  // Adjust size if needed
+            snprintf(formatted_url, sizeof(formatted_url),
+            URL_CASHLESSSALE,
+            SerialNumber, refId, price , spring);  // price is int here
+            strcpy(API,"CashLessSale");
+            start_http_get_task(formatted_url);
+    
+        } else {
+            ESP_LOGW("UART", "Invalid TRXN format: expected 7 values.");
+        }
+    }
+    
     else if(strncmp(pkt,"*REQUEST:",9)==0)
     {
         uart_write_string_ln("Display dummy QR Code");
