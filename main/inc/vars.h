@@ -184,3 +184,5 @@ bool connected_to_wifi = false;
 
 #include "lvgl.h"
 lv_obj_t * img = NULL; // Declare globally or in a higher scope
+
+char UartDebugInfoRequired = 0;

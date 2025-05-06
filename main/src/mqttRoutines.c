@@ -84,6 +84,7 @@ void InitMqtt (void);
    
     if (msg_id == -1) {
         ESP_LOGE(TAG, "Publish failed! MQTT client not ready or disconnected.");
+        if (UartDebugInfoRequired)
         uart_write_string_ln("Publish failed! MQTT client not ready or disconnected.");
       
     } else {
@@ -137,11 +138,11 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
         uart_write_string_ln("*OKNET#");
         sprintf(topic, "GVC/MV/%s", SerialNumber);
         sprintf (payload,"Topic is %s",topic);
+        if (UartDebugInfoRequired)
         uart_write_string_ln(payload);
         msg_id = esp_mqtt_client_subscribe(client, topic, 0);
         ESP_LOGI(TAG, "sent subscribe successful, msg_id=%d", msg_id);
 
-        ESP_LOGI(TAG, "sent subscribe successful, msg_id=%d", msg_id);
         break;
 
     case MQTT_EVENT_DISCONNECTED:
@@ -263,6 +264,7 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
                         sprintf(payload, "*RST-OK,%s,%s#",RSTuserName,RSTdateTime);
                          publish_message(payload, client);
                         ESP_LOGI(TAG, "*RST-OK#");
+                        if (UartDebugInfoRequired)
                         uart_write_string_ln("*Resetting device#");
                        RestartDevice();
                 }
@@ -444,6 +446,7 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
                 }
                 else if(strncmp(data, "*RESTART#", 9) == 0){
                     publish_message("*RESTART-OK#", client);
+                    if (UartDebugInfoRequired)
                     uart_write_string_ln("*Resetting device#");
                     tx_event_pending = 1;
                    RestartDevice();
@@ -573,8 +576,10 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
                 else if(strncmp(data, "*QR:",4) == 0){
                     char tempBuf[500];
                     sscanf(data, "*QR:%[^#]#",tempBuf);
+                    if (UartDebugInfoRequired)
                     uart_write_string_ln(tempBuf);
                     strcpy(QrString,tempBuf);
+                    if (UartDebugInfoRequired)
                     uart_write_string_ln(QrString);
                     utils_nvs_set_str(NVS_QR_STRING,QrString);
                     sprintf(payload, "*QR-OK,%s#",QrString);

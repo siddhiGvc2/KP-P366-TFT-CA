@@ -191,3 +191,4 @@ extern bool connected_to_wifi;
 
 #include "lvgl.h"
 extern lv_obj_t * img; // Declare globally or in a higher scope
+extern char UartDebugInfoRequired;
