@@ -468,6 +468,8 @@ void process_uart_packet(const char *pkt){
         uart_write_string_ln(pkt);
         sprintf(payload,"*WS,%d#",connected_to_wifi);
         uart_write_string_ln(payload);
+        if (connect_to_wifi == 0)
+            ESP_LOGI(TAG,"********WS? = 0#############")
     }
     else if (strncmp(pkt, "*SELL,", 6) == 0) {
         ESP_LOGI("UART", "Received SELL command!");

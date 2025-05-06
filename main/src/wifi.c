@@ -457,7 +457,7 @@ void wifi_init_sta(void)
     else // restart
     {
         uart_write_string_ln("*WS0#");
-        ESP_LOGI(TAG,"*All tries over");
+        ESP_LOGI(TAG,"************All tries over WS0 ##############");
         if (UartDebugInfoRequired)
         uart_write_string_ln("*All tries over#");
         RestartDevice();
