@@ -37,7 +37,7 @@ static const char *TAG = "MQTT";
 void InitMqtt (void);
 
 
-int32_t MQTT_CONNEECTED = 0;
+
 
 /*
  * @brief Event handler registered to receive MQTT events

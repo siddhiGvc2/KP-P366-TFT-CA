@@ -179,5 +179,8 @@ int CashCollected=200;
 int CashLessVending=6;
 int OnTime=5;
 
+int32_t MQTT_CONNEECTED = 0;
+bool connected_to_wifi = false;
+
 #include "lvgl.h"
 lv_obj_t * img = NULL; // Declare globally or in a higher scope

@@ -12,4 +12,5 @@
 - when UART sends *TRXN,POSID,TID,SID,PAYTM,Price,SprialNumber# - this means this item has been vend, send API to mobivend server.
 -- send Serial Number via *PID,xxxx# to UART
 -- serial number is without NA-1507-
+-- MS? & WS? command added in uart
 

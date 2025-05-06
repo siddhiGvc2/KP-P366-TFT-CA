@@ -458,6 +458,14 @@ void process_uart_packet(const char *pkt){
         sprintf(payload,"LED State is %d",led_state);
         uart_write_string_ln(payload);
     }
+    else if(strncmp(pkt, "*MS?#", 5) == 0){
+        sprintf(payload,"*M,%ld#",MQTT_CONNEECTED);
+        uart_write_string_ln(payload);
+    }
+    else if(strncmp(pkt, "*WS?#", 5) == 0){
+        sprintf(payload,"*W,%d#",connected_to_wifi);
+        uart_write_string_ln(payload);
+    }
     else if (strncmp(pkt, "*SELL,", 6) == 0) {
         ESP_LOGI("UART", "Received SELL command!");
 
@@ -551,7 +559,7 @@ void process_uart_packet(const char *pkt){
         uart_write_string_ln("Send Request to server");
         mqtt_publish_msg(pkt);
     }
-    
+  
     else{
         uart_write_string_ln(pkt);
         int l = strlen(pkt);
