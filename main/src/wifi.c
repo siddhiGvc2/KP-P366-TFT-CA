@@ -127,6 +127,7 @@ void event_handler(void* arg, esp_event_base_t event_base,
             ESP_LOGI(TAG, "*WiFi:%d#",WiFiNumber);
             sprintf(buffer, "*WiFi:%d#", WiFiNumber); //actual when in production
             // sprintf(buffer,"*WiFi Connected %d#",WiFiNumber);
+
             uart_write_string_ln(buffer);
             s_retry_num = 0;
             FirstWiFiConnection = 1;
@@ -381,6 +382,8 @@ void wifi_init_sta(void)
                      continue;
                 }
                 else{
+                sprintf(buffer,"*WiFi,%s#",WIFI_SSID_3);
+                uart_write_string_ln(buffer);
                 ESP_LOGI(TAG, "*Connected To WiFi3#");
                 serverStatus=1;
                  sprintf(buffer, "*NOSERVER#");
@@ -390,6 +393,8 @@ void wifi_init_sta(void)
             }
             }
             else{
+                sprintf(buffer,"*WiFi,%s#",WIFI_SSID_2);
+                uart_write_string_ln(buffer);
                 ESP_LOGI(TAG, "*Connected To WiFi2#");
                 serverStatus=1;
                  sprintf(buffer, "*NOSERVER#");
@@ -398,6 +403,8 @@ void wifi_init_sta(void)
                 break;
             }
         }else{
+            sprintf(buffer,"*WiFi,%s#",WIFI_SSID_1);
+            uart_write_string_ln(buffer);
             ESP_LOGI(TAG, "*Connected To WiFi1#");
             serverStatus=1;
             sprintf(buffer, "*N#");
@@ -411,6 +418,7 @@ void wifi_init_sta(void)
        
         vTaskDelay(2000/portTICK_PERIOD_MS);
         uart_write_string_ln("*CONFIGOK#");
+       
         connected_to_wifi_and_internet = true;
         DisplayMode=ModeNone;
         dispayQR();

@@ -459,11 +459,11 @@ void process_uart_packet(const char *pkt){
         uart_write_string_ln(payload);
     }
     else if(strncmp(pkt, "*MS?#", 5) == 0){
-        sprintf(payload,"*M,%ld#",MQTT_CONNEECTED);
+        sprintf(payload,"*MS,%ld#",MQTT_CONNEECTED);
         uart_write_string_ln(payload);
     }
     else if(strncmp(pkt, "*WS?#", 5) == 0){
-        sprintf(payload,"*W,%d#",connected_to_wifi);
+        sprintf(payload,"*WS,%d#",connected_to_wifi);
         uart_write_string_ln(payload);
     }
     else if (strncmp(pkt, "*SELL,", 6) == 0) {

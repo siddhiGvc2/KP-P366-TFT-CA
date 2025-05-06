@@ -14,3 +14,8 @@
 -- serial number is without NA-1507-
 -- MS? & WS? command added in uart
 
+#060525
+-- MS? & WS? command added in uart
+-- replay as MSx and WSx
+-- send *WiFi,SSID# when wifi connected
+
