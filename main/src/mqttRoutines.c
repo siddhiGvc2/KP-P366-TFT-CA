@@ -612,10 +612,11 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
 
                 }
                 else if(strncmp(data, "*DATA:", 6) == 0){
-                    sscanf(data, "*DATA:%s#",currentDateTime);
+                    sscanf(data, "*DATA:%[^#]#",currentDateTime);
                     sprintf(payload, "*DATA-OK,%s#",currentDateTime); 
                     publish_message(payload,client);
-                    uart_write_string_ln(data);
+                    sprintf(payload, "*D%s#",currentDateTime); 
+                    uart_write_string_ln(payload);
                     
                 }
                 else {

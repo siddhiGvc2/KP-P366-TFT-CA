@@ -515,7 +515,7 @@ void process_uart_packet(const char *pkt){
     }
     else if (strncmp(pkt, "*TRXN,", 6) == 0) {
         ESP_LOGI("UART", "Received TRXN command!");
-    
+        uart_write_string_ln("Received TRXN command!");
         // Declare buffers for all 7 fields
         char val1[20], val2[20], refId[32], val4[20], rawPrice[20], itemCode[10];
     
@@ -534,14 +534,15 @@ void process_uart_packet(const char *pkt){
                 snprintf(spring, sizeof(spring), "%cX%c%c", itemCode[0], itemCode[1], itemCode[2]);
             } else {
                 ESP_LOGW("UART", "Invalid itemCode length");
+                uart_write_string_ln("Invalid itemCode length");
                 return;
             }
             sprintf(price, 50, "%d", p);
 
             // Send acknowledgment over UART
             char payload[204];
-            snprintf(payload, sizeof(payload), "*VEND-OK,%s,%s#", price, spring);
-            uart_write_string_ln(payload);
+            // snprintf(payload, sizeof(payload), "*VEND-OK,%s,%s#", price, spring);
+            // uart_write_string_ln(payload);
     
             char formatted_url[476];  // Adjust size if needed
             snprintf(formatted_url, sizeof(formatted_url),

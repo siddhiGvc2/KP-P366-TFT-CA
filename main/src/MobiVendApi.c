@@ -77,7 +77,8 @@ static esp_err_t _http_handler(esp_http_client_event_t *evt) {
             if(strstr(API,"CashLessSale")!=NULL)
             {
                 ESP_LOGI(TAG, "CashLessSale Response: %s", output_buffer);
-              
+                sprintf(payload,"CashLessSale Response: %s", output_buffer);
+                uart_write_string_ln(payload);
             }
             if(strstr(API,"CashLessVend")!=NULL)
             {
