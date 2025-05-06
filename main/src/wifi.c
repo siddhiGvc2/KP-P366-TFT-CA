@@ -415,10 +415,10 @@ void wifi_init_sta(void)
     }
   
     if(connected_to_wifi){
-       
+        uart_write_string_ln("*WS1#");
         vTaskDelay(2000/portTICK_PERIOD_MS);
         uart_write_string_ln("*CONFIGOK#");
-       
+         
         connected_to_wifi_and_internet = true;
         DisplayMode=ModeNone;
         dispayQR();
@@ -440,7 +440,7 @@ void wifi_init_sta(void)
     }
     else // restart
     {
-       
+        uart_write_string_ln("*WS0#");
         ESP_LOGI(TAG,"*All tries over");
         uart_write_string_ln("*All tries over#");
         RestartDevice();

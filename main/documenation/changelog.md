@@ -18,4 +18,10 @@
 -- MS? & WS? command added in uart
 -- replay as MSx and WSx
 -- send *WiFi,SSID# when wifi connected
+-- send *WS1# when wifi connected and *WS0# when wifi disconnected
+-- send *MS1# when MQTT connected and *MS0# when mqtt disconnected
+-- send *Dddmmyyhhmmss# when wifi connected
+-- remove unnecessary UART command
+
+
 

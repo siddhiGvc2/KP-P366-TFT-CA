@@ -455,14 +455,17 @@ void process_uart_packet(const char *pkt){
         RestartDevice();
     }
     else if(strncmp(pkt, "*LS?#", 5) == 0){
+       
         sprintf(payload,"LED State is %d",led_state);
         uart_write_string_ln(payload);
     }
     else if(strncmp(pkt, "*MS?#", 5) == 0){
+        uart_write_string_ln(pkt);
         sprintf(payload,"*MS,%ld#",MQTT_CONNEECTED);
         uart_write_string_ln(payload);
     }
     else if(strncmp(pkt, "*WS?#", 5) == 0){
+        uart_write_string_ln(pkt);
         sprintf(payload,"*WS,%d#",connected_to_wifi);
         uart_write_string_ln(payload);
     }
