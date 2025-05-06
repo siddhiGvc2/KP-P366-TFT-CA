@@ -189,6 +189,8 @@ extern int OnTime;
 extern int32_t MQTT_CONNEECTED;
 extern bool connected_to_wifi;
 
+extern char currentDateTime[50];
+
 #include "lvgl.h"
 extern lv_obj_t * img; // Declare globally or in a higher scope
 extern char UartDebugInfoRequired;

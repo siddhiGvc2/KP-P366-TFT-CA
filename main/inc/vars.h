@@ -182,6 +182,9 @@ int OnTime=5;
 int32_t MQTT_CONNEECTED = 0;
 bool connected_to_wifi = false;
 
+
+char currentDateTime[50];
+
 #include "lvgl.h"
 lv_obj_t * img = NULL; // Declare globally or in a higher scope
 

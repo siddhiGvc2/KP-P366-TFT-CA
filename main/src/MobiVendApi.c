@@ -69,8 +69,10 @@ static esp_err_t _http_handler(esp_http_client_event_t *evt) {
         
         case HTTP_EVENT_ON_FINISH:
             output_buffer[output_len] = '\0';  // Null-terminate the buffer
+            if (UartDebugInfoRequired){
             sprintf(payload, "Response for : %s, %s", API, output_buffer);
             uart_write_string_ln(payload);
+            }
             
             if(strstr(API,"CashLessSale")!=NULL)
             {
@@ -83,6 +85,7 @@ static esp_err_t _http_handler(esp_http_client_event_t *evt) {
               
                 if (sscanf(output_buffer, "MVBEGIN_OK_MVCLOSE") == 0)
                 {
+
                     sprintf(payload, "*VEND,%s,%s#", price, "02x20");
                     uart_write_string_ln(payload);
                 }
@@ -94,9 +97,11 @@ static esp_err_t _http_handler(esp_http_client_event_t *evt) {
                 ESP_LOGI(TAG, "Extracted RefId: %s", refId);
             
                 sprintf(payload, "Price: %s, RefId: %s", price, refId);
+                if (UartDebugInfoRequired){
                 uart_write_string_ln(payload);
                 sprintf(payload, "*SELL,%s,%s#", price, "02x20");
                 uart_write_string_ln(payload);
+                }
 
             } else {
                 ESP_LOGE(TAG, "Parsing failed: Unexpected response format.");
@@ -132,7 +137,8 @@ void http_get_task(void *param) {
     }
 
     ESP_LOGI(TAG, "HTTP GET Request to: %s", req->url);
-    uart_write_string_ln(req->url);
+    if(UartDebugInfoRequired)
+      uart_write_string_ln(req->url);
 
     esp_http_client_config_t config = {
         .url = req->url,

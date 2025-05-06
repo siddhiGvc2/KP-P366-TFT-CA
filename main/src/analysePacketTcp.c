@@ -116,9 +116,12 @@ void tcpip_client_task(){
                     int err = send(sock, payload, strlen(payload), 0);
                     ESP_LOGI(TAG, "*Successfully connected#"); 
                     serverStatus=1;
-
+                     
+                    if(UartDebugInfoRequired)
+                    {
                     sprintf(payload, "*QR:%s#",QrString); 
                     uart_write_string_ln(payload);
+                    }
 
                     if (gpio_get_level(JUMPER) == 0)
                         ESP_LOGI(TAG, "*MAC,%s,%s#", MAC_ADDRESS_ESP,SerialNumber) ;
@@ -131,9 +134,12 @@ void tcpip_client_task(){
                     ESP_LOGI(TAG, "*%s#",FWVersion);
                     err = send(sock, FWVersion, strlen(FWVersion), 0);
 
+                    if(UartDebugInfoRequired)
+                    {
                     sprintf(payload, "*QR-OK,%s#",QrString); 
           
                     uart_write_string_ln(payload);
+                    }
                     uart_write_string_ln('*BOOTING#');
 
                     sprintf(payload,"*FW:%s#",FWVersion);

@@ -260,7 +260,10 @@ void gpio_read_n_act(void)
                     Jumper2Debounce = Jumper2Debounce-1;
                     if (Jumper2Debounce == 0)
                     {
-                        uart_write_string_ln("*Jumper Debounced Low#");
+                        if(UartDebugInfoRequired)
+                        {
+                            uart_write_string_ln("*Jumper Debounced Low#");
+                        }
                         Jumper2Status = 0;
                         AckPulseReceived++;
                     }
