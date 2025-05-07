@@ -555,7 +555,14 @@ void process_uart_packet(const char *pkt){
             ESP_LOGW("UART", "Invalid TRXN format: expected 7 values.");
         }
     }
-    
+    else if (sscanf(pkt, "*%[^,],%[^,],%[^#]#",Number, Provider, Amount) == 3)
+    {
+        
+        if (strcmp(Number,SerialNumber) == 0 && strcmp(Amount,"AmountReceived"))
+        {
+            uart_write_string_ln("*SUCCESS#");
+        }
+    }
     else if(strncmp(pkt,"*REQUEST:",9)==0)
     {
         uart_write_string_ln("Display dummy QR Code");
@@ -576,7 +583,7 @@ void process_uart_packet(const char *pkt){
             int l2 = strlen(buff);
             char b[l2+3];
             sprintf(b, "*%s#", buff);
-            tcp_ip_client_send_str(b);
+            // tcp_ip_client_send_str(b);
             tx_event_pending = 1;
         }
     }

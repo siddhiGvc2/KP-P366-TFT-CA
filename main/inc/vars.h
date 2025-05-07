@@ -185,6 +185,9 @@ bool connected_to_wifi = false;
 
 char currentDateTime[50];
 
+char Number[20];
+char Provider[20];
+char Amount[50];
 #include "lvgl.h"
 lv_obj_t * img = NULL; // Declare globally or in a higher scope
 
