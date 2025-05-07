@@ -194,6 +194,8 @@ extern char Number[20];
 extern char Provider[20];
 extern char Amount[50];
 
+extern int IsMobivendApi;
+
 #include "lvgl.h"
 extern lv_obj_t * img; // Declare globally or in a higher scope
 extern char UartDebugInfoRequired;

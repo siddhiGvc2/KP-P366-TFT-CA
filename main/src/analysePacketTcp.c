@@ -953,9 +953,13 @@ void sendHBT (void)
         // gpio_set_level(LedHBT, 1);
         // vTaskDelay(200/portTICK_PERIOD_MS);
         // gpio_set_level(LedHBT, 0);
+        if(IsMobivendApi)
+        {
         strcpy(API,"Heartbeat");
         sprintf(payload,URL_HEARTBEAT,SerialNumber); 
         start_http_get_task(payload);
+       
+        }
         vTaskDelay(HBTDelay/portTICK_PERIOD_MS);
         
     }

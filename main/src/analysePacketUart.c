@@ -481,13 +481,15 @@ void process_uart_packet(const char *pkt){
             sprintf(payload,"*SELL-OK,%s,%s#", uartPrice, spring);
             uart_write_string_ln(payload);
             // Process the SELL command as needed...
-
+            if(IsMobivendApi)
+            {
             char formatted_url[376];  // Adjust size if needed
             sprintf(formatted_url, 
              URL_CASHLESSVEND,
              SerialNumber,spring, price, refId);
             strcpy(API,"CashLessVend");
             start_http_get_task(formatted_url);
+            }
         } else {
             ESP_LOGW("UART", "Invalid SELL command format!");
         }
@@ -502,13 +504,15 @@ void process_uart_packet(const char *pkt){
             sprintf(payload,"*VEND-OK,%s,%s#", uartPrice, spring);
             uart_write_string_ln(payload);
             // Process the SELL command as needed...
-
+            if(IsMobivendApi)
+            {
             char formatted_url[376];  // Adjust size if needed
             sprintf(formatted_url, 
             URL_CASHLESSSALE,
             SerialNumber,refId,price,spring);
             strcpy(API,"CashLessSale");
             start_http_get_task(formatted_url);
+            }
         } else {
             ESP_LOGW("UART", "Invalid VEND command format!");
         }
@@ -543,13 +547,15 @@ void process_uart_packet(const char *pkt){
             char payload[204];
             // snprintf(payload, sizeof(payload), "*VEND-OK,%s,%s#", price, spring);
             // uart_write_string_ln(payload);
-    
+            if(IsMobivendApi)
+            {
             char formatted_url[476];  // Adjust size if needed
             snprintf(formatted_url, sizeof(formatted_url),
             URL_CASHLESSSALE,
             SerialNumber, refId, price , spring);  // price is int here
             strcpy(API,"CashLessSale");
             start_http_get_task(formatted_url);
+            }
     
         } else {
             ESP_LOGW("UART", "Invalid TRXN format: expected 7 values.");
