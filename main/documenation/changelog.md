@@ -29,8 +29,14 @@
 -- change QR code to thaat of Mobivend (done 12:30 - 12:45 )
 -- ensure that QR code is changed when new value is set (pending)
 -- removed ESP_LOGI (for MQTT HBT) (12:45 - 12:50)
--- stop calling mobivend APIs (pending)
-
+-- stop calling mobivend APIs (done)
+-- Send SUCCESS after TRXN received (done)
+-- Send MS1 and WS1 and not MS,1 and WS,1
+-- do not send any thing to UART for diagnostics and MQTT copy data (done)
+-- add ITEMS VENDED screen on display whem TRXN receievd
+-- wait for 30 seconds and display QR code again
+-- send MQTT *TRXN,.. as it is #
+-- check when there is no WIFI or MQTT do not display QR code and display some message 
 
 
 

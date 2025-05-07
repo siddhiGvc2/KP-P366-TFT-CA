@@ -51,14 +51,25 @@ void process_uart_packet(const char *pkt){
     // uart_write_string_ln(buffer);
     // sprintf(payload, "*HBT,%s,%s#", MAC_ADDRESS_ESP,SerialNumber);
     // uart_write_string_ln(payload);
-    uart_write_string_ln(pkt);
-    if(strncmp(pkt, "*CA?#", 5) == 0){
+    //uart_write_string_ln(pkt);
+    ESP_LOGI(TAG,"%s",pkt);
+
+
+    if(strstr(pkt, "AmountReceived"))
+//    if (sscanf(pkt, "*%[^,],%[^,],%[^#]#",Number, Provider, Amount) == 3)
+    {
+        ESP_LOGI(TAG,"AmountReceived pkt accepeted");
+        uart_write_string_ln("*SUCCESS#");
+    }
+    else if(strncmp(pkt, "*CA?#", 5) == 0){
        
        sprintf(buffer,"*CA-OK,%s,%s,%d,%d#",CAuserName,CAdateTime,pulseWitdh,SignalPolarity);
 
-       uart_write_string_ln(buffer);
+       if (UartDebugInfoRequired)
+             uart_write_string_ln(buffer);
         tx_event_pending = 1;
-    }else if(strncmp(pkt, "*CC#", 4) == 0){
+    }
+    else if(strncmp(pkt, "*CC#", 4) == 0){
          for (int i = 0 ; i < 7 ; i++)
         {
             Totals[i] = 0;
@@ -74,6 +85,7 @@ void process_uart_packet(const char *pkt){
        
         sprintf(buffer, "*CC-OK#");
       
+        if (UartDebugInfoRequired)
         uart_write_string_ln(buffer);
         tx_event_pending = 1;
     }
@@ -88,10 +100,12 @@ void process_uart_packet(const char *pkt){
         if (ledpin == 3)
             gpio_set_level(L3, ledstatus);
       
-        uart_write_string_ln("*SL-OK#");
-        tx_event_pending = 1;
+           if (UartDebugInfoRequired)
+            uart_write_string_ln("*SL-OK#");
+              tx_event_pending = 1;
         }
     }
+    
       else if(strncmp(pkt, "*SN:", 4) == 0){
       
        sscanf(pkt, "*SN:%[^#]#",buf);
@@ -103,6 +117,7 @@ void process_uart_packet(const char *pkt){
         utils_nvs_set_str(NVS_SN_DATETIME,SNdateTime);
         
       
+        if (UartDebugInfoRequired)
         uart_write_string_ln("*SN-OK#");
         tx_event_pending = 1;
         
@@ -117,7 +132,8 @@ void process_uart_packet(const char *pkt){
         utils_nvs_set_str(NVS_PT_USERNAME,PTuserName);
         utils_nvs_set_str(NVS_PT_DATETIME,PTdateTime);
         
-      
+        if (UartDebugInfoRequired)
+    
         uart_write_string_ln("*PT-OK#");
         tx_event_pending = 1;
         
@@ -125,6 +141,8 @@ void process_uart_packet(const char *pkt){
        else if(strncmp(pkt, "*PT?#", 5) == 0){
       
         sprintf(buffer, "*PT,%s,%s,%s#",PTuserName,PTdateTime,PassThruValue); //actual when in production
+        if (UartDebugInfoRequired)
+    
         uart_write_string_ln(buffer);
       
       
@@ -134,6 +152,7 @@ void process_uart_packet(const char *pkt){
      else if(strncmp(pkt, "*SN?#", 5) == 0){
       
         sprintf(buffer, "*SN,%s,%s,%s#",SNuserName,SNdateTime,SerialNumber); //actual when in production
+        if (UartDebugInfoRequired)
         uart_write_string_ln(buffer);
       
       
@@ -148,6 +167,7 @@ void process_uart_packet(const char *pkt){
         sprintf(buffer,"*CA-OK,%d,%d#",numValue,polarity);
         utils_nvs_set_str(NVS_CA_USERNAME, CAuserName);
         utils_nvs_set_str(NVS_CA_DATETIME, CAdateTime);
+        if (UartDebugInfoRequired)
        uart_write_string_ln(buffer);
         tx_event_pending = 1;
         
@@ -166,12 +186,14 @@ void process_uart_packet(const char *pkt){
         sscanf(pkt, "*D:%[^:#]#",UniqueTimeStamp);
         utils_nvs_set_str(NVS_UNIX_TS,UniqueTimeStamp);
         sprintf(buffer,"*D-OK,%s#",UniqueTimeStamp); 
-        uart_write_string_ln(buffer);
+        if (UartDebugInfoRequired)
+          uart_write_string_ln(buffer);
     }
     else if(strncmp(pkt, "*D?#",4) == 0){
         
         sprintf(buffer, "*D-OK,%s#",UniqueTimeStamp); 
-        uart_write_string_ln(buffer);
+        if (UartDebugInfoRequired)
+           uart_write_string_ln(buffer);
     }            
     else if(strncmp(pkt, "*V:", 3) == 0){
         if(edges==0)
@@ -194,10 +216,12 @@ void process_uart_packet(const char *pkt){
                 ESP_LOGI(TAG, "*V-OK,%s,%d,%d#",TID,pin,pulses);
                  
                 sprintf(buffer, "*V-OK,%s,%d,%d#", TID,pin,pulses); //actual when in production
+                if (UartDebugInfoRequired)
                 uart_write_string_ln(buffer);
                 vTaskDelay(1000/portTICK_PERIOD_MS);
                 sprintf(buffer, "*T-OK,%s,%d,%d#",TID,pin,pulses); //actual when in production
                 ESP_LOGI(TAG, "*T-OK,%s,%d,%d#",TID,pin,pulses);
+                if (UartDebugInfoRequired)
                 uart_write_string_ln(buffer);
                 tx_event_pending = 1;
                 Totals[pin-1] += pulses;
@@ -210,6 +234,7 @@ void process_uart_packet(const char *pkt){
            
                 
                 sprintf(buffer,  "*DUP TID#");
+                if (UartDebugInfoRequired)
                 uart_write_string_ln(buffer);
             }  
       
@@ -226,12 +251,16 @@ void process_uart_packet(const char *pkt){
             utils_nvs_set_str(NVS_QR_STRING,QrString);
             DisplayMode=ModeNone;
             dispayQR();
+            if (UartDebugInfoRequired){
             uart_write_string_ln(payload);
+            }
         }
         else if(strncmp(pkt, "*QR?#",5) == 0){
             
             sprintf(buffer, "*QR-OK,%s#",QrString); 
+            if (UartDebugInfoRequired){
             uart_write_string_ln(buffer);
+            }
         }
          else if(strncmp(pkt, "*STATUS?#",9) == 0){
            
@@ -239,15 +268,18 @@ void process_uart_packet(const char *pkt){
             if(fotaStatus==1)
             {
               sprintf(buffer, "*FOTA#");
+              if (UartDebugInfoRequired)
               uart_write_string_ln(buffer);   
             }
             else if(serverStatus==0)
             {
              sprintf(buffer, "*NOSERVER#");
+             if (UartDebugInfoRequired)
              uart_write_string_ln(buffer); 
             }
             else if(serverStatus==1){
-              sprintf(buffer, "*QR:%s#",QrString); 
+              sprintf(buffer, "*QR:%s#",QrString);
+              if (UartDebugInfoRequired) 
               uart_write_string_ln(buffer);
             }
             
@@ -257,8 +289,10 @@ void process_uart_packet(const char *pkt){
         
       else if(strncmp(pkt, "*FW?#", 5) == 0){
          ESP_LOGI(TAG, "*%s#",FWVersion);
-       
+         if (UartDebugInfoRequired)
+         {
          uart_write_string_ln(FWVersion);
+         }
       
         tx_event_pending = 1;
         if (ledpin == 1)
@@ -273,37 +307,43 @@ void process_uart_packet(const char *pkt){
         //uart_write_string_ln(buf);
         strcpy(WIFI_SSID_1, buf);
         utils_nvs_set_str(NVS_SSID_1_KEY, WIFI_SSID_1);
-        uart_write_string_ln("*SS-OK#");
+        if (UartDebugInfoRequired)
+           uart_write_string_ln("*SS-OK#");
         tx_event_pending = 1;
     }else if(strncmp(pkt, "*SS1:", 5) == 0){
         sscanf(pkt, "*SS1:%[^#]#", buf);
         strcpy(WIFI_SSID_2, buf);
         utils_nvs_set_str(NVS_SSID_2_KEY, WIFI_SSID_2);
-        uart_write_string_ln("*SS1-OK#");
+        if (UartDebugInfoRequired)
+            uart_write_string_ln("*SS1-OK#");
         tx_event_pending = 1;
     }else if(strncmp(pkt, "*SS2:", 5) == 0){
         sscanf(pkt, "*SS2:%[^#]#", buf);
         strcpy(WIFI_SSID_3, buf);
         utils_nvs_set_str(NVS_SSID_3_KEY, WIFI_SSID_3);
-        uart_write_string_ln("*SS2-OK#");
+        if (UartDebugInfoRequired)
+            uart_write_string_ln("*SS2-OK#");
         tx_event_pending = 1;
     }else if(strncmp(pkt, "*PW:", 4) == 0){
         sscanf(pkt, "*PW:%[^#]#", buf);
         strcpy(WIFI_PASS_1, buf);
         utils_nvs_set_str(NVS_PASS_1_KEY, WIFI_PASS_1);
-        uart_write_string_ln("*PW-OK#");
+        if (UartDebugInfoRequired)
+           uart_write_string_ln("*PW-OK#");
         tx_event_pending = 1;
     }else if(strncmp(pkt, "*PW1:", 5) == 0){
         sscanf(pkt, "*PW1:%[^#]#", buf);
         strcpy(WIFI_PASS_2, buf);
         utils_nvs_set_str(NVS_PASS_2_KEY, WIFI_PASS_2);
-        uart_write_string_ln("*PW1-OK#");
+        if (UartDebugInfoRequired)
+           uart_write_string_ln("*PW1-OK#");
         tx_event_pending = 1;
     }else if(strncmp(pkt, "*PW2:", 5) == 0){
         sscanf(pkt, "*PW2:%[^#]#", buf);
         strcpy(WIFI_PASS_3, buf);
         utils_nvs_set_str(NVS_PASS_3_KEY, WIFI_PASS_3);
-        uart_write_string_ln("*PW2-OK#");
+        if (UartDebugInfoRequired)
+           uart_write_string_ln("*PW2-OK#");
         tx_event_pending = 1;
     }else if(strncmp(pkt, "*URL:", 5) == 0){
         sscanf(pkt, "*URL:%[^#]#", buf);
@@ -313,8 +353,8 @@ void process_uart_packet(const char *pkt){
         utils_nvs_set_str(NVS_OTA_URL_KEY, FOTA_URL);
         utils_nvs_set_str(NVS_URL_USERNAME, URLuserName);
         utils_nvs_set_str(NVS_URL_DATETIME, URLdateTime);
-
-        uart_write_string_ln("*URL-OK#");
+        if (UartDebugInfoRequired)
+           uart_write_string_ln("*URL-OK#");
         tx_event_pending = 1;
     }else if(strncmp(pkt, "*FOTA#", 6) == 0){
         uart_write_string_ln("*FOTA-OK#");
@@ -323,12 +363,14 @@ void process_uart_packet(const char *pkt){
     }else if(strncmp(pkt, "*URL?#", 6) == 0){
        
        sprintf(buffer,"*%s,%s,%s#",URLuserName,URLdateTime,FOTA_URL);
-        uart_write_string_ln(buffer);
-        tx_event_pending = 1;
+       if (UartDebugInfoRequired)
+         uart_write_string_ln(buffer);
+    tx_event_pending = 1;
     
     }
 //    WIFI_SSID_1,WIFI_SSID_2,WIFI_SSID_3
     else if(strncmp(pkt, "*SSID?#", 7) == 0){
+
         uart_write_string("SSID Current/1/2/3 are - ");
         uart_write_number(WiFiNumber);
         uart_write_string(" , ");
@@ -346,7 +388,9 @@ void process_uart_packet(const char *pkt){
             HardwareTestMode = 1;    
             pin = 0;    
             ESP_LOGI(TAG, "*Hardware Test Started#");
+            if (UartDebugInfoRequired){
             uart_write_string_ln("*Hardware Test Started#");
+            }
             // clear TC also
             for (int i = 0 ; i < 7 ; i++)
             {
@@ -358,7 +402,9 @@ void process_uart_packet(const char *pkt){
             HardwareTestMode = 0;    
             pin = 0;    
             ESP_LOGI(TAG, "*Hardware Test Stopped#");
+            if (UartDebugInfoRequired){
             uart_write_string_ln("*Hardware Test Stopped#");
+            }
             RestartDevice();
 
     }    
@@ -368,8 +414,10 @@ void process_uart_packet(const char *pkt){
         sprintf(buffer, "*TC,%s,%d,%d,%d,%d,%d,%d,%d#", 
              UniqueTimeStamp,CashTotals[0],CashTotals[1],CashTotals[2],CashTotals[3],CashTotals[4],CashTotals[5],CashTotals[6]);
 
-   
+        if (UartDebugInfoRequired)
+        {
         uart_write_string_ln(buffer);
+        }
         tx_event_pending = 1;
     }
     else if(strncmp(pkt, "*TV?#", 5) == 0){
@@ -377,8 +425,8 @@ void process_uart_packet(const char *pkt){
         sprintf(buffer, "*TV,%d,%d,%d,%d,%d,%d,%d#", 
             Totals[0], Totals[1], Totals[2], Totals[3], Totals[4], Totals[5], Totals[6]);
 
-   
-        uart_write_string_ln(buffer);
+        if (UartDebugInfoRequired)
+            uart_write_string_ln(buffer);
         tx_event_pending = 1;
     
     }
@@ -391,7 +439,8 @@ void process_uart_packet(const char *pkt){
             {  
                 //sprintf(payload, "*SIP-Error#");
                 ESP_LOGI(TAG,"*SIP-ERROR#");
-                uart_write_string_ln("*SIP-ERROR#");
+                if (UartDebugInfoRequired)
+                   uart_write_string_ln("*SIP-ERROR#");
 
             }else 
             {
@@ -418,7 +467,8 @@ void process_uart_packet(const char *pkt){
                                         sp_port );
 
    
-        uart_write_string_ln(buffer);
+        if (UartDebugInfoRequired)
+           uart_write_string_ln(buffer);
         tx_event_pending = 1;
     
     }
@@ -439,34 +489,41 @@ void process_uart_packet(const char *pkt){
         utils_nvs_set_str(NVS_ERASED_SERIAL_NUMBER, ErasedSerialNumber);
         utils_nvs_erase_all();
         utils_nvs_set_str(NVS_SERIAL_NUMBER, ErasedSerialNumber);
-        uart_write_string_ln("*ERASE:OK#");
+        if (UartDebugInfoRequired)
+           uart_write_string_ln("*ERASE:OK#");
         }
 
     }
      else if (strncmp(pkt, "*ERASE?", 7) == 0){
    
      sprintf(buffer,"*ERASE,%s,%s,%s#",ERASEuserName,ERASEdateTime,ErasedSerialNumber); 
-      uart_write_string_ln(payload);
+     if (UartDebugInfoRequired)
+        uart_write_string_ln(payload);
         
     }
     else if(strncmp(pkt, "*RESTART#", 9) == 0){
-        uart_write_string("*RESTART:OK#");
-        uart_write_string_ln("*Resetting device#");
+        if (UartDebugInfoRequired)
+            uart_write_string("*RESTART:OK#");
+        if (UartDebugInfoRequired)
+            uart_write_string_ln("*Resetting device#");
         RestartDevice();
     }
     else if(strncmp(pkt, "*LS?#", 5) == 0){
        
         sprintf(payload,"LED State is %d",led_state);
-        uart_write_string_ln(payload);
+        if (UartDebugInfoRequired)
+            uart_write_string_ln(payload);
     }
     else if(strncmp(pkt, "*MS?#", 5) == 0){
-        uart_write_string_ln(pkt);
-        sprintf(payload,"*MS,%ld#",MQTT_CONNEECTED);
+        if (UartDebugInfoRequired)
+            uart_write_string_ln(pkt);
+        sprintf(payload,"*MS%ld#",MQTT_CONNEECTED);
         uart_write_string_ln(payload);
     }
     else if(strncmp(pkt, "*WS?#", 5) == 0){
-        uart_write_string_ln(pkt);
-        sprintf(payload,"*WS,%d#",connected_to_wifi);
+        if (UartDebugInfoRequired)
+           uart_write_string_ln(pkt);
+        sprintf(payload,"*WS%d#",connected_to_wifi);
         uart_write_string_ln(payload);
         if (connected_to_wifi==false)
             ESP_LOGI(TAG,"********WS? = 0#############");
@@ -477,9 +534,11 @@ void process_uart_packet(const char *pkt){
         // Extract Price, RefId, and extra value (e.g., 0x20)
         char uartPrice[10], spring[10];
         if (sscanf(pkt, "*SELL,%19[^,],%19[^,#]#", uartPrice, spring) == 2) {
-            // ESP_LOGI("UART", "Price: %s, RefId: %s, Extra: %s", price, refId, extra);
+            ESP_LOGI("UART", "Price: %s, RefId: %s", price, refId);
             sprintf(payload,"*SELL-OK,%s,%s#", uartPrice, spring);
+            if (UartDebugInfoRequired){
             uart_write_string_ln(payload);
+            }
             // Process the SELL command as needed...
             if(IsMobivendApi)
             {
@@ -500,9 +559,11 @@ void process_uart_packet(const char *pkt){
         // Extract Price, RefId, and extra value (e.g., 0x20)
         char uartPrice[10], spring[10];
         if (sscanf(pkt, "*VEND,%19[^,],%19[^,#]#", uartPrice, spring) == 2) {
-            // ESP_LOGI("UART", "Price: %s, RefId: %s, Extra: %s", price, refId, extra);
+            // ESP_LOGI("UART", "Price: %s, RefId: %s", price, refId);
             sprintf(payload,"*VEND-OK,%s,%s#", uartPrice, spring);
+            if (UartDebugInfoRequired){
             uart_write_string_ln(payload);
+            }
             // Process the SELL command as needed...
             if(IsMobivendApi)
             {
@@ -519,7 +580,8 @@ void process_uart_packet(const char *pkt){
     }
     else if (strncmp(pkt, "*TRXN,", 6) == 0) {
         ESP_LOGI("UART", "Received TRXN command!");
-        uart_write_string_ln("Received TRXN command!");
+        if (UartDebugInfoRequired)
+             uart_write_string_ln("Received TRXN command!");
         // Declare buffers for all 7 fields
         char val1[20], val2[20], refId[32], val4[20], rawPrice[20], itemCode[10];
     
@@ -541,7 +603,8 @@ void process_uart_packet(const char *pkt){
                 uart_write_string_ln("Invalid itemCode length");
                 return;
             }
-            sprintf(price, 50, "%d", p);
+            uart_write_string_ln("*SUCCESS#");
+         
 
             // Send acknowledgment over UART
             char payload[204];
@@ -549,6 +612,7 @@ void process_uart_packet(const char *pkt){
             // uart_write_string_ln(payload);
             if(IsMobivendApi)
             {
+                sprintf(price,"%d", p);
             char formatted_url[476];  // Adjust size if needed
             snprintf(formatted_url, sizeof(formatted_url),
             URL_CASHLESSSALE,
@@ -561,27 +625,23 @@ void process_uart_packet(const char *pkt){
             ESP_LOGW("UART", "Invalid TRXN format: expected 7 values.");
         }
     }
-    else if (sscanf(pkt, "*%[^,],%[^,],%[^#]#",Number, Provider, Amount) == 3)
-    {
-        
-        if (strcmp(Number,SerialNumber) == 0 && strcmp(Amount,"AmountReceived"))
-        {
-            uart_write_string_ln("*SUCCESS#");
-        }
-    }
+
     else if(strncmp(pkt,"*REQUEST:",9)==0)
     {
-        uart_write_string_ln("Display dummy QR Code");
+        if (UartDebugInfoRequired)
+            uart_write_string_ln("Display dummy QR Code");
         strcpy(QrString,"Waiting For QrCode");
         DisplayMode=ModeNone;
         dispayQR();
-        uart_write_string_ln("Send Request to server");
+        if (UartDebugInfoRequired)
+            uart_write_string_ln("Send Request to server");
         mqtt_publish_msg(pkt);
     }
   
     else{
-        uart_write_string_ln(pkt);
-        int l = strlen(pkt);
+        if (UartDebugInfoRequired)
+             uart_write_string_ln(pkt);
+     int l = strlen(pkt);
         char buff[l+1];
         /*   *---#  */
 
@@ -610,6 +670,7 @@ void uart_write_string(const char * str){
 }
 
 void uart_write_string_ln(const char * str){
+    ESP_LOGI(TAG,"To UART : %s",str);
     uart_write_bytes(EX_UART_NUM, str, strlen(str));
     uart_write_string("\r\n");
 }

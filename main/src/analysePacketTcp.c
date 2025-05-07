@@ -945,7 +945,7 @@ void sendHBT (void)
     for (;;) {
         if(IsSocketConnected)
         {
-        ESP_LOGI(TAG, "*HBT,%s,%s#", MAC_ADDRESS_ESP,SerialNumber);
+//        ESP_LOGI(TAG, "*HBT,%s,%s#", MAC_ADDRESS_ESP,SerialNumber);
         sprintf(payload, "*HBT,%s,%s#", MAC_ADDRESS_ESP,SerialNumber); //actual when in production
 
          int err = send(sock, payload, strlen(payload), 0);
