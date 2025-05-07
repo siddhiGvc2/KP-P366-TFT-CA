@@ -604,7 +604,8 @@ void process_uart_packet(const char *pkt){
                 return;
             }
             uart_write_string_ln("*SUCCESS#");
-         
+            DisplayItemVend();
+            mqtt_publish_msg(pkt);
 
             // Send acknowledgment over UART
             char payload[204];
@@ -620,6 +621,9 @@ void process_uart_packet(const char *pkt){
             strcpy(API,"CashLessSale");
             start_http_get_task(formatted_url);
             }
+
+            vTaskDelay(30000/portTICK_PERIOD_MS);
+            dispayQR();
     
         } else {
             ESP_LOGW("UART", "Invalid TRXN format: expected 7 values.");

@@ -17,6 +17,7 @@
 #define ModeFOTA 5
 #define ModeCashReceived 6
 #define ModeSelectItem 7
+#define ModeItemVend 8
 
 
 typedef enum LED_STATES{
