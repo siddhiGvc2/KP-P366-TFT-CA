@@ -89,7 +89,7 @@ void InitMqtt (void);
       
     } else {
         
-        ESP_LOGI(TAG, "Published SIP message: %s", message);
+      //  ESP_LOGI(TAG, "Published SIP message: %s", message);
     }
 }
 

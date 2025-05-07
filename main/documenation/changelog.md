@@ -22,6 +22,14 @@
 -- send *MS1# when MQTT connected and *MS0# when mqtt disconnected
 -- send *Dddmmyyhhmmss# when wifi connected
 -- remove unnecessary UART command
+-- when *65121,PAYTM,AmountReceived#  received, reply with *SUCCESS# to UART
+-- do not send this or any UART packet to TCP
+
+## 070525
+-- change QR code to thaat of Mobivend (done 12:30 - 12:45 )
+-- ensure that QR code is changed when new value is set (pending)
+-- removed ESP_LOGI (for MQTT HBT) (12:45 - 12:50)
+-- stop calling mobivend APIs (pending)
 
 
 
