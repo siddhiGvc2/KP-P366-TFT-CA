@@ -605,7 +605,11 @@ void process_uart_packet(const char *pkt){
             }
             uart_write_string_ln("*SUCCESS#");
             DisplayItemVend();
+            ESP_LOGI(TAG,"DISPLAYED ITEME VEND");
+            if(MQTT_CONNEECTED && MQTTRequired)
+            {
             mqtt_publish_msg(pkt);
+            }
 
             // Send acknowledgment over UART
             char payload[204];
