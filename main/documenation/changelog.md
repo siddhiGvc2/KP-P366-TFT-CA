@@ -33,10 +33,14 @@
 -- Send SUCCESS after TRXN received (done)
 -- Send MS1 and WS1 and not MS,1 and WS,1
 -- do not send any thing to UART for diagnostics and MQTT copy data (done)
--- add ITEMS VENDED screen on display whem TRXN receievd
--- wait for 30 seconds and display QR code again
--- send MQTT *TRXN,.. as it is #
--- check when there is no WIFI or MQTT do not display QR code and display some message 
+-- add ITEMS VENDED screen on display whem TRXN receievd(done)  changed in /main/src/analysePacketUart.c
+-- wait for 30 seconds and display QR code again(done)  changed in /main/src/analysePacketUart.c
+-- send MQTT *TRXN,.. as it is #(done)  changed in /main/src/analysePacketUart.c
+-- check when there is no WIFI or MQTT do not display QR code and display some message (done)
+
+## 080525
+-- when *SCANQR# received display QR code if not already on display(done)  changed in /main/src/analysePacketUart.c
+-- Send SUCCESS after REFUND received(done)  changed in /main/src/analysePacketUart.c
 
 
 
