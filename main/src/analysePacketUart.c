@@ -578,6 +578,8 @@ void process_uart_packet(const char *pkt){
             ESP_LOGW("UART", "Invalid VEND command format!");
         }
     }
+
+     // added on 070525
     else if (strncmp(pkt, "*TRXN,", 6) == 0) {
         ESP_LOGI("UART", "Received TRXN command!");
         if (UartDebugInfoRequired)
@@ -634,11 +636,14 @@ void process_uart_packet(const char *pkt){
             ESP_LOGW("UART", "Invalid TRXN format: expected 7 values.");
         }
     }
+
+    // added on 080525
     else if(strncmp(pkt,"*REFUND,",8)==0)
     {
         uart_write_string_ln("*SUCCESS#");
         mqtt_publish_msg(pkt);
     }
+     // added on 080525
     else if(strncmp(pkt,"*SCANQR#",8)==0)
     {
         dispayQR();
