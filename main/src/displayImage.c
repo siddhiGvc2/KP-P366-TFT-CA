@@ -49,13 +49,21 @@
 
 
 void display_images(const lv_img_dsc_t *ig) {
-    if(img)
-    {
-    lv_obj_del(img); // Delete the flame icon if it exists
-    img = NULL;
+    // uart_write_string_ln("displayImage started");
+    if (img){
+        lv_obj_del(img);
+        img = NULL;
+    } 
+    else{
+        img = NULL;
     }
-    
     img = lv_img_create(lv_scr_act());
+    // uart_write_string_ln("displayImage created");
+    if (!img) {
+        // uart_write_string_ln("Failed to create image");
+        printf("Failed to create image!\n");
+        return;
+    }
     lv_img_set_src(img, ig);
     lv_obj_align(img, LV_ALIGN_TOP_MID, 0, 0);
 }
@@ -128,10 +136,13 @@ void DisplayItemVend(void)
 void dispayQR(void){
     if (DisplayMode != ModeQR)
     {
-        if(img)
+        if (img)
         {
         lv_obj_del(img); // Delete the flame icon if it exists
         img = NULL;
+        }
+        else{
+            img = NULL; 
         }
      DisplayMode = ModeQR;   
     

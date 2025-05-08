@@ -627,6 +627,7 @@ void process_uart_packet(const char *pkt){
             }
 
             vTaskDelay(30000/portTICK_PERIOD_MS);
+            DisplayMode=ModeNone;
             dispayQR();
     
         } else {

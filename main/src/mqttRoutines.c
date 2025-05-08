@@ -133,13 +133,15 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
     case MQTT_EVENT_CONNECTED:
         ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
         uart_write_string_ln("*MS1#");
+        DisplayMode=ModeNone;
+        dispayQR();
         MQTT_CONNEECTED = 1;  // Ensure MQTT_CONNECTED is defined
         vTaskDelay(2000/portTICK_PERIOD_MS);
         uart_write_string_ln("*OKNET#");
         sprintf(topic, "GVC/KP/%s", SerialNumber);
         sprintf (payload,"Topic is %s",topic);
         if (UartDebugInfoRequired)
-        uart_write_string_ln(payload);
+            uart_write_string_ln(payload);
 
         msg_id = esp_mqtt_client_subscribe(client, topic, 0);
         ESP_LOGI(TAG, "sent subscribe successful, msg_id=%d", msg_id);
