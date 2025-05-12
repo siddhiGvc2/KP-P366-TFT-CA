@@ -45,28 +45,36 @@
 #include "SelectItem.c"
 #include "ItemVend.c"
 #include "WaitingCashLessDevice.c"
+static const char *TAG = "LVGL";
 
 #define QR_CODE_SIZE  198
 
 
 void display_images(const lv_img_dsc_t *ig) {
-    // uart_write_string_ln("displayImage started");
-    if (img){
-        lv_obj_del(img);
-        img = NULL;
-    } 
-    else{
-        img = NULL;
+    if (lv_obj_is_valid(img)) {
+        lv_obj_del_async(img);  // Asynchronously delete the previous image object
+        img = NULL;             // ✅ Good: prevent use-after-free
     }
-    img = lv_img_create(lv_scr_act());
-    // uart_write_string_ln("displayImage created");
-    if (!img) {
-        // uart_write_string_ln("Failed to create image");
+    
+    if (example_lvgl_lock(-1)) {
+        img = lv_img_create(lv_scr_act());
+        example_lvgl_unlock();
+    }
+
+    // img = lv_img_create(lv_scr_act());  // Create new image
+    if (!lv_obj_is_valid(img)) {
         printf("Failed to create image!\n");
         return;
     }
-    lv_img_set_src(img, ig);
-    lv_obj_align(img, LV_ALIGN_TOP_MID, 0, 0);
+   
+
+    if (example_lvgl_lock(-1)) {
+          lv_img_set_src(img, ig);                      // Set image source
+    lv_obj_align(img, LV_ALIGN_TOP_MID, 0, 0);    // Align to top-middle
+        example_lvgl_unlock();
+    }
+
+  
 }
 
 
@@ -74,9 +82,12 @@ static lv_obj_t * img6 = NULL;
 void showLogo(void)
 {
     LV_IMG_DECLARE(gvcLogo);
+     if (example_lvgl_lock(-1)) {
     img6 = lv_img_create(lv_scr_act());
     lv_img_set_src(img6, &gvcLogo);
     lv_obj_align(img6, LV_ALIGN_TOP_MID, 0, 240);
+      example_lvgl_unlock();
+     }
 
 }
 
@@ -150,7 +161,7 @@ void DisplayCashlessDevice(void)
 void dispayQR(void){
     if (DisplayMode != ModeQR)
     {
-        if (img)
+        if (lv_obj_is_valid(img))
         {
         lv_obj_del(img); // Delete the flame icon if it exists
         img = NULL;
@@ -163,8 +174,15 @@ void dispayQR(void){
      LV_IMG_DECLARE(QRcode);
 
     //  display_images(&image);
-    img = lv_img_create(lv_scr_act());
-    lv_img_set_src(img, &QRcode);
+    if (example_lvgl_lock(-1)) {
+        img = lv_img_create(lv_scr_act());
+        example_lvgl_unlock();
+    }
+
+    if (example_lvgl_lock(-1)) {
+        lv_img_set_src(img, &QRcode);
+        example_lvgl_unlock();
+    }
     lv_obj_align(img, LV_ALIGN_TOP_MID, 0, 0);
    
    

@@ -41,11 +41,15 @@
 static const char *TAG = "main";
 
 
-static void display_inc_task(void *para) {
-        
+static void memory_check(void *para) {
+         vTaskDelay(pdMS_TO_TICKS(5000));
     while(1) {
-        lv_timer_handler();
-        vTaskDelay(pdMS_TO_TICKS(10));
+        // lv_timer_handler();
+                //    vTaskDelay(pdMS_TO_TICKS(5000));  // 30 msec delay
+        size_t free_heap = heap_caps_get_free_size(MALLOC_CAP_8BIT);
+        size_t free_internal_heap = heap_caps_get_free_size(MALLOC_CAP_INTERNAL); 
+        ESP_LOGI(TAG, "Free memory: %d, free internal memory : %d ", free_heap, free_internal_heap);          
+        vTaskDelay(pdMS_TO_TICKS(5000));
     }
 }
 
@@ -87,15 +91,15 @@ void app_main(void)
     DisplayBootingUp();
     
     showLogo();
-
+    
     sprintf(payload,"*PID,%s#",SerialNumber);
     uart_write_string_ln(payload);
     uart_write_string_ln("*ARD+ESP#");
     
     // for (int i = 0 ; i < 3 ; i++)
     // {
-    //     led_set_level(LEDR, 1);
-    //     led_set_level(LEDG, 0);
+        //     led_set_level(LEDR, 1);
+        //     led_set_level(LEDG, 0);
     //     vTaskDelay(500/portTICK_PERIOD_MS);   
     //     led_set_level(LEDR, 0);
     //     led_set_level(LEDG, 1);
@@ -104,7 +108,6 @@ void app_main(void)
     //     led_set_level(LEDG, 0);
     //     vTaskDelay(500/portTICK_PERIOD_MS);   
     // }
-    xTaskCreate(display_inc_task, "display task", 1024 * 4, NULL, 20, NULL);
     
     ESP_LOGI(TAG, "*Starting WiFi#");
     wifi_init_sta();
@@ -112,15 +115,29 @@ void app_main(void)
     ESP_LOGI(TAG, "*Testing RGB #");
     TestRGB();
     
-    xTaskCreate(sendHBT, "sendHBT", 4096, NULL, 6, NULL);
-    xTaskCreate(BlinkLED, "BlinkLED", 2048, NULL, 6, NULL);
+    //xTaskCreate(sendHBT, "sendHBT", 4096, NULL, 6, NULL);
+    // xTaskCreate(BlinkLED, "BlinkLED", 2048, NULL, 6, NULL);
    
-    xTaskCreate(TestCoin, "TestCoin", 2048, NULL, 6, NULL);
+    // xTaskCreate(TestCoin, "TestCoin", 2048, NULL, 6, NULL);
   
 
-    for (;;) 
-    {
-        vTaskDelay(100/portTICK_PERIOD_MS);  // 100 msec delay
+    // for (;;) 
+    // xTaskCreate(memory_check, "display task", 1024 * 4, NULL, 10, NULL);
+
+     while(1) {
+        // lv_timer_handler();
+                //    vTaskDelay(pdMS_TO_TICKS(5000));  // 30 msec delay
+        size_t free_heap = heap_caps_get_free_size(MALLOC_CAP_8BIT);
+        size_t free_internal_heap = heap_caps_get_free_size(MALLOC_CAP_INTERNAL); 
+        ESP_LOGI(TAG, "Free memory: %d, free internal memory : %d ", free_heap, free_internal_heap);          
+        vTaskDelay(pdMS_TO_TICKS(5000));
+    }
+
+    // {   
+//        lv_timer_handler();
+        // vTaskDelay(pdMS_TO_TICKS(10));  // 30 msec delay
+        // size_t free_heap = heap_caps_get_free_size(MALLOC_CAP_8BIT);
+        // size_t free_internal_heap = heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
         // logic added on 251224
         // display No HBT For X minutes once every minute
         // and restart if no HBT for Y minutes
@@ -138,5 +155,5 @@ void app_main(void)
         // }
         // 1 min = 60 sec, 30 min  = 1800 seconds = 18000 X 100 msec ticks  
         // 35 mins = 2100 seconds = 21000 X 100 msecs ticks
-    }
+    // }
 }

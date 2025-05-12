@@ -88,7 +88,7 @@
  #define EXAMPLE_LCD_PARAM_BITS         8
  
  #define EXAMPLE_LVGL_TICK_PERIOD_MS    2
- #define EXAMPLE_LVGL_TASK_MAX_DELAY_MS 500
+ #define EXAMPLE_LVGL_TASK_MAX_DELAY_MS 100
  #define EXAMPLE_LVGL_TASK_MIN_DELAY_MS 1
  #define EXAMPLE_LVGL_TASK_STACK_SIZE   (4 * 1024)
  #define EXAMPLE_LVGL_TASK_PRIORITY     2
@@ -291,17 +291,20 @@ void example_lvgl_demo_ui(lv_disp_t *disp)
      ESP_LOGI(TAG, "Starting LVGL task");
      uint32_t task_delay_ms = EXAMPLE_LVGL_TASK_MAX_DELAY_MS;
      while (1) {
-         // Lock the mutex due to the LVGL APIs are not thread-safe
+        //  // Lock the mutex due to the LVGL APIs are not thread-safe
          if (example_lvgl_lock(-1)) {
-             task_delay_ms = lv_timer_handler();
+            //  task_delay_ms = lv_timer_handler();
+            lv_timer_handler();
              // Release the mutex
              example_lvgl_unlock();
          }
-         if (task_delay_ms > EXAMPLE_LVGL_TASK_MAX_DELAY_MS) {
-             task_delay_ms = EXAMPLE_LVGL_TASK_MAX_DELAY_MS;
-         } else if (task_delay_ms < EXAMPLE_LVGL_TASK_MIN_DELAY_MS) {
-             task_delay_ms = EXAMPLE_LVGL_TASK_MIN_DELAY_MS;
-         }
+        //  if (task_delay_ms > EXAMPLE_LVGL_TASK_MAX_DELAY_MS) {
+        //      task_delay_ms = EXAMPLE_LVGL_TASK_MAX_DELAY_MS;
+        //  } else if (task_delay_ms < EXAMPLE_LVGL_TASK_MIN_DELAY_MS) {
+        //      task_delay_ms = EXAMPLE_LVGL_TASK_MIN_DELAY_MS;
+        //  }
+
+          
          vTaskDelay(pdMS_TO_TICKS(task_delay_ms));
      }
  }

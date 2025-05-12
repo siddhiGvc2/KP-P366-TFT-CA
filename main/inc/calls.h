@@ -76,7 +76,8 @@ extern void mqtt_app_start(void);
 extern void mqtt_publish_msg(const char *);
 // extern void publish_message(const char *, esp_mqtt_client_handle_t *)
 
-
+extern  bool example_lvgl_lock(int timeout_ms);
+extern  void example_lvgl_unlock();
 //mobivendApi
 extern void start_http_get_task(const char *);
 extern void server_main(void);

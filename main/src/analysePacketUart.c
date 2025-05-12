@@ -42,6 +42,12 @@ void uart_write_string_ln(const char * );
 
 void process_uart_packet(const char *);
 
+//added on 120525
+void UartDataReceivedShowQRCode (void)
+{
+    UartPacketReceived = 1;
+}
+
 void process_uart_packet(const char *pkt){
     rx_event_pending = 1;
     char buf[200];
@@ -524,13 +530,7 @@ void process_uart_packet(const char *pkt){
         if (UartDebugInfoRequired)
            uart_write_string_ln(pkt);
         sprintf(payload,"*WS%d#",connected_to_wifi);
-
-        //added on 120525
-        if(connected_to_wifi && MQTT_CONNEECTED)
-        {
-        DisplayMode=ModeNone;
-        dispayQR();
-        }
+        UartDataReceivedShowQRCode();
         uart_write_string_ln(payload);
         if (connected_to_wifi==false)
             ESP_LOGI(TAG,"********WS? = 0#############");
@@ -635,7 +635,7 @@ void process_uart_packet(const char *pkt){
             start_http_get_task(formatted_url);
             }
 
-            vTaskDelay(30000/portTICK_PERIOD_MS);
+            vTaskDelay(10000/portTICK_PERIOD_MS);
             DisplayMode=ModeNone;
             dispayQR();
     
@@ -653,7 +653,7 @@ void process_uart_packet(const char *pkt){
      // added on 080525
     else if(strncmp(pkt,"*SCANQR#",8)==0)
     {
-        // DisplayMode=ModeNone;
+        DisplayMode=ModeNone;
         dispayQR();
     }
       else if(strncmp(pkt,"*REQUEST:",9)==0)
@@ -681,7 +681,9 @@ void process_uart_packet(const char *pkt){
             sprintf(b, "*%s#", buff);
             // tcp_ip_client_send_str(b);
             tx_event_pending = 1;
-        }
+            // added in 120525
+            UartDataReceivedShowQRCode();
+         }
     }
 }
 
