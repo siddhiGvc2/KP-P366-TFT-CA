@@ -524,6 +524,13 @@ void process_uart_packet(const char *pkt){
         if (UartDebugInfoRequired)
            uart_write_string_ln(pkt);
         sprintf(payload,"*WS%d#",connected_to_wifi);
+
+        //added on 120525
+        if(connected_to_wifi && MQTT_CONNEECTED)
+        {
+        DisplayMode=ModeNone;
+        dispayQR();
+        }
         uart_write_string_ln(payload);
         if (connected_to_wifi==false)
             ESP_LOGI(TAG,"********WS? = 0#############");
@@ -646,6 +653,7 @@ void process_uart_packet(const char *pkt){
      // added on 080525
     else if(strncmp(pkt,"*SCANQR#",8)==0)
     {
+        // DisplayMode=ModeNone;
         dispayQR();
     }
       else if(strncmp(pkt,"*REQUEST:",9)==0)

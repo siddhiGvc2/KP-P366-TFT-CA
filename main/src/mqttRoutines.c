@@ -133,8 +133,9 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
     case MQTT_EVENT_CONNECTED:
         ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
         uart_write_string_ln("*MS1#");
-        DisplayMode=ModeNone;
-        dispayQR();
+          //added on 120525
+       
+        DisplayCashlessDevice();
         MQTT_CONNEECTED = 1;  // Ensure MQTT_CONNECTED is defined
         vTaskDelay(2000/portTICK_PERIOD_MS);
         uart_write_string_ln("*OKNET#");
@@ -581,11 +582,15 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
                 else if(strncmp(data, "*QR:",4) == 0){
                     char tempBuf[500];
                     sscanf(data, "*QR:%[^#]#",tempBuf);
+                    DisplayMode=ModeNone;
+                    dispayQR();
                     if (UartDebugInfoRequired)
-                    uart_write_string_ln(tempBuf);
+                         uart_write_string_ln(tempBuf);
                     strcpy(QrString,tempBuf);
+
+
                     if (UartDebugInfoRequired)
-                    uart_write_string_ln(QrString);
+                          uart_write_string_ln(QrString);
                     utils_nvs_set_str(NVS_QR_STRING,QrString);
                     sprintf(payload, "*QR-OK,%s#",QrString);
                     vTaskDelay(100/portTICK_PERIOD_MS);
@@ -593,8 +598,7 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
                     vTaskDelay(100/portTICK_PERIOD_MS);
                     publish_message(payload,client);
                     vTaskDelay(100/portTICK_PERIOD_MS);
-                    DisplayMode=ModeNone;
-                    dispayQR();
+                   
                   
                 }
                 else if(strncmp(data, "*QR?#",5) == 0){

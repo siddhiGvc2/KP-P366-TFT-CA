@@ -18,6 +18,7 @@
 #define ModeCashReceived 6
 #define ModeSelectItem 7
 #define ModeItemVend 8
+#define ModeCashlessDevice 9
 
 
 typedef enum LED_STATES{
@@ -168,7 +169,7 @@ typedef enum TCPIP_SOCKET_STATE{
 
 #define PASS_THRU   "Y"
 
-#define FWVersion "*Mobivend_310325_VER_1.2 Naico Ltd#"
+#define FWVersion "*Mobivend_120525_VER_1.2 Naico Ltd#"
 
 #define HBTDelay    20000
 #define LEDR    13

@@ -44,6 +44,7 @@
 #include "CashReceived.c"
 #include "SelectItem.c"
 #include "ItemVend.c"
+#include "WaitingCashLessDevice.c"
 
 #define QR_CODE_SIZE  198
 
@@ -129,6 +130,19 @@ void DisplayItemVend(void)
         LV_IMG_DECLARE(ItemVend);
         display_images(&ItemVend);
         DisplayMode = ModeItemVend;
+    }
+}
+
+
+//added on 120525
+
+void DisplayCashlessDevice(void)
+{
+    if(DisplayMode != ModeCashlessDevice)
+    {
+        LV_IMG_DECLARE(WaitingCashLessDevice);
+        display_images(&WaitingCashLessDevice);
+        DisplayMode=ModeCashlessDevice;
     }
 }
 

@@ -436,8 +436,8 @@ void wifi_init_sta(void)
         uart_write_string_ln("*CONFIGOK#");
          
         connected_to_wifi_and_internet = true;
-     
-       
+        
+      
         
         // esp_http_client_config_t config = {
         //     .url = "http://www.google.com",  

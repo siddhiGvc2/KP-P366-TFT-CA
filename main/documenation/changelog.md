@@ -43,5 +43,8 @@
 -- Send SUCCESS after REFUND received(done)  changed in /main/src/analysePacketUart.c
 
 
+## 120525
 
+-- QR code displayed when WS? command recived from uart. /main/src/analysePacketUart.c
+-- till then displayed wating for cashless device image. /main/src/wifi.c
 
