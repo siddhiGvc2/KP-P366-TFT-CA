@@ -875,8 +875,11 @@ void resolve_hostname(const char *hostname) {
 
         inet_ntop(p->ai_family, addr, ipstr, sizeof ipstr);
         sprintf(payload,"*IP VER - %s: IP STR - %s#", ipver, ipstr);
-        uart_write_string(payload);
-//        ESP_LOGI(TAG,payload);
+        if (UartDebugInfoRequired)
+        {
+            uart_write_string(payload);
+        }    
+        //        ESP_LOGI(TAG,payload);
 
     }
 

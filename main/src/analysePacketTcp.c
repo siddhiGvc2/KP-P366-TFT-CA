@@ -107,11 +107,17 @@ void tcpip_client_task(){
                         IsSocketConnected=1;
                     }
                     if (gpio_get_level(JUMPER) == 0)
+                    {    
                         sprintf(payload, "*MAC,%s,%s#", MAC_ADDRESS_ESP,SerialNumber);  // for GVC use ,
+                    }
                     else
+                    {
                         sprintf(payload, "*MAC:%s:%s#", MAC_ADDRESS_ESP,SerialNumber);  // for KP use :
-                    uart_write_string_ln(payload);
-
+                    }    
+                    if (UartDebugInfoRequired)
+                    {
+                            uart_write_string_ln(payload);
+                    }        
                     
                     int err = send(sock, payload, strlen(payload), 0);
                     ESP_LOGI(TAG, "*Successfully connected#"); 
@@ -142,9 +148,11 @@ void tcpip_client_task(){
                     }
                     uart_write_string_ln('*BOOTING#');
 
-                    sprintf(payload,"*FW:%s#",FWVersion);
-                    uart_write_string_ln(payload);
-
+                    if (UartDebugInfoRequired)
+                    {
+                        sprintf(payload,"*FW:%s#",FWVersion);
+                        uart_write_string_ln(payload);
+                    }
 
                     if (err < 0) {
                         ESP_LOGE(TAG, "*Error occurred during sending: errno %d#", errno);

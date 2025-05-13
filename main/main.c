@@ -60,85 +60,16 @@ static void memory_check(void *para) {
     }
 }
 
-void app_main(void)
+void display_image_task(void)
 {
-    //Initialize NVS
-    //esp_log_level_set("*", ESP_LOG_NONE);
-    // set totals to 0
-    char payload[200];
-    MQTTRequired = 1;
-    for (int i = 0 ; i < 7 ; i++)
-    {
-        Totals[i] = 0;
-        CashTotals[i] = 0;
-    }   
-    esp_log_level_set(TAG, ESP_LOG_DEBUG);
-    esp_err_t ret = nvs_flash_init();
-    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
-      ESP_ERROR_CHECK(nvs_flash_erase());
-      ret = nvs_flash_init();
-    }
-    ESP_ERROR_CHECK(ret);
-    ESP_LOGI(TAG, "================================");
-    ESP_LOGI(TAG, "*FW:%s#",FWVersion);
-    ESP_LOGI(TAG, "================================");
-    utils_nvs_init();
-    status_leds_init();
-    console_uart_init();
-    uart_write_string(FWVersion);
-    read_mac_address();
-    xTaskCreate(tcpip_client_task, "tcpip_client_task", 8192, NULL, 7, NULL);
-    load_settings_nvs();
-    ESP_LOGI(TAG, "*Starting ICH#");
-    ICH_init();
-    ESP_LOGI(TAG, "*Starting S2P#");
-    s2p_init();
-    Out4094(0x00);; // set all outputs inactive
-    TFT_main();
-    DisplayBootingUp();
-    
-    showLogo();
-    
-    sprintf(payload,"*PID,%s#",SerialNumber);
-    uart_write_string_ln(payload);
-    uart_write_string_ln("*ARD+ESP#");
-    
-    // for (int i = 0 ; i < 3 ; i++)
-    // {
-        //     led_set_level(LEDR, 1);
-        //     led_set_level(LEDG, 0);
-    //     vTaskDelay(500/portTICK_PERIOD_MS);   
-    //     led_set_level(LEDR, 0);
-    //     led_set_level(LEDG, 1);
-    //     vTaskDelay(500/portTICK_PERIOD_MS);   
-    //     led_set_level(LEDR, 0);
-    //     led_set_level(LEDG, 0);
-    //     vTaskDelay(500/portTICK_PERIOD_MS);   
-    // }
-    
-    ESP_LOGI(TAG, "*Starting WiFi#");
-    wifi_init_sta();
-    // server_main();
-    ESP_LOGI(TAG, "*Testing RGB #");
-    TestRGB();
-    
-    //xTaskCreate(sendHBT, "sendHBT", 4096, NULL, 6, NULL);
-    // xTaskCreate(BlinkLED, "BlinkLED", 2048, NULL, 6, NULL);
-   
-    // xTaskCreate(TestCoin, "TestCoin", 2048, NULL, 6, NULL);
-  
-
-    // for (;;) 
-    // xTaskCreate(memory_check, "display task", 1024 * 4, NULL, 10, NULL);
-
-     while(1) {
+    while(1) {
         // lv_timer_handler();
                 //    vTaskDelay(pdMS_TO_TICKS(5000));  // 30 msec delay
         // size_t free_heap = heap_caps_get_free_size(MALLOC_CAP_8BIT);
         // size_t free_internal_heap = heap_caps_get_free_size(MALLOC_CAP_INTERNAL); 
         // ESP_LOGI(TAG, "Free memory: %d, free internal memory : %d ", free_heap, free_internal_heap);          
         // display all images here
-        ESP_LOGI(TAG,"%d",Image2BDisplayed);
+        // //ESP_LOGI(TAG,"%d",Image2BDisplayed);
         if (Image2BDisplayed == ImageBootingUp)
         {
             if (DisplayMode != ModeBootingUp)
@@ -199,6 +130,85 @@ void app_main(void)
         }
 
         Image2BDisplayed=0;
+        vTaskDelay(pdMS_TO_TICKS(1000));
+    }
+}
+
+void app_main(void)
+{
+    //Initialize NVS
+    //esp_log_level_set("*", ESP_LOG_NONE);
+    // set totals to 0
+    char payload[200];
+    MQTTRequired = 1;
+    for (int i = 0 ; i < 7 ; i++)
+    {
+        Totals[i] = 0;
+        CashTotals[i] = 0;
+    }   
+    esp_log_level_set(TAG, ESP_LOG_DEBUG);
+    esp_err_t ret = nvs_flash_init();
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+      ESP_ERROR_CHECK(nvs_flash_erase());
+      ret = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK(ret);
+    ESP_LOGI(TAG, "================================");
+    ESP_LOGI(TAG, "*FW:%s#",FWVersion);
+    ESP_LOGI(TAG, "================================");
+    utils_nvs_init();
+    status_leds_init();
+    console_uart_init();
+    uart_write_string(FWVersion);
+    read_mac_address();
+    xTaskCreate(display_image_task, "display_image_task", 8192, NULL, 7, NULL);
+    xTaskCreate(tcpip_client_task, "tcpip_client_task", 8192, NULL, 7, NULL);
+    load_settings_nvs();
+    ESP_LOGI(TAG, "*Starting ICH#");
+    ICH_init();
+    ESP_LOGI(TAG, "*Starting S2P#");
+    s2p_init();
+    Out4094(0x00);; // set all outputs inactive
+    TFT_main();
+    DisplayBootingUp();
+    
+    showLogo();
+    
+    sprintf(payload,"*PID,%s#",SerialNumber);
+    uart_write_string_ln(payload);
+    uart_write_string_ln("*ARD+ESP#");
+    
+    // for (int i = 0 ; i < 3 ; i++)
+    // {
+        //     led_set_level(LEDR, 1);
+        //     led_set_level(LEDG, 0);
+    //     vTaskDelay(500/portTICK_PERIOD_MS);   
+    //     led_set_level(LEDR, 0);
+    //     led_set_level(LEDG, 1);
+    //     vTaskDelay(500/portTICK_PERIOD_MS);   
+    //     led_set_level(LEDR, 0);
+    //     led_set_level(LEDG, 0);
+    //     vTaskDelay(500/portTICK_PERIOD_MS);   
+    // }
+    
+    ESP_LOGI(TAG, "*Starting WiFi#");
+    wifi_init_sta();
+    // server_main();
+    ESP_LOGI(TAG, "*Testing RGB #");
+    TestRGB();
+    
+    //xTaskCreate(sendHBT, "sendHBT", 4096, NULL, 6, NULL);
+    // xTaskCreate(BlinkLED, "BlinkLED", 2048, NULL, 6, NULL);
+   
+    // xTaskCreate(TestCoin, "TestCoin", 2048, NULL, 6, NULL);
+  
+
+    // for (;;) 
+    // xTaskCreate(memory_check, "display task", 1024 * 4, NULL, 10, NULL);
+
+     while(1) {
+        // lv_timer_handler();
+            
         vTaskDelay(pdMS_TO_TICKS(5000));
     }
 

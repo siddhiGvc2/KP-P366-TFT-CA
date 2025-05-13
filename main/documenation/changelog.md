@@ -48,3 +48,6 @@
 -- QR code displayed when WS? command recived from uart. /main/src/analysePacketUart.c
 -- till then displayed wating for cashless device image. /main/src/wifi.c
 
+## 130525
+-- removed UART data of FW and Mac and IP Address
+-- all display images logic changed. It is in single task DisplayImageTask / main.c
