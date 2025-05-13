@@ -293,16 +293,16 @@ void example_lvgl_demo_ui(lv_disp_t *disp)
      while (1) {
         //  // Lock the mutex due to the LVGL APIs are not thread-safe
          if (example_lvgl_lock(-1)) {
-            //  task_delay_ms = lv_timer_handler();
-            lv_timer_handler();
+             task_delay_ms = lv_timer_handler();
+//            lv_timer_handler();
              // Release the mutex
              example_lvgl_unlock();
          }
-        //  if (task_delay_ms > EXAMPLE_LVGL_TASK_MAX_DELAY_MS) {
-        //      task_delay_ms = EXAMPLE_LVGL_TASK_MAX_DELAY_MS;
-        //  } else if (task_delay_ms < EXAMPLE_LVGL_TASK_MIN_DELAY_MS) {
-        //      task_delay_ms = EXAMPLE_LVGL_TASK_MIN_DELAY_MS;
-        //  }
+         if (task_delay_ms > EXAMPLE_LVGL_TASK_MAX_DELAY_MS) {
+             task_delay_ms = EXAMPLE_LVGL_TASK_MAX_DELAY_MS;
+         } else if (task_delay_ms < EXAMPLE_LVGL_TASK_MIN_DELAY_MS) {
+             task_delay_ms = EXAMPLE_LVGL_TASK_MIN_DELAY_MS;
+         }
 
           
          vTaskDelay(pdMS_TO_TICKS(task_delay_ms));

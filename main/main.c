@@ -27,6 +27,13 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <arpa/inet.h>
+#include "NoConnectivity.c"
+#include "BootingUp.c"
+#include "CashReceived.c"
+#include "SelectItem.c"
+#include "ItemVend.c"
+#include "WaitingCashLessDevice.c"
+
 #include "calls.h"
 #include "vars.h"
 
@@ -127,9 +134,71 @@ void app_main(void)
      while(1) {
         // lv_timer_handler();
                 //    vTaskDelay(pdMS_TO_TICKS(5000));  // 30 msec delay
-        size_t free_heap = heap_caps_get_free_size(MALLOC_CAP_8BIT);
-        size_t free_internal_heap = heap_caps_get_free_size(MALLOC_CAP_INTERNAL); 
-        ESP_LOGI(TAG, "Free memory: %d, free internal memory : %d ", free_heap, free_internal_heap);          
+        // size_t free_heap = heap_caps_get_free_size(MALLOC_CAP_8BIT);
+        // size_t free_internal_heap = heap_caps_get_free_size(MALLOC_CAP_INTERNAL); 
+        // ESP_LOGI(TAG, "Free memory: %d, free internal memory : %d ", free_heap, free_internal_heap);          
+        // display all images here
+        ESP_LOGI(TAG,"%d",Image2BDisplayed);
+        if (Image2BDisplayed == ImageBootingUp)
+        {
+            if (DisplayMode != ModeBootingUp)
+            {
+                // LV_IMG_DECLARE();
+                LV_IMG_DECLARE(BootingUp);
+                display_images(&BootingUp);
+                DisplayMode = ModeBootingUp;
+            }
+        }
+
+        if (Image2BDisplayed == ImageNoWifi)
+        {
+            if (DisplayMode != ModeNoWifi)
+            {
+                LV_IMG_DECLARE(NoConnectivity);
+                display_images(&NoConnectivity);
+                DisplayMode = ModeNoWifi;
+            }
+        }
+         
+        if(Image2BDisplayed==ImageCashlessDevice)
+        {
+            if(DisplayMode != ModeCashlessDevice)
+            {
+                LV_IMG_DECLARE(WaitingCashLessDevice);
+                display_images(&WaitingCashLessDevice);
+                DisplayMode=ModeCashlessDevice;
+            }
+        }
+
+        if(Image2BDisplayed==ImageItemVend){
+            if (DisplayMode != ModeItemVend)
+            {
+                LV_IMG_DECLARE(ItemVend);
+                display_images(&ItemVend);
+                DisplayMode = ModeItemVend;
+            }
+        }
+
+        if(Image2BDisplayed==ImageSelectItem)
+        {
+             if (DisplayMode != ModeSelectItem)
+            {
+                LV_IMG_DECLARE(SelectItem);
+                display_images(&SelectItem);
+                DisplayMode = ModeSelectItem;
+            }
+        }
+        if(Image2BDisplayed==ImageCashReceived)
+        {
+              if (DisplayMode != ModeCashReceived)
+            {
+                LV_IMG_DECLARE(CashReceived);
+                display_images(&CashReceived);
+                DisplayMode = ModeCashReceived;
+            }
+        }
+
+        Image2BDisplayed=0;
         vTaskDelay(pdMS_TO_TICKS(5000));
     }
 
@@ -141,7 +210,6 @@ void app_main(void)
         // logic added on 251224
         // display No HBT For X minutes once every minute
         // and restart if no HBT for Y minutes
-
         // removed on 301224 as advised by Neeraj Ji
         // ServerHBTTimeOut++;
         // if ( ((ServerHBTTimeOut % 600) == 40) && (ServerHBTTimeOut > 620))

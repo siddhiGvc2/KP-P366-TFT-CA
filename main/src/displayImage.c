@@ -38,13 +38,9 @@
 #include "externVars.h"
 #include "calls.h"
 #include "gvcLogo.c"
-#include "NoConnectivity.c"
-#include "BootingUp.c"
+
 #include "QRcode.c"
-#include "CashReceived.c"
-#include "SelectItem.c"
-#include "ItemVend.c"
-#include "WaitingCashLessDevice.c"
+
 static const char *TAG = "LVGL";
 
 #define QR_CODE_SIZE  198
@@ -94,54 +90,34 @@ void showLogo(void)
 
 void DisplayBootingUp(void)
 {
-    if (DisplayMode != ModeBootingUp)
-    {
-        // LV_IMG_DECLARE();
-        LV_IMG_DECLARE(BootingUp);
-        display_images(&BootingUp);
-        DisplayMode = ModeBootingUp;
-    }
-    
+    Image2BDisplayed = ImageBootingUp;
+
+
 }
 
 void DisplayNoWiFi(void)
 {
-    if (DisplayMode != ModeNoWifi)
-    {
-        LV_IMG_DECLARE(NoConnectivity);
-        display_images(&NoConnectivity);
-        DisplayMode = ModeNoWifi;
-    }
+
+    Image2BDisplayed = ImageNoWifi;
+
 }
 
 void DisplayCashReceived(void)
 {
-    if (DisplayMode != ModeCashReceived)
-    {
-        LV_IMG_DECLARE(CashReceived);
-        display_images(&CashReceived);
-        DisplayMode = ModeCashReceived;
-    }
+    Image2BDisplayed = ImageCashReceived;
+
 }
 
 void DisplaySelectItem(void)
 {
-    if (DisplayMode != ModeSelectItem)
-    {
-        LV_IMG_DECLARE(SelectItem);
-        display_images(&SelectItem);
-        DisplayMode = ModeSelectItem;
-    }
+    Image2BDisplayed = ImageSelectItem;
+   
 }
 
 void DisplayItemVend(void)
 {
-    if (DisplayMode != ModeItemVend)
-    {
-        LV_IMG_DECLARE(ItemVend);
-        display_images(&ItemVend);
-        DisplayMode = ModeItemVend;
-    }
+    Image2BDisplayed = ImageItemVend;
+    
 }
 
 
@@ -149,12 +125,8 @@ void DisplayItemVend(void)
 
 void DisplayCashlessDevice(void)
 {
-    if(DisplayMode != ModeCashlessDevice)
-    {
-        LV_IMG_DECLARE(WaitingCashLessDevice);
-        display_images(&WaitingCashLessDevice);
-        DisplayMode=ModeCashlessDevice;
-    }
+    Image2BDisplayed = ImageCashlessDevice;
+    
 }
 
 

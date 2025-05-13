@@ -21,6 +21,14 @@
 #define ModeCashlessDevice 9
 
 
+#define ImageBootingUp 1
+#define ImageNoWifi 2
+#define ImageCashReceived 3
+#define ImageSelectItem 4
+#define ImageItemVend 5
+#define ImageCashlessDevice 6
+
+
 typedef enum LED_STATES{
     STANDBY_LED,
     SEARCH_FOR_WIFI,

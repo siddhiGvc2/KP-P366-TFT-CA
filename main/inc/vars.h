@@ -189,9 +189,12 @@ char Number[20];
 char Provider[20];
 char Amount[50];
 
+int Image2BDisplayed;
+
 int IsMobivendApi=0;
 #include "lvgl.h"
 lv_obj_t * img = NULL; // Declare globally or in a higher scope
 
 char UartDebugInfoRequired = 0;
 char UartPacketReceived = 0;
+
