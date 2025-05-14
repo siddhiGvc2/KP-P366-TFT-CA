@@ -51,3 +51,13 @@
 ## 130525
 -- removed UART data of FW and Mac and IP Address
 -- all display images logic changed. It is in single task DisplayImageTask / main.c
+
+
+## 140525
+-- display QR code when setting --(done)
+-- display Item Code and Price is Item Vended (as well as remaining price if any)
+-- refund
+-- backend data save all info (vend, refund, transaction)
+-- send SUCCESS from backend when you get *Amount Received". "TRXN" and "REFUND" and remove from esp-idf
+-- esp-idf will forward SUCCESS message to UART--(done)
+

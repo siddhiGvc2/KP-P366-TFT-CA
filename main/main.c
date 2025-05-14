@@ -128,8 +128,10 @@ void display_image_task(void)
                 DisplayMode = ModeCashReceived;
             }
         }
-
+        if(Image2BDisplayed>0)
+        {
         Image2BDisplayed=0;
+        }
         vTaskDelay(pdMS_TO_TICKS(1000));
     }
 }

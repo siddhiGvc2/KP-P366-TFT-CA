@@ -584,8 +584,6 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
                 else if(strncmp(data, "*QR:",4) == 0){
                     char tempBuf[500];
                     sscanf(data, "*QR:%[^#]#",tempBuf);
-                    DisplayMode=ModeNone;
-                    dispayQR();
                     if (UartDebugInfoRequired)
                          uart_write_string_ln(tempBuf);
                     strcpy(QrString,tempBuf);
@@ -595,11 +593,13 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
                           uart_write_string_ln(QrString);
                     utils_nvs_set_str(NVS_QR_STRING,QrString);
                     sprintf(payload, "*QR-OK,%s#",QrString);
-                    vTaskDelay(100/portTICK_PERIOD_MS);
-                        //utils_nvs_set_str(NVS_QR_STRING,QrString);
+
+                    //added on 140525
+                      DisplayMode=ModeNone;
+                    dispayQR();
                     vTaskDelay(100/portTICK_PERIOD_MS);
                     publish_message(payload,client);
-                    vTaskDelay(100/portTICK_PERIOD_MS);
+                   
                    
                   
                 }
@@ -626,6 +626,11 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
                     sprintf(payload, "*D%s#",currentDateTime); 
                     uart_write_string_ln(payload);
                     
+                }
+                // added on 140525 
+                else if(strncmp(data,"*SUCCESS#",9)==0)
+                {
+                    uart_write_string_ln(data);
                 }
                 else {
                     ESP_LOGI(TAG, "Unknown message received.");

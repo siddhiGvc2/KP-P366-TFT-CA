@@ -62,10 +62,10 @@ void process_uart_packet(const char *pkt){
 
 
     if(strstr(pkt, "AmountReceived"))
-//    if (sscanf(pkt, "*%[^,],%[^,],%[^#]#",Number, Provider, Amount) == 3)
     {
         ESP_LOGI(TAG,"AmountReceived pkt accepeted");
-        uart_write_string_ln("*SUCCESS#");
+        mqtt_publish_msg(pkt);
+        // uart_write_string_ln("*SUCCESS#");
     }
     else if(strncmp(pkt, "*CA?#", 5) == 0){
        
@@ -612,7 +612,7 @@ void process_uart_packet(const char *pkt){
                 uart_write_string_ln("Invalid itemCode length");
                 return;
             }
-            uart_write_string_ln("*SUCCESS#");
+            // uart_write_string_ln("*SUCCESS#");
             DisplayItemVend();
             ESP_LOGI(TAG,"DISPLAYED ITEME VEND");
             if(MQTT_CONNEECTED && MQTTRequired)
@@ -647,7 +647,7 @@ void process_uart_packet(const char *pkt){
     // added on 080525
     else if(strncmp(pkt,"*REFUND,",8)==0)
     {
-        uart_write_string_ln("*SUCCESS#");
+        // uart_write_string_ln("*SUCCESS#");
         mqtt_publish_msg(pkt);
     }
      // added on 080525

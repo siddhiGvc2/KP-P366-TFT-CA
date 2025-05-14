@@ -66,8 +66,18 @@ void display_images(const lv_img_dsc_t *ig) {
 
     if (example_lvgl_lock(-1)) {
           lv_img_set_src(img, ig);                      // Set image source
-    lv_obj_align(img, LV_ALIGN_TOP_MID, 0, 0);    // Align to top-middle
+          lv_obj_align(img, LV_ALIGN_TOP_MID, 0, 0);    // Align to top-middle
         example_lvgl_unlock();
+    }
+    
+    // added on 140525
+    if(Image2BDisplayed==5)
+    {
+    // char label[200];
+    lv_obj_t *label = lv_label_create(lv_scr_act());
+    // sprintf(label,"")
+    lv_label_set_text(label, "Hello LVGL!");
+    lv_obj_align_to(label, img, LV_ALIGN_CENTER, 0, 0);
     }
 
   
