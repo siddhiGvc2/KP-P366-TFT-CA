@@ -74,7 +74,7 @@ void display_images(const lv_img_dsc_t *ig) {
     {
     char payload[200];
     lv_obj_t *label = lv_label_create(lv_scr_act());
-    sprintf(payload,"ItemCode-%s Price-%s",itemCode,rawPrice);
+    sprintf(payload,"ItemCode-%s\nPrice-%s",itemCode,rawPrice);
     lv_label_set_text(label, payload);
   
     static lv_style_t style;
