@@ -72,11 +72,34 @@ void display_images(const lv_img_dsc_t *ig) {
     // added on 140525
     if(Image2BDisplayed==5)
     {
+    char payload[200];
+    lv_obj_t *label = lv_label_create(lv_scr_act());
+    sprintf(payload,"ItemCode-%s Price-%s",itemCode,rawPrice);
+    lv_label_set_text(label, payload);
+  
+    static lv_style_t style;
+    lv_style_init(&style);
+    lv_style_set_text_font(&style, &lv_font_montserrat_22);  // Set font size 28
+    lv_style_set_text_color(&style, lv_color_black());
+    lv_obj_add_style(label, &style, 0);
+
+     lv_obj_align_to(label, img, LV_ALIGN_BOTTOM_MID, 0, -100);
+    }
+     // added on 140525
+    else  if(Image2BDisplayed==1)
+    {
     // char label[200];
     lv_obj_t *label = lv_label_create(lv_scr_act());
     // sprintf(label,"")
-    lv_label_set_text(label, "Hello LVGL!");
-    lv_obj_align_to(label, img, LV_ALIGN_CENTER, 0, 0);
+    lv_label_set_text(label, "Mobivend 140525");
+   
+    static lv_style_t style;
+    lv_style_init(&style);
+    lv_style_set_text_font(&style, &lv_font_montserrat_22);  // Set font size 28
+    lv_style_set_text_color(&style, lv_color_black());
+    lv_obj_add_style(label, &style, 0);
+
+     lv_obj_align_to(label, img, LV_ALIGN_BOTTOM_MID, 0, -10);
     }
 
   

@@ -592,7 +592,7 @@ void process_uart_packet(const char *pkt){
         if (UartDebugInfoRequired)
              uart_write_string_ln("Received TRXN command!");
         // Declare buffers for all 7 fields
-        char val1[20], val2[20], refId[32], val4[20], rawPrice[20], itemCode[10];
+      
     
         // Parse 7 fields
         int matched = sscanf(pkt, "*TRXN,%[^,],%[^,],%[^,],%[^,],%[^,],%[^,#]#", 

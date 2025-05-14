@@ -59,7 +59,7 @@
 -- esp-idf will forward SUCCESS message to UART--(done) /main/src/mqttRoutines.c
 
 
--- display Item Code and Price is Item Vended (as well as remaining price if any)
+-- display Item Code and Price is Item Vended (as well as remaining price if any) src/displayImage.c
 -- refund
 -- backend data save all info (vend, refund, transaction)
 
