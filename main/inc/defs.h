@@ -27,7 +27,9 @@
 #define ImageSelectItem 4
 #define ImageItemVend 5
 #define ImageCashlessDevice 6
+#define ImageQRCode 7 
 
+#define QR_CODE_SIZE  198
 
 typedef enum LED_STATES{
     STANDBY_LED,

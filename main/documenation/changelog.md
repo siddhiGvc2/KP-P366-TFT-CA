@@ -54,10 +54,12 @@
 
 
 ## 140525
--- display QR code when setting --(done) /main/src/mqttRoutines.c
+-- display QR code when setting --(done) /main/src/mqttRoutines.c , displayimage.c, main.c
+-- send SUCCESS from backend when you get *Amount Received". "TRXN" and "REFUND" and remove from esp-idf - analysepacketuart at 3 places
+-- esp-idf will forward SUCCESS message to UART--(done) /main/src/mqttRoutines.c
+
+
 -- display Item Code and Price is Item Vended (as well as remaining price if any)
 -- refund
 -- backend data save all info (vend, refund, transaction)
--- send SUCCESS from backend when you get *Amount Received". "TRXN" and "REFUND" and remove from esp-idf
--- esp-idf will forward SUCCESS message to UART--(done) /main/src/mqttRoutines.c
 

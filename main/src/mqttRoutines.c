@@ -595,8 +595,9 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
                     sprintf(payload, "*QR-OK,%s#",QrString);
 
                     //added on 140525
-                      DisplayMode=ModeNone;
-                    dispayQR();
+                    DisplayMode=ModeNone;
+                    dispayQR(); // remoed by VC
+
                     vTaskDelay(100/portTICK_PERIOD_MS);
                     publish_message(payload,client);
                    
@@ -627,7 +628,7 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
                     uart_write_string_ln(payload);
                     
                 }
-                // added on 140525 
+                // added on 140525 by Siddhi. Checked by Vinay
                 else if(strncmp(data,"*SUCCESS#",9)==0)
                 {
                     uart_write_string_ln(data);

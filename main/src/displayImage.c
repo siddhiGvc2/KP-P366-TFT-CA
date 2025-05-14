@@ -43,7 +43,6 @@
 
 static const char *TAG = "LVGL";
 
-#define QR_CODE_SIZE  198
 
 
 void display_images(const lv_img_dsc_t *ig) {
@@ -139,65 +138,68 @@ void DisplayCashlessDevice(void)
     
 }
 
-
-void dispayQR(void){
+// changed on 140525
+// all code shifted to display_image_task/main.c
+ void dispayQR(void){
     if (DisplayMode != ModeQR)
     {
-        if (lv_obj_is_valid(img))
-        {
-        lv_obj_del(img); // Delete the flame icon if it exists
-        img = NULL;
-        }
-        else{
-            img = NULL; 
-        }
-     DisplayMode = ModeQR;   
+        Image2BDisplayed = ImageQRCode;
+    }
+//         if (lv_obj_is_valid(img))
+//         {
+//         lv_obj_del(img); // Delete the flame icon if it exists
+//         img = NULL;
+//         }
+//         else{
+//             img = NULL; 
+//         }
+//      DisplayMode = ModeQR;   
     
-     LV_IMG_DECLARE(QRcode);
+//      LV_IMG_DECLARE(QRcode);
 
-    //  display_images(&image);
-    if (example_lvgl_lock(-1)) {
-        img = lv_img_create(lv_scr_act());
-        example_lvgl_unlock();
-    }
+//     //  display_images(&image);
+//     if (example_lvgl_lock(-1)) {
+//         img = lv_img_create(lv_scr_act());
+//         example_lvgl_unlock();
+//     }
 
-    if (example_lvgl_lock(-1)) {
-        lv_img_set_src(img, &QRcode);
-        example_lvgl_unlock();
-    }
-    lv_obj_align(img, LV_ALIGN_TOP_MID, 0, 0);
+//     if (example_lvgl_lock(-1)) {
+//         lv_img_set_src(img, &QRcode);
+//         example_lvgl_unlock();
+//     }
+//     lv_obj_align(img, LV_ALIGN_TOP_MID, 0, 0);
    
    
 
-    // Refresh the display to show the first image
+//     // Refresh the display to show the first image
   
-    // //delay
+//     // //delay
 
     
-    // // Display "Hello World" text
-    // lv_obj_t *label = lv_label_create(scr);
-    // lv_label_set_text(label, QrString);
-    // lv_obj_align(label, LV_ALIGN_CENTER, 0, 0); // Center the text
+//     // // Display "Hello World" text
+//     // lv_obj_t *label = lv_label_create(scr);
+//     // lv_label_set_text(label, QrString);
+//     // lv_obj_align(label, LV_ALIGN_CENTER, 0, 0); // Center the text
 
-    // // Create a QR code object
-    lv_obj_t *qr = lv_qrcode_create(img, QR_CODE_SIZE, lv_color_hex3(0x000), lv_color_hex3(0xFFF));
+//     // // Create a QR code object
+//     lv_obj_t *qr = lv_qrcode_create(img, QR_CODE_SIZE, lv_color_hex3(0x000), lv_color_hex3(0xFFF));
   
 
-    // // Set the QR code data
-   //const char *data = "https://www.google.com";
-    lv_qrcode_update(qr, QrString, strlen(QrString));
+//     // // Set the QR code data
+//    //const char *data = "https://www.google.com";
+//     lv_qrcode_update(qr, QrString, strlen(QrString));
   
 
-    // // Center the QR code on the screen
-    lv_obj_align(qr, LV_ALIGN_CENTER, 0, 10);
+//     // // Center the QR code on the screen
+//     lv_obj_align(qr, LV_ALIGN_CENTER, 0, 10);
    
 
-    // ***********Haresh
-    // while(1) {
-    //     lv_timer_handler();
-    //     vTaskDelay(pdMS_TO_TICKS(50));
-    // }
-    }
+//     // ***********Haresh
+//     // while(1) {
+//     //     lv_timer_handler();
+//     //     vTaskDelay(pdMS_TO_TICKS(50));
+//     // }
+//     }
 }
 
 

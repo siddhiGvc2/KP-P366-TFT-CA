@@ -128,6 +128,20 @@ void display_image_task(void)
                 DisplayMode = ModeCashReceived;
             }
         }
+        // this function added on 140525 by Vinay with guidance of Siddhi
+        if (Image2BDisplayed == ImageQRCode)
+        {
+            if (DisplayMode != ModeQR)
+            {
+                LV_IMG_DECLARE(QRcode);
+                display_images(&QRcode);
+                
+                lv_obj_t *qr = lv_qrcode_create(img, QR_CODE_SIZE, lv_color_hex3(0x000), lv_color_hex3(0xFFF));
+                lv_qrcode_update(qr, QrString, strlen(QrString));
+                lv_obj_align(qr, LV_ALIGN_CENTER, 0, 10);
+                DisplayMode = ModeQR;
+            }    
+        }
         if(Image2BDisplayed>0)
         {
         Image2BDisplayed=0;
