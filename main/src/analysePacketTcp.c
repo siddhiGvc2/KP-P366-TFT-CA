@@ -802,26 +802,6 @@ void tcpip_client_task(){
 
 
 
-                                else if(strncmp(rx_buffer, "*SL:", 4) == 0){
-                                    if (edges == 0)
-                                    {
-                                        sscanf(rx_buffer, "*SL:%[^:]:%[^:]:%d:%d#",SLuserName,SLdateTime,&ledpin,&ledstatus);
-                                        // strcpy(WIFI_PASS_2, buf);
-                                        // utils_nvs_set_str(NVS_PASS_2_KEY, WIFI_PASS_2);
-                                        ESP_LOGI(TAG, "Set LED @ Pin %d Status %d",ledpin,ledstatus);
-                                        send(sock, "*SL-OK#", strlen("*SL-OK#"), 0);
-                                        tx_event_pending = 1;
-                                        if (ledpin == 1)
-                                            gpio_set_level(L1, ledstatus);
-                                        if (ledpin == 2)
-                                            gpio_set_level(L2, ledstatus);
-                                        if (ledpin == 3)
-                                            gpio_set_level(L3, ledstatus);
-                                        
-                                    }
-                                }
-                                // when TC command is received send totals
-
                                 else if(strncmp(rx_buffer, "*TV?#", 5) == 0){
                                         sprintf(payload, "*TV,%d,%d,%d,%d,%d,%d,%d#", Totals[0],Totals[1],Totals[2],Totals[3],Totals[4],Totals[5],Totals[6]); //actual when in production
                                         send(sock, payload, strlen(payload), 0);
@@ -882,12 +862,6 @@ void tcpip_client_task(){
                                         send(sock, FWVersion, strlen(FWVersion), 0);
                                         uart_write_string_ln(payload);
                                         tx_event_pending = 1;
-                                        if (ledpin == 1)
-                                            gpio_set_level(L1, ledstatus);
-                                        if (ledpin == 2)
-                                            gpio_set_level(L2, ledstatus);
-                                        if (ledpin == 3)
-                                            gpio_set_level(L3, ledstatus);
                                     }
                                 else if(strncmp(rx_buffer, "*RST:", 5) == 0){
                                         sscanf(rx_buffer, "*RST:%[^:]:%[^#]#",RSTuserName,RSTdateTime);

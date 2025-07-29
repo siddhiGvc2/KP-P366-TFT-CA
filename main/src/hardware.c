@@ -180,11 +180,17 @@ void gpio_read_n_act(void)
 {
     int testCounter = 0;
     int BlinkMode = 0;
+    int INHLevel;
+    int PULSELevel;
+    int PreviousINHLevel = 100;
+    int PreviousPULSELevel = 100;
     char payload[100];
     int TimeToBlinkLed = 0;
     Led_State_t prev_state = STANDBY_LED;
+    
     for (;;)
     {
+     
         if (TimeToBlinkLed)
         {
             TimeToBlinkLed--;
@@ -301,9 +307,11 @@ void gpio_read_n_act(void)
         if (PreviousINHValue != INHInputValue)
         {
             PreviousINHValue = INHInputValue;
+            INHInputValue ^= 1;
             // if (gpio_get_level(JUMPER) == 0)
             // {
                 sprintf(payload, "*INH,%d#",INHInputValue); 
+                gpio_set_level(CINHO,INHInputValue);
                 send(sock, payload, strlen(payload), 0);
             // }
         }
@@ -613,34 +621,6 @@ void Out4094 (unsigned char value)
 // blink LED as per number - set led on, wait, led off, clear led number
 void BlinkLED (void)
 {
-    for (;;)
-    {
-        if (blinkLEDNumber>0)
-        {
-            if (blinkLEDNumber==1)
-            {
-                gpio_set_level(L1, 1);
-                vTaskDelay(500/portTICK_PERIOD_MS);
-                gpio_set_level(L1, 0);
-                blinkLEDNumber = 0;
-            }
-            if (blinkLEDNumber==2)
-            {
-                gpio_set_level(L2, 1);
-                vTaskDelay(500/portTICK_PERIOD_MS);
-                gpio_set_level(L2, 0);
-                blinkLEDNumber = 0;
-            }
-            if (blinkLEDNumber==3)
-            {
-                gpio_set_level(L1, 1);
-                vTaskDelay(500/portTICK_PERIOD_MS);
-                gpio_set_level(L3, 0);
-                blinkLEDNumber = 0;
-            }
-        }
-        vTaskDelay(500/portTICK_PERIOD_MS);
-    }
 }
 
 
@@ -654,13 +634,13 @@ void GeneratePulsesInBackGround (void)
         {
             if (edges%2 == 0)
             {
-                Out4094(pin);
-//                 uart_write_string_ln("Set Low");
+                gpio_set_level(PULSEO,1);
+                ESP_LOGI(TAG,"Pulse Low");
             }
             else
             {    
-                Out4094(8);
-//                uart_write_string_ln("Set High");
+                gpio_set_level(PULSEO,0);
+                ESP_LOGI(TAG,"Pulse high");
             }
             edges--;
             pulses++;
@@ -678,96 +658,16 @@ void GeneratePulsesInBackGround (void)
 
 void TestCoin (void)
 {
-    char buffer[100];
-    int j;
-    for (;;) 
-    {
-        if (HardwareTestMode)
-        {
-            gpio_set_level(L1, 0);
-            gpio_set_level(L2, 0);
-            gpio_set_level(L3, 0);
-            pin++;
-            if (pin>7)
-            {
-                j = 0;
-                pin = 1;
-                HardwareTestCount++;
-                for (int i = 0 ; i < 7 ; i++)
-                {
-                    if ( CashTotals[i] != HardwareTestCount)
-                    {
-                        sprintf(buffer, "Error - Pin %d & Count Number %d ",i+1,CashTotals[i]); //actual when in production
-                        ESP_LOGI("TestCoin","Error %d - Pin %d, Count",i+1 , CashTotals[i]);
-                        uart_write_string_ln(buffer);
-                        j++;
-                    }
-                    if (j == 0)
-                    {    
-                        ESP_LOGI("TestCoin","Test Cycle Okay");
-                        uart_write_string_ln("Test Cycle Okay");        
-                    }   
-                }
-            }   
-            if ((pin == 1) || (pin == 4))
-                gpio_set_level(L1, 1);
-            if ((pin == 2) || (pin == 5))
-                gpio_set_level(L2, 1);
-            if ((pin == 3) || (pin == 6))
-                gpio_set_level(L3, 1);
-
-            edges = 2;    
-            ESP_LOGI("TestCoin","Test Coin Pin Number %d ",pin);
-            sprintf(buffer, "Test Coin Pin Number %d ",pin); //actual when in production
-            uart_write_string_ln(buffer);
-            
-        }
-        vTaskDelay(2000/portTICK_PERIOD_MS);
-    }
 }
 
 
 void TestRGB (void)
 {
-    gpio_set_level(L1, 0);
-    gpio_set_level(L2, 0);
-    gpio_set_level(L3, 0);
-    vTaskDelay(1000/portTICK_PERIOD_MS);
-    gpio_set_level(L1, 1);
-    vTaskDelay(1000/portTICK_PERIOD_MS);
-    
-    gpio_set_level(L1, 0);
-    gpio_set_level(L2, 1);
-    vTaskDelay(1000/portTICK_PERIOD_MS);
-    gpio_set_level(L2, 0);
-    gpio_set_level(L3, 1);
-    vTaskDelay(1000/portTICK_PERIOD_MS);
-    gpio_set_level(L3, 0);
     
 }
 
 void Test4094 (void)
 {
-    for (;;) 
-    {
-        Test4094Count++;
-        if (Test4094Count == 8)
-            Test4094Count = 0;
-
-        gpio_set_level(L1, 0);
-        gpio_set_level(L2, 0);
-        gpio_set_level(L3, 0);
-        if ((Test4094Count == 0) || (Test4094Count == 3))
-            gpio_set_level(L1, 1);
-        if ((Test4094Count == 1) || (Test4094Count == 4))
-            gpio_set_level(L2, 1);
-        if ((Test4094Count == 2) || (Test4094Count == 5))
-            gpio_set_level(L3, 1);
-
-        Out4094(Test4094Count);  
-        ESP_LOGI(TAG, "Pulse 4094 %d",Test4094Count);  
-        vTaskDelay(2000/portTICK_PERIOD_MS);
-    }
 }
 
 void s2p_init(){
@@ -778,19 +678,18 @@ void s2p_init(){
     io_conf.mode = GPIO_MODE_OUTPUT;
     //bit mask of the pins that you want to set
 //    io_conf.pin_bit_mask = 1ULL << STRB | 1ULL << CLK | 1ULL << DAT | 1ULL << CINHO | 1ULL << L1 | 1ULL << L2 | 1ULL << L3 ;
-    io_conf.pin_bit_mask =  1ULL << CLK | 1ULL << DAT | 1ULL << CINHO  ;
+    io_conf.pin_bit_mask =  1ULL << CLK | 1ULL << DAT | 1ULL << CINHO | 1ULL << PULSEO ;
     //disable pull-down mode
     io_conf.pull_down_en = 0;
     //disable pull-up mode
     io_conf.pull_up_en = 0;
     //configure GPIO with the given settings
     gpio_config(&io_conf);
+
+    gpio_set_level(PULSEO, 0);
     gpio_set_level(STRB, 0);
     gpio_set_level(CLK, 0);
     gpio_set_level(DAT, 0);
-    gpio_set_level(L1, 0);
-    gpio_set_level(L2, 0);
-    gpio_set_level(L3, 0);
     if (INHOutputValue != 0)
     {
         INHOutputValue = 1;

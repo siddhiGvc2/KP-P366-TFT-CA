@@ -1,7 +1,13 @@
 ## 290725
 copied from KWIKPAT MOBIVEND TFT and made it working by making hardware related changes
 git push
- 
+
+add PULSEI and PULSEO
+set PULSO as 0
+Pulse as per V command 
+
+*V:TID:1:x#
+
 
 ## 050525
 -- use static QR code

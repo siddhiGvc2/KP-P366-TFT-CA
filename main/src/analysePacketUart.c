@@ -95,22 +95,6 @@ void process_uart_packet(const char *pkt){
         uart_write_string_ln(buffer);
         tx_event_pending = 1;
     }
-     else if(strncmp(pkt, "*SL:", 4) == 0){
-        if(edges==0)
-        {
-        sscanf(pkt, "*SL:%d:%d#", &ledpin,&ledstatus);
-        if (ledpin == 1)
-            gpio_set_level(L1, ledstatus);
-        if (ledpin == 2)
-            gpio_set_level(L2, ledstatus);
-        if (ledpin == 3)
-            gpio_set_level(L3, ledstatus);
-      
-           if (UartDebugInfoRequired)
-            uart_write_string_ln("*SL-OK#");
-              tx_event_pending = 1;
-        }
-    }
     
       else if(strncmp(pkt, "*SN:", 4) == 0){
       
@@ -301,12 +285,6 @@ void process_uart_packet(const char *pkt){
          }
       
         tx_event_pending = 1;
-        if (ledpin == 1)
-            gpio_set_level(L1, ledstatus);
-        if (ledpin == 2)
-            gpio_set_level(L2, ledstatus);
-        if (ledpin == 3)
-            gpio_set_level(L3, ledstatus);
     }
     else if(strncmp(pkt, "*SS:", 4) == 0){
         sscanf(pkt, "*SS:%[^#]#",buf);

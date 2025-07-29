@@ -497,24 +497,6 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
 
                     }
                 }
-                else if(strncmp(data, "*SL:", 4) == 0){
-                    if (edges == 0)
-                    {
-                        sscanf(data, "*SL:%d:%d#",&ledpin,&ledstatus);
-                        // strcpy(WIFI_PASS_2, buf);
-                        // utils_nvs_set_str(NVS_PASS_2_KEY, WIFI_PASS_2);
-                        ESP_LOGI(TAG, "Set LED @ Pin %d Status %d",ledpin,ledstatus);
-                        publish_message("SL-OK", client);
-                        tx_event_pending = 1;
-                        if (ledpin == 1)
-                            gpio_set_level(L1, ledstatus);
-                        if (ledpin == 2)
-                            gpio_set_level(L2, ledstatus);
-                        if (ledpin == 3)
-                            gpio_set_level(L3, ledstatus);
-                        
-                    }
-                }
                 else if(strncmp(data, "*TV?#", 5) == 0){
                         sprintf(payload, "*TV,%d,%d,%d,%d,%d,%d,%d#", Totals[0],Totals[1],Totals[2],Totals[3],Totals[4],Totals[5],Totals[6]); //actual when in production
                         publish_message(payload, client);
@@ -531,12 +513,6 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
                     ESP_LOGI(TAG, "*%s#",FWVersion);
                      publish_message(FWVersion, client);
                     tx_event_pending = 1;
-                    if (ledpin == 1)
-                        gpio_set_level(L1, ledstatus);
-                    if (ledpin == 2)
-                        gpio_set_level(L2, ledstatus);
-                    if (ledpin == 3)
-                        gpio_set_level(L3, ledstatus);
                 }
                 else if(strncmp(data, "*FOTA:", 6) == 0){
                     strcpy(FOTAuserName,"MQTT_LOCAL");

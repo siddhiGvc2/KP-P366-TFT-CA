@@ -189,6 +189,9 @@ typedef enum TCPIP_SOCKET_STATE{
 #define JUMPER2  32
 
 
+#define PULSEI 35 
+#define PULSEO 5
+
 //#define RxD2    16
 #define ErasePin 0
 #define ICH1    -1
@@ -207,11 +210,6 @@ typedef enum TCPIP_SOCKET_STATE{
 #define CINHO   26
 #define CINHI   18
 
-#define L1      -1
-#define L2     -1
-#define L3     -1
-#define LedHBT  L1
-#define LedTCP  L2
 
 #define SDA     21
 #define SCL     22
