@@ -201,7 +201,6 @@ typedef enum TCPIP_SOCKET_STATE{
 #define ICH5    -1
 #define ICH6    -1
 #define ICH7    -1
-#define INH     -1
 
 #define STRB    -1
 #define CLK     22

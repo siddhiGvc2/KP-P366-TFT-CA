@@ -307,13 +307,14 @@ void gpio_read_n_act(void)
         if (PreviousINHValue != INHInputValue)
         {
             PreviousINHValue = INHInputValue;
-            INHInputValue ^= 1;
-            // if (gpio_get_level(JUMPER) == 0)
-            // {
+                
                 sprintf(payload, "*INH,%d#",INHInputValue); 
-                gpio_set_level(CINHO,INHInputValue);
                 send(sock, payload, strlen(payload), 0);
-            // }
+                ESP_LOGI(TAG, "*INH,%d#",INHInputValue);
+                // GPIO output is input of GPIO
+                INHInputValue ^= 1;
+                gpio_set_level(CINHO,INHInputValue);            
+                INHInputValue ^= 1;
         }
         InputPin = 0;
         if (gpio_get_level(ICH1) == 0)
@@ -536,7 +537,7 @@ void ICH_init()
     //set as input mode
     io_conf.mode = GPIO_MODE_INPUT;
     //bit mask of the pins that you want to set
-    io_conf.pin_bit_mask = 1ULL << ErasePin | 1ULL << JUMPER | 1ULL << JUMPER2 |1ULL << CINHI | 1ULL << INH ;
+    io_conf.pin_bit_mask = 1ULL << ErasePin | 1ULL << JUMPER | 1ULL << JUMPER2 |1ULL << CINHI  ;
     //disable pull-down mode
     io_conf.pull_down_en = 0;
     //enable pull-up mode

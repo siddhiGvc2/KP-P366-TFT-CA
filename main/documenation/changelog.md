@@ -7,6 +7,7 @@ set PULSO as 0
 Pulse as per V command 
 
 *V:TID:1:x#
+gpio bug solved
 
 
 ## 050525
