@@ -182,34 +182,34 @@ typedef enum TCPIP_SOCKET_STATE{
 #define FWVersion "*Mobivend_120525_VER_1.2 Naico Ltd#"
 
 #define HBTDelay    20000
-#define LEDR    13
-#define LEDG    12
+#define LEDR    33
+#define LEDG    25
 
-#define JUMPER  15
-#define JUMPER2  18
+#define JUMPER  32
+#define JUMPER2  32
 
 
-#define RxD2    16
+//#define RxD2    16
 #define ErasePin 0
-#define ICH1    33
-#define ICH2    32
-#define ICH3    35
-#define ICH4    34
-#define ICH5    26
-#define ICH6    27
-#define ICH7    25
-#define INH     23
+#define ICH1    -1
+#define ICH2    -1
+#define ICH3    -1
+#define ICH4    -1
+#define ICH5    -1
+#define ICH6    -1
+#define ICH7    -1
+#define INH     -1
 
-#define STRB    19
+#define STRB    -1
 #define CLK     22
 #define DAT    21
 
-#define CINHO   14
-#define CINHI   23
+#define CINHO   26
+#define CINHI   18
 
-#define L1      2
-#define L2      5
-#define L3      4
+#define L1      -1
+#define L2     -1
+#define L3     -1
 #define LedHBT  L1
 #define LedTCP  L2
 

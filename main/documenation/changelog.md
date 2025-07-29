@@ -1,3 +1,8 @@
+## 290725
+copied from KWIKPAT MOBIVEND TFT and made it working by making hardware related changes
+git push
+ 
+
 ## 050525
 -- use static QR code
 -- set QR code using *QR:QRstring# command

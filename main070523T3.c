@@ -1848,7 +1848,8 @@ void s2p_init(){
     //set as output mode
     io_conf.mode = GPIO_MODE_OUTPUT;
     //bit mask of the pins that you want to set
-    io_conf.pin_bit_mask = 1ULL << STRB | 1ULL << CLK | 1ULL << DAT | 1ULL << CINHO | 1ULL << L1 | 1ULL << L2 | 1ULL << L3 ;
+//    io_conf.pin_bit_mask = 1ULL << STRB | 1ULL << CLK | 1ULL << DAT | 1ULL << CINHO | 1ULL << L1 | 1ULL << L2 | 1ULL << L3 ;
+    io_conf.pin_bit_mask =  1ULL << CLK | 1ULL << DAT | 1ULL << CINHO   ;
     //disable pull-down mode
     io_conf.pull_down_en = 0;
     //disable pull-up mode

@@ -71,7 +71,7 @@
  #define EXAMPLE_PIN_NUM_LCD_DC         2
  #define EXAMPLE_PIN_NUM_LCD_RST        -1
  #define EXAMPLE_PIN_NUM_LCD_CS         15
- #define EXAMPLE_PIN_NUM_BK_LIGHT       21
+ #define EXAMPLE_PIN_NUM_BK_LIGHT       19
  #define EXAMPLE_PIN_NUM_TOUCH_CS       -1
 
  

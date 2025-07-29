@@ -96,21 +96,22 @@ void event_handler(void* arg, esp_event_base_t event_base,
     char buffer[100];
     if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_START) 
     {
-         if (gpio_get_level(JUMPER2) == 0)
+//         if (gpio_get_level(JUMPER2) == 0)
+         if (0)
          {
-             set_led_state(WAIT4ESPTOUCH);
-             ESP_LOGI(TAG,"*Waiting for jumper to be removed#");
-             if (UartDebugInfoRequired)
-            uart_write_string_ln("*Waiting for jumper to be removed#");
-            while (1)
-            {
-                while (gpio_get_level(JUMPER2) == 0)
-                    vTaskDelay(100);   
-                if (gpio_get_level(JUMPER2) == 0)
-                    continue;
-                else    
-                    break;
-            }
+            //  set_led_state(WAIT4ESPTOUCH);
+            //  ESP_LOGI(TAG,"*Waiting for jumper to be removed#");
+            //  if (UartDebugInfoRequired)
+            // uart_write_string_ln("*Waiting for jumper to be removed#");
+            // while (1)
+            // {
+            //     while (gpio_get_level(JUMPER2) == 0)
+            //         vTaskDelay(100);   
+            //     if (gpio_get_level(JUMPER2) == 0)
+            //         continue;
+            //     else    
+            //         break;
+           // }
             
             xTaskCreate(smartconfig_example_task, "smartconfig_example_task", 4096, NULL, 6, NULL);
             set_led_state(SEARCH_FOR_ESPTOUCH);
