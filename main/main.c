@@ -166,6 +166,7 @@ void app_main(void)
     //esp_log_level_set("*", ESP_LOG_NONE);
     // set totals to 0
     char payload[200];
+    VendingMode = VendingMobiVend;
     MQTTRequired = 1;
     for (int i = 0 ; i < 7 ; i++)
     {

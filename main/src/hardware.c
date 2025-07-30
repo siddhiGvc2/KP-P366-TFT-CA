@@ -69,6 +69,7 @@ void RestartDevice (void)
      uart_write_string_ln("*Resetting device#");
      led_state = WAITING_FOR_RESTART;
      vTaskDelay(4000/portTICK_PERIOD_MS);
+     ESP_LOGI(TAG,"Edges- %d, PulseStoppedDelay- %d",edges,PulseStoppedDelay);
      while ((edges !=0) || (PulseStoppedDelay!=0))
         vTaskDelay(1000/portTICK_PERIOD_MS);
      esp_restart();
@@ -347,38 +348,6 @@ void gpio_read_n_act(void)
 
         }
         InputPin = 0;
-        if (gpio_get_level(ICH1) == 0)
-        {
-            InputPin = 1;
-        }
-        else if (gpio_get_level(ICH2) == 0)
-        {
-            InputPin = 2;
-        }
-        else if (gpio_get_level(ICH3) == 0)
-        {
-            InputPin = 3;
-        }
-        else if (gpio_get_level(ICH4) == 0)
-        {
-            InputPin = 4;
-        }
-        else if (gpio_get_level(ICH5) == 0)
-        {
-            InputPin = 5;
-        }
-        else if (gpio_get_level(ICH6) == 0)
-        {
-            InputPin = 6;
-        }
-        else if (gpio_get_level(ICH7) == 0)
-        {
-            InputPin = 7;
-        }
-        else 
-        {
-            InputPin = 0;
-        }    
         if (InputPin == 0)
         {
             if (PulseStoppedDelay>0)
@@ -386,22 +355,9 @@ void gpio_read_n_act(void)
                 PulseStoppedDelay--;
                 if (PulseStoppedDelay == 0)
                 {
-                    
                     CashTotals[LastInputPin-1] += TotalPulses;
                     if (LastInputPin == 1)
                         utils_nvs_set_int(NVS_CASH1_KEY, CashTotals[0]);
-                    if (LastInputPin == 2)
-                        utils_nvs_set_int(NVS_CASH2_KEY, CashTotals[1]);
-                    if (LastInputPin == 3)
-                        utils_nvs_set_int(NVS_CASH3_KEY, CashTotals[2]);
-                    if (LastInputPin == 4)
-                        utils_nvs_set_int(NVS_CASH4_KEY, CashTotals[3]);
-                    if (LastInputPin == 5)
-                        utils_nvs_set_int(NVS_CASH5_KEY, CashTotals[4]);
-                    if (LastInputPin == 6)
-                        utils_nvs_set_int(NVS_CASH6_KEY, CashTotals[5]);
-                    if (LastInputPin == 7)
-                        utils_nvs_set_int(NVS_CASH7_KEY, CashTotals[6]);
 
                     // ESP_LOGI("COIN","Input Pin %d Pulses %d",LastInputPin,TotalPulses);
                    if (gpio_get_level(JUMPER) == 0)
@@ -661,6 +617,9 @@ void GeneratePulsesInBackGround (void)
     int pulses = 0;
     for (;;)
     {
+        // for Mobivend vending amount is in Paisa, divide by 100 to get rupees
+        if ((VendingMode == VendingMobiVend) && (edges >= 100))
+            edges = edges/100;
         if (edges)
         {
             if (edges%2 == 0)
@@ -673,7 +632,13 @@ void GeneratePulsesInBackGround (void)
                 gpio_set_level(PULSEO,0);
                 ESP_LOGI(TAG,"Pulse high");
             }
-            edges--;
+            if (VendingMode == VendingArcade)
+            {
+                    if (edges>1)
+                    edges = 1;
+            }
+            else
+                edges--;
             pulses++;
             if (edges == 0)
             {

@@ -1,3 +1,7 @@
+#define VendingMobiVend 0
+#define VendingArcade 1
+#define VendingSNV 2
+
 #define URL_HEARTBEAT    "http://snaxsmart.mobivend.in/heartbeat/%s" // SerialNumber
 #define URL_CASHLESSVEND "http://snaxsmart.mobivend.in/cashlessvend/%s?spring=%s&price=%s&request=%s" // SerialNumber,spring,price,refId
 #define URL_CASHLESSSALE "http://snaxsmart.mobivend.in/CashlessSale/%s?request=%s&items=%s,%s" // SerialNumber,refId,items,spring

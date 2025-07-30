@@ -9,6 +9,9 @@ SetInho function added to Set INHO value
 Reset Not Working.
 Wifi Not connecting after restarting.
 
+Three vending mode added
+vendingMobivend = edges = cash* 100 so reduce by 100
+vendingArcade = generate only one pulse
 
 14:45 - on dashboard, add Coin_Acceptor_type in database as 0/1/2/....
 if 0 any payment - 
