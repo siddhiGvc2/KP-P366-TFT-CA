@@ -47,6 +47,20 @@ bool extractSubstring(const char* , char* );
 uint32_t millis(void);
 void resolve_hostname(const char *);
 
+// call when INH switch changes - done
+// call when wifi is disconnected or connected
+// call at power on
+
+void SetCINHO (void)
+{
+    // if no wifi set CINHO as 1
+    ESP_LOGI(TAG,"WIFI VALUE IS- %s, IN",connected_to_wifi ? "true":"false");
+    if (!connected_to_wifi)
+        gpio_set_level(CINHO,1);            
+    else
+        gpio_set_level(CINHO,INHInputValue);            
+}
+
 void RestartDevice (void)
 {
      ESP_LOGI(TAG, "**************Restarting after 3 second******#");
@@ -313,7 +327,10 @@ void gpio_read_n_act(void)
                 ESP_LOGI(TAG, "*INH,%d#",INHInputValue);
                 // GPIO output is input of GPIO
                 INHInputValue ^= 1;
-                gpio_set_level(CINHO,INHInputValue);            
+                // if no wifi , set CINHO as 1
+                // do this at power on also
+
+                SetCINHO();
                 INHInputValue ^= 1;
                 // 
                 //  if INHInputValue is 0 then show OUT OF STOCK

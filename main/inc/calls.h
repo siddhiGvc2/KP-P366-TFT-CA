@@ -100,3 +100,6 @@ extern void DisplaySelectItem(void);
 extern void DisplayItemVend(void);
 extern void DisplayCashlessDevice(void);
 extern void DisplayNoStock(void);
+
+
+extern void SetCINHO (void);

@@ -3,7 +3,21 @@ if CINHI is low, display OUT OF STOCK image
 when it is high, display QR code again
 Displayed No Stock Image on Poweron on also if INHInputValue==0
 
+when there is no WiFi, make CINH0 as high
+SetInho function added to Set INHO value
 
+Reset Not Working.
+Wifi Not connecting after restarting.
+
+
+14:45 - on dashboard, add Coin_Acceptor_type in database as 0/1/2/....
+if 0 any payment - 
+if 1 any paymenyt - send command *V:TID:1:1# also send VEND command
+if 2 any payment  - send command *V:TID:1:X# where x is amount
+if 3 any paymeny - use fpr future use
+
+Right now we hard code as 2 for P366 and 0 for mobivend 
+option - do not add any database , send VEND as well as V command (CA Type 2)
 
 ## 290725
 copied from KWIKPAT MOBIVEND TFT and made it working by making hardware related changes

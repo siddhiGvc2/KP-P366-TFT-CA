@@ -141,6 +141,7 @@ void event_handler(void* arg, esp_event_base_t event_base,
     else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_DISCONNECTED) {
         connected_to_wifi_and_internet = false;
         DisplayNoWiFi();
+        SetCINHO();
         if (WiFiNumber == 1)
             set_led_state(SEARCH_FOR_WIFI1);
         if (WiFiNumber == 2)
@@ -191,6 +192,7 @@ void event_handler(void* arg, esp_event_base_t event_base,
         ESP_LOGI(TAG, "*got ip:*" IPSTR, IP2STR(&event->ip_info.ip));
         s_retry_num = 0;
         xEventGroupSetBits(s_wifi_event_group, WIFI_CONNECTED_BIT);
+         SetCINHO();
 // disable mqtt      
     if (MQTTRequired)
             mqtt_app_start();  // connect to MQTT when IP received
@@ -435,7 +437,7 @@ void wifi_init_sta(void)
         uart_write_string_ln("*WS1#");
         vTaskDelay(2000/portTICK_PERIOD_MS);
         uart_write_string_ln("*CONFIGOK#");
-         
+         SetCINHO();
         connected_to_wifi_and_internet = true;
         
       
@@ -457,6 +459,7 @@ void wifi_init_sta(void)
     else // restart
     {
         DisplayNoWiFi();
+        SetCINHO();
         uart_write_string_ln("*WS0#");
         ESP_LOGI(TAG,"************All tries over WS0 ##############");
         if (UartDebugInfoRequired)
