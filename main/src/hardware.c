@@ -315,6 +315,11 @@ void gpio_read_n_act(void)
                 INHInputValue ^= 1;
                 gpio_set_level(CINHO,INHInputValue);            
                 INHInputValue ^= 1;
+                // 
+                //  if INHInputValue is 0 then show OUT OF STOCK
+                // if INHInputValue is 1 then show QR code again
+
+
         }
         InputPin = 0;
         if (gpio_get_level(ICH1) == 0)
