@@ -33,6 +33,7 @@
 #include "SelectItem.c"
 #include "ItemVend.c"
 #include "WaitingCashLessDevice.c"
+#include "NoStock.c"
 
 #include "calls.h"
 #include "vars.h"
@@ -141,6 +142,15 @@ void display_image_task(void)
                 lv_obj_align(qr, LV_ALIGN_CENTER, 0, 10);
                 DisplayMode = ModeQR;
             }    
+        }
+          if(Image2BDisplayed==ImageNoStock)
+        {
+              if (DisplayMode != ModeNoStock)
+            {
+                LV_IMG_DECLARE(NoStock);
+                display_images(&NoStock);
+                DisplayMode = ModeNoStock;
+            }
         }
         if(Image2BDisplayed>0)
         {

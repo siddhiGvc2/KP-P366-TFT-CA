@@ -161,12 +161,25 @@ void DisplayCashlessDevice(void)
     
 }
 
+void DisplayNoStock(void)
+{
+    Image2BDisplayed = ImageNoStock;
+    //DisplayMode = ModeNoStock;
+}
+
 // changed on 140525
 // all code shifted to display_image_task/main.c
  void dispayQR(void){
     if (DisplayMode != ModeQR)
     {
+        // if INHvalue == 0 then dispaly No stock in place of QR Code
+        if(INHInputValue==0)
+        {
+            DisplayNoStock();
+        }
+        else{
         Image2BDisplayed = ImageQRCode;
+        }
     }
 //         if (lv_obj_is_valid(img))
 //         {

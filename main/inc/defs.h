@@ -19,6 +19,7 @@
 #define ModeSelectItem 7
 #define ModeItemVend 8
 #define ModeCashlessDevice 9
+#define ModeNoStock 10
 
 
 #define ImageBootingUp 1
@@ -28,6 +29,7 @@
 #define ImageItemVend 5
 #define ImageCashlessDevice 6
 #define ImageQRCode 7 
+#define ImageNoStock 8
 
 #define QR_CODE_SIZE  198
 

@@ -318,6 +318,14 @@ void gpio_read_n_act(void)
                 // 
                 //  if INHInputValue is 0 then show OUT OF STOCK
                 // if INHInputValue is 1 then show QR code again
+                if(INHInputValue==0)
+                {
+                    DisplayNoStock();
+                }
+                else if(INHInputValue==1)
+                {
+                    dispayQR();
+                }
 
 
         }

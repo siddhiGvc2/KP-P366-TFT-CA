@@ -1,6 +1,7 @@
 ## 300725
 if CINHI is low, display OUT OF STOCK image
 when it is high, display QR code again
+Displayed No Stock Image on Poweron on also if INHInputValue==0
 
 
 

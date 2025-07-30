@@ -99,3 +99,4 @@ extern void displayVariables(void);
 extern void DisplaySelectItem(void);
 extern void DisplayItemVend(void);
 extern void DisplayCashlessDevice(void);
+extern void DisplayNoStock(void);
