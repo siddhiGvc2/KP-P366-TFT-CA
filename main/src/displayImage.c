@@ -85,6 +85,7 @@ void display_images(const lv_img_dsc_t *ig) {
 
      lv_obj_align_to(label, img, LV_ALIGN_BOTTOM_MID, 0, -100);
     }
+    
      // added on 140525
     else  if(Image2BDisplayed==1)
     {

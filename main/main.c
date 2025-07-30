@@ -140,6 +140,29 @@ void display_image_task(void)
                 lv_obj_t *qr = lv_qrcode_create(img, QR_CODE_SIZE, lv_color_hex3(0x000), lv_color_hex3(0xFFF));
                 lv_qrcode_update(qr, QrString, strlen(QrString));
                 lv_obj_align(qr, LV_ALIGN_CENTER, 0, 10);
+
+                // 2. Create a full-width black background container for the label
+lv_obj_t *label_bg = lv_obj_create(lv_scr_act());
+lv_obj_set_size(label_bg, lv_disp_get_hor_res(NULL), 40); // Full width, fixed height
+lv_obj_align_to(label_bg, qr, LV_ALIGN_OUT_TOP_MID, 0, -10); // Above the QR code
+
+lv_obj_set_style_bg_color(label_bg, lv_color_black(), 0);
+lv_obj_set_style_bg_opa(label_bg, LV_OPA_COVER, 0);
+lv_obj_set_style_border_width(label_bg, 0, 0);
+lv_obj_clear_flag(label_bg, LV_OBJ_FLAG_SCROLLABLE); // optional
+
+                lv_obj_t *label = lv_label_create(label_bg);
+                lv_label_set_text_fmt(label, "Serial Number : %s",SerialNumber);
+                lv_obj_align_to(label, qr, LV_ALIGN_OUT_TOP_MID, 0, -15);  // below QR code
+
+                // Optional: Set label style (white text on black background)
+                static lv_style_t style;
+                lv_style_init(&style);
+                lv_style_set_text_color(&style, lv_color_white());
+                lv_style_set_bg_color(&style, lv_color_black());
+                lv_style_set_bg_opa(&style, LV_OPA_COVER);
+                lv_style_set_pad_all(&style, 4);
+                lv_obj_add_style(label, &style, 0);
                 DisplayMode = ModeQR;
             }    
         }
