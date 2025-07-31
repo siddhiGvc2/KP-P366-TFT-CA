@@ -645,6 +645,13 @@ void process_uart_packet(const char *pkt){
             uart_write_string_ln("Send Request to server");
         mqtt_publish_msg(pkt);
     }
+    else if(strncmp(pkt,"*START_ESPTOUCH#",16)==0)
+    {
+       StartESPTOUCH();
+       if(UartDebugInfoRequired)
+          uart_write_string_ln("Initallized ESP-TOUCH");
+        ESP_LOGI(TAG,"Initallized ESP-TOUCH");
+    }
   
     else{
         if (UartDebugInfoRequired)

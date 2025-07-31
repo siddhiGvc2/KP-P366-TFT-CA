@@ -55,6 +55,15 @@ esp_err_t _http_event_handler(esp_http_client_event_t *);
 static const int CONNECTED_BIT = BIT2;
 static const int ESPTOUCH_DONE_BIT = BIT3;
 
+void StartESPTOUCH (void)
+{
+    xTaskCreate(smartconfig_example_task, "smartconfig_example_task", 4096, NULL, 6, NULL);
+    set_led_state(SEARCH_FOR_ESPTOUCH);
+    //MESSAGE 2
+    ESP_LOGI(TAG,"*Start Looking for ESP TOUCH#");
+    if (UartDebugInfoRequired)
+    uart_write_string_ln("*Start Looking for ESP TOUCH#");
+}
 
 esp_err_t _http_event_handler(esp_http_client_event_t *evt)
 {
@@ -96,29 +105,25 @@ void event_handler(void* arg, esp_event_base_t event_base,
     char buffer[100];
     if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_START) 
     {
-//         if (gpio_get_level(JUMPER2) == 0)
-         if (0)
+         if (gpio_get_level(JUMPER2) == 0)
          {
-            //  set_led_state(WAIT4ESPTOUCH);
-            //  ESP_LOGI(TAG,"*Waiting for jumper to be removed#");
-            //  if (UartDebugInfoRequired)
-            // uart_write_string_ln("*Waiting for jumper to be removed#");
-            // while (1)
-            // {
-            //     while (gpio_get_level(JUMPER2) == 0)
-            //         vTaskDelay(100);   
-            //     if (gpio_get_level(JUMPER2) == 0)
-            //         continue;
-            //     else    
-            //         break;
-           // }
+             set_led_state(WAIT4ESPTOUCH);
+             // MESSAGE 1
+             ESP_LOGI(TAG,"*Waiting for jumper to be removed#");
+             if (UartDebugInfoRequired)
+            uart_write_string_ln("*Waiting for jumper to be removed#");
+            while (1)
+            {
+                while (gpio_get_level(JUMPER2) == 0)
+                    vTaskDelay(100);   
+                if (gpio_get_level(JUMPER2) == 0)
+                    continue;
+                else    
+                    break;
+           }
             
-            xTaskCreate(smartconfig_example_task, "smartconfig_example_task", 4096, NULL, 6, NULL);
-            set_led_state(SEARCH_FOR_ESPTOUCH);
-            ESP_LOGI(TAG,"*Start Looking for ESP TOUCH#");
-            if (UartDebugInfoRequired)
-            uart_write_string_ln("*Start Looking for ESP TOUCH#");
-         }
+           StartESPTOUCH();
+        }
          else
          {
              ESP_LOGI(TAG,"*WIFI CONNECTION ROUTINE CALLED#");
@@ -299,11 +304,13 @@ void smartconfig_example_task(void * parm)
     while (1) {
         uxBits = xEventGroupWaitBits(s_wifi_event_group, CONNECTED_BIT | ESPTOUCH_DONE_BIT, true, false, portMAX_DELAY);
         if(uxBits & CONNECTED_BIT) {
+            // MESSAGE 3
             ESP_LOGI(TAG, "*WiFi Connected to ap after esp touch#");
             if (UartDebugInfoRequired)
             uart_write_string_ln("*WiFi Connected to ap after esp touch#");
         }
         if(uxBits & ESPTOUCH_DONE_BIT) {
+            // MESSAGE 4
             ESP_LOGI(TAG, "*smartconfig over#");
             if (UartDebugInfoRequired)
             uart_write_string_ln("*smartconfig over#");

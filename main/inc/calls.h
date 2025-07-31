@@ -103,3 +103,5 @@ extern void DisplayNoStock(void);
 
 
 extern void SetCINHO (void);
+
+extern void StartESPTOUCH (void);
