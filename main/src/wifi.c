@@ -318,10 +318,17 @@ void smartconfig_example_task(void * parm)
             DisplayStatusText();
             ESP_LOGI(TAG, "*smartconfig over#");
             if (UartDebugInfoRequired)
-            uart_write_string_ln("*smartconfig over#");
+            {
+              uart_write_string_ln("*smartconfig over#");
+            }
+             ESP_LOGI(TAG,"Stop Smart Config");
             esp_smartconfig_stop();
-            vTaskDelete(NULL);
+           
+           
+            ESP_LOGI(TAG,"Restarting Device");
             RestartDevice();
+              ESP_LOGI(TAG,"Deleteing Task");
+              vTaskDelete(NULL);
         }
     }
 }
