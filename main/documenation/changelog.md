@@ -3,7 +3,7 @@
 2. Start ESP Touch when switch pressed and then released at power on -workingf
 
 3. Initiate ESP Touch from UART - SIdDDHI 10:51 - 11:00
-*START_ESPTOUCH# command added in Uart to Start Esp Touch.
+*START_ESPTOUCH# command added in Uart to Start Esp Touch.-ABORT
 
 4. Display Images/Text - REMOVE JUMPER , RUN ESP TOUCH APP, SENSING WIFI, ESP TOUCH DONE, RESETTING
 

@@ -65,6 +65,8 @@ void RestartDevice (void)
 {
      ESP_LOGI(TAG, "**************Restarting after 3 second******#");
      send(sock, "*RST-OK#", strlen("*RST-OK#"), 0);
+     strcpy(TextStatus,"RESETTING");
+     DisplayStatusText();
      ESP_LOGI(TAG, "*RST-OK#");
      uart_write_string_ln("*Resetting device#");
      led_state = WAITING_FOR_RESTART;

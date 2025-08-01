@@ -55,16 +55,7 @@ esp_err_t _http_event_handler(esp_http_client_event_t *);
 static const int CONNECTED_BIT = BIT2;
 static const int ESPTOUCH_DONE_BIT = BIT3;
 
-void StartESPTOUCH (void)
-{
-    xTaskCreate(smartconfig_example_task, "smartconfig_example_task", 4096, NULL, 6, NULL);
-    set_led_state(SEARCH_FOR_ESPTOUCH);
-    //MESSAGE 2
-    ESP_LOGI(TAG,"*Start Looking for ESP TOUCH#");
-    if (UartDebugInfoRequired)
-    uart_write_string_ln("*Start Looking for ESP TOUCH#");
-}
-
+ 
 esp_err_t _http_event_handler(esp_http_client_event_t *evt)
 {
     switch (evt->event_id) {
@@ -109,6 +100,8 @@ void event_handler(void* arg, esp_event_base_t event_base,
          {
              set_led_state(WAIT4ESPTOUCH);
              // MESSAGE 1
+             strcpy(TextStatus,"Removed\nJumper");
+             DisplayStatusText();
              ESP_LOGI(TAG,"*Waiting for jumper to be removed#");
              if (UartDebugInfoRequired)
             uart_write_string_ln("*Waiting for jumper to be removed#");
@@ -122,7 +115,14 @@ void event_handler(void* arg, esp_event_base_t event_base,
                     break;
            }
             
-           StartESPTOUCH();
+            xTaskCreate(smartconfig_example_task, "smartconfig_example_task", 4096, NULL, 6, NULL);
+            set_led_state(SEARCH_FOR_ESPTOUCH);
+            //MESSAGE 2
+            strcpy(TextStatus,"RUN ESP\nTOUCH APP");
+            DisplayStatusText();
+            ESP_LOGI(TAG,"*Start Looking for ESP TOUCH#");
+            if (UartDebugInfoRequired)
+            uart_write_string_ln("*Start Looking for ESP TOUCH#");
         }
          else
          {
@@ -225,14 +225,14 @@ void event_handler(void* arg, esp_event_base_t event_base,
 
         memcpy(ssid, evt->ssid, sizeof(evt->ssid));
         memcpy(password, evt->password, sizeof(evt->password));
-        ESP_LOGI(TAG, "*SSID3:%s#", ssid);
-        ESP_LOGI(TAG, "*PASSWORD3:%s#", password);
+        ESP_LOGI(TAG, "*SSID1:%s#", ssid);
+        ESP_LOGI(TAG, "*PASSWORD1:%s#", password);
         // memorise in NV RAM
 
-        strcpy(WIFI_SSID_3,ssid);
-        strcpy(WIFI_PASS_3,password);
-        utils_nvs_set_str(NVS_SSID_3_KEY, WIFI_SSID_3);
-        utils_nvs_set_str(NVS_PASS_3_KEY, WIFI_PASS_3);
+        strcpy(WIFI_SSID_1,ssid);
+        strcpy(WIFI_PASS_1,password);
+        utils_nvs_set_str(NVS_SSID_1_KEY, WIFI_SSID_1);
+        utils_nvs_set_str(NVS_PASS_1_KEY, WIFI_PASS_1);
 
         if (evt->type == SC_TYPE_ESPTOUCH_V2) {
             ESP_ERROR_CHECK( esp_smartconfig_get_rvd_data(rvd_data, sizeof(rvd_data)) );
@@ -301,16 +301,21 @@ void smartconfig_example_task(void * parm)
     ESP_ERROR_CHECK( esp_smartconfig_set_type(SC_TYPE_ESPTOUCH) );
     smartconfig_start_config_t cfg = SMARTCONFIG_START_CONFIG_DEFAULT();
     ESP_ERROR_CHECK( esp_smartconfig_start(&cfg) );
+    ESP_LOGI(TAG, "*Smart Config Task Started#");
     while (1) {
         uxBits = xEventGroupWaitBits(s_wifi_event_group, CONNECTED_BIT | ESPTOUCH_DONE_BIT, true, false, portMAX_DELAY);
         if(uxBits & CONNECTED_BIT) {
             // MESSAGE 3
+            strcpy(TextStatus,"SENSING\nWIFI");
+            DisplayStatusText();
             ESP_LOGI(TAG, "*WiFi Connected to ap after esp touch#");
             if (UartDebugInfoRequired)
             uart_write_string_ln("*WiFi Connected to ap after esp touch#");
         }
         if(uxBits & ESPTOUCH_DONE_BIT) {
             // MESSAGE 4
+             strcpy(TextStatus,"ESP TOUCH\nDONE");
+            DisplayStatusText();
             ESP_LOGI(TAG, "*smartconfig over#");
             if (UartDebugInfoRequired)
             uart_write_string_ln("*smartconfig over#");

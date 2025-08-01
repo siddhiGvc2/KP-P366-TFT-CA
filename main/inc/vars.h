@@ -200,3 +200,5 @@ lv_obj_t * img = NULL; // Declare globally or in a higher scope
 char UartDebugInfoRequired = 0;
 char UartPacketReceived = 0;
 int VendingMode;
+
+char TextStatus[100];

@@ -34,6 +34,7 @@
 #include "ItemVend.c"
 #include "WaitingCashLessDevice.c"
 #include "NoStock.c"
+#include "BlankImage.c"
 
 #include "calls.h"
 #include "vars.h"
@@ -172,6 +173,15 @@ lv_obj_clear_flag(label_bg, LV_OBJ_FLAG_SCROLLABLE); // optional
             {
                 LV_IMG_DECLARE(NoStock);
                 display_images(&NoStock);
+                DisplayMode = ModeNoStock;
+            }
+        }
+           if(Image2BDisplayed==StatusText)
+        {
+              if (DisplayMode != ModeStatusText)
+            {
+                 LV_IMG_DECLARE(BlankImage);
+                display_images(&BlankImage);
                 DisplayMode = ModeNoStock;
             }
         }

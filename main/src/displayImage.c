@@ -85,7 +85,22 @@ void display_images(const lv_img_dsc_t *ig) {
 
      lv_obj_align_to(label, img, LV_ALIGN_BOTTOM_MID, 0, -100);
     }
+    else if(Image2BDisplayed==9)
+    {
+         char payload[200];
+        lv_obj_t *label = lv_label_create(lv_scr_act());
+        sprintf(payload,"%s",TextStatus);
+        lv_label_set_text(label, payload);
     
+        static lv_style_t style;
+        lv_style_init(&style);
+        lv_style_set_text_font(&style, &lv_font_montserrat_28);  // Set font size 28
+        lv_style_set_text_color(&style, lv_color_black());
+        lv_obj_add_style(label, &style, 0);
+
+        lv_obj_align_to(label, img, LV_ALIGN_CENTER, 0, 0);
+    
+    }
      // added on 140525
     else  if(Image2BDisplayed==1)
     {
@@ -166,6 +181,13 @@ void DisplayNoStock(void)
 {
     Image2BDisplayed = ImageNoStock;
     //DisplayMode = ModeNoStock;
+}
+
+void DisplayStatusText(void)
+{
+    DisplayMode = ModeNone;
+    Image2BDisplayed = StatusText;
+    
 }
 
 // changed on 140525

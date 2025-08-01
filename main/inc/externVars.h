@@ -206,3 +206,4 @@ extern char UartDebugInfoRequired;
 extern char UartPacketReceived;
 extern int VendingMode;
 
+extern char TextStatus[100];
