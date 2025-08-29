@@ -350,6 +350,10 @@ void gpio_read_n_act(void)
 
         }
         InputPin = 0;
+        if (gpio_get_level(PULSEI) == 0)
+        {
+            InputPin = 1;        
+        }
         if (InputPin == 0)
         {
             if (PulseStoppedDelay>0)
@@ -362,11 +366,12 @@ void gpio_read_n_act(void)
                         utils_nvs_set_int(NVS_CASH1_KEY, CashTotals[0]);
 
                     // ESP_LOGI("COIN","Input Pin %d Pulses %d",LastInputPin,TotalPulses);
-                   if (gpio_get_level(JUMPER) == 0)
-                   {
-                        sprintf(payload, "*RP,%d,%d#",LastInputPin,TotalPulses); 
+                        sprintf(payload, "*RP:%d:%d#",LastInputPin,TotalPulses); 
                         send(sock, payload, strlen(payload), 0);
-                   }
+                        // if(MQTTRequired)
+                        // {
+                        //     mqtt_publish_msg(payload);
+                        // }
                    // create same pules on same output pin 17-06-24
                    // provided this is not hardware test mode
                    // or PT? is N
@@ -410,9 +415,9 @@ void gpio_read_n_act(void)
                     }
                     if (InputPin != 0)
                     {
-                    TotalPulses++;                                      
-                    PulseStoppedDelay = 100;
-                    LastInputPin = InputPin;
+                        TotalPulses++;                                      
+                        PulseStoppedDelay = 100;
+                        LastInputPin = InputPin;
                     }
                 }
             }
@@ -435,7 +440,7 @@ void ICH_init()
     //set as input mode
     io_conf.mode = GPIO_MODE_INPUT;
     //bit mask of the pins that you want to set
-    io_conf.pin_bit_mask = 1ULL << ErasePin | 1ULL << JUMPER | 1ULL << JUMPER2 |1ULL << CINHI  ;
+    io_conf.pin_bit_mask = 1ULL << ErasePin | 1ULL << JUMPER | 1ULL << JUMPER2 | 1ULL << CINHI | 1ULL << PULSEI ;
     //disable pull-down mode
     io_conf.pull_down_en = 0;
     //enable pull-up mode
@@ -449,7 +454,7 @@ void ICH_init()
     // //start gpio task
 // **************** skip reading input
     if (Production)
-        xTaskCreate(gpio_read_n_act, "gpio_read_n_act", 2048, NULL, 10, NULL);
+        xTaskCreate(gpio_read_n_act, "gpio_read_n_act", 4096, NULL, 10, NULL);
 
     //install gpio isr service
     // gpio_install_isr_service(ESP_INTR_FLAG_DEFAULT);

@@ -1,3 +1,10 @@
+## 290825
+remove MQTT for RP till we find solution
+add *SENDID# command
+reply with 5 digit serial number lik 00123
+change serial number to numeric only and do not add any GVC-CA etc..
+
+
 ## 310725
 1. Test FOTA
 2. Start ESP Touch when switch pressed and then released at power on -workingf
