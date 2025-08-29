@@ -634,6 +634,15 @@ void process_uart_packet(const char *pkt){
         DisplayMode=ModeNone;
         dispayQR();
     }
+     else if(strncmp(pkt,"*SENDID#",8)==0)
+    {
+       char response[6];   // 5 digits + null terminator
+        int num = atoi(SerialNumber);   // Convert string to integer
+
+        // Format into 5-digit, zero-padded number
+        sprintf(response, "%05d", num);
+        uart_write_string_ln(response);
+    }
       else if(strncmp(pkt,"*REQUEST:",9)==0)
     {
         if (UartDebugInfoRequired)

@@ -173,6 +173,14 @@ void load_settings_nvs(){
        utils_nvs_get_str(NVS_SERIAL_NUMBER, SerialNumber,100);
        if(utils_nvs_get_str(NVS_SERIAL_NUMBER, SerialNumber,100) == ESP_OK){
         utils_nvs_get_str(NVS_SERIAL_NUMBER, SerialNumber,100);
+        // Check if SerialNumber starts with "GVC-CA-"
+        const char *prefix = "GVC-CA-";
+        size_t prefix_len = strlen(prefix);
+
+        if (strncmp(SerialNumber, prefix, prefix_len) == 0) {
+            // Shift string left to remove prefix
+            memmove(SerialNumber, SerialNumber + prefix_len, strlen(SerialNumber) - prefix_len + 1);
+        }
          uart_write_string("SerialNumber is - ");
          uart_write_string_ln(SerialNumber);
         }
