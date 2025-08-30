@@ -190,6 +190,12 @@ void DisplayStatusText(void)
     
 }
 
+void DisplayCoinInserted(void)
+{
+    Image2BDisplayed = ImageCoinInserted;
+
+}
+
 // changed on 140525
 // all code shifted to display_image_task/main.c
  void dispayQR(void){

@@ -4,6 +4,8 @@ add *SENDID# command
 reply with 5 digit serial number lik 00123
 change serial number to numeric only and do not add any GVC-CA etc..
 
+when cash inserted (*RP:1:1#) - show a screen of CASH ENTERED for X seconds and then back to last screen QR Code or NO STOCK or No WiFi
+
 
 ## 310725
 1. Test FOTA

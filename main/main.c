@@ -35,6 +35,7 @@
 #include "WaitingCashLessDevice.c"
 #include "NoStock.c"
 #include "BlankImage.c"
+#include "CoinInserted.c"
 
 #include "calls.h"
 #include "vars.h"
@@ -128,6 +129,15 @@ void display_image_task(void)
                 LV_IMG_DECLARE(CashReceived);
                 display_images(&CashReceived);
                 DisplayMode = ModeCashReceived;
+            }
+        }
+         if(Image2BDisplayed==ImageCoinInserted)
+        {
+              if (DisplayMode != ModeCoinInserted)
+            {
+                LV_IMG_DECLARE(CoinInserted);
+                display_images(&CoinInserted);
+                DisplayMode = ModeCoinInserted;
             }
         }
         // this function added on 140525 by Vinay with guidance of Siddhi

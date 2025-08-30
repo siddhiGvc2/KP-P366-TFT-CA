@@ -101,6 +101,7 @@ extern void DisplayItemVend(void);
 extern void DisplayCashlessDevice(void);
 extern void DisplayNoStock(void);
 extern void DisplayStatusText(void);
+extern void DisplayCoinInserted(void);
 
 
 extern void SetCINHO (void);
